@@ -1,0 +1,34 @@
+{
+  "name": "mapbox-tile-copy",
+  "version": "0.0.0",
+  "description": "From geodata files to tiles on S3",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapbox/mapbox-tile-copy.git"
+  },
+  "author": "Mapbox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mapbox/mapbox-tile-copy/issues"
+  },
+  "homepage": "https://github.com/mapbox/mapbox-tile-copy",
+  "dependencies": {
+    "mapbox-studio-default-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-default-fonts-0.0.4-4afb5235f457bd1c1a5a70fce6c2aa83bf7a851e.tgz",
+    "mapbox-studio-pro-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-pro-fonts-1.0.0-9870a90b713f307b9391829602f4d5857e419615.tgz",
+    "mapbox-upload-validate": "^1.0.0",
+    "mapnik": "^3.1.0",
+    "mbtiles": "^0.7.1",
+    "tilejson": "^0.10.0",
+    "tilelive": "^5.3.3",
+    "tilelive-omnivore": "0.0.4",
+    "tilelive-s3": "^1.0.0",
+    "tilelive-vector": "^3.0.1"
+  },
+  "devDependencies": {
+    "tape": "^3.0.2"
+  }
+}
