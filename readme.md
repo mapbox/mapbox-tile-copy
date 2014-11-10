@@ -1,5 +1,7 @@
 ## work-in-progress
 
+![build status](https://travis-ci.org/mapbox/mapbox-tile-copy.svg?branch=master)
+
 ## Running tests
 
 Tests involve copying files to S3. You can bring your own bucket by specifying a `TestBucket` environment variable.
