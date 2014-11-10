@@ -1,10 +1,13 @@
+var url = require('url');
+var getUri = require('./lib/get-uri');
+var copy = require('./lib/copy');
+
 var tilelive = require('tilelive');
 var Vector = require('tilelive-vector');
 var MBTiles = require('mbtiles');
 var Omnivore = require('tilelive-omnivore');
 var TileJSON = require('tilejson');
 var Mapbox = require('../lib/tilelive-mapbox');
-var invalid = require('./invalid');
 
 Vector.registerProtocols(tilelive);
 MBTiles.registerProtocols(tilelive);
@@ -20,7 +23,13 @@ if (process.env.MapboxUploadValidateFonts)
 var mapnik = require('mapnik');
 mapnik.Logger.setSeverity(mapnik.Logger.NONE);
 
-// Generate a tilelive URI for the file, maybe with mapbox-file-sniff
-// then, tilelive-copy, we may want to refactor tilelive.js to expose its copy functionality
-//  rather than recreating it here
-// In the case of serialtiles, which must walk a different copy path
+module.exports = function(filepath, s3urlTemplate, jobInfo, callback) {
+  getUri(filepath, function(err, uri) {
+    if (err) return callback(err);
+
+    var copyTiles = url.parse(uri).protocol === 'serialtiles:' ?
+      copy.serialtiles : copy.tilelive;
+
+    copyTiles(srcUri, s3urlTemplate, jobInfo, callback);
+  });
+};
