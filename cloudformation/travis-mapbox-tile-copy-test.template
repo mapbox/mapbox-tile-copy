@@ -1,0 +1,65 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Travis user for testing mapbox-tile-copy",
+    "Resources": {
+        "MapboxTileCopyTestUser": {
+            "Type": "AWS::IAM::User",
+            "Properties": {
+                "Path": "/service/",
+                "Policies": [
+                    {
+                        "PolicyName": "mapbox-tile-copy-test",
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Resource": [
+                                        "arn:aws:s3:::tilestream-tilesets-development/*"
+                                    ],
+                                    "Action": [
+                                        "s3:GetObject",
+                                        "s3:PutObject",
+                                        "s3:PutObjectAcl"
+                                    ],
+                                    "Effect": "Allow"
+                                },
+                                {
+                                    "Resource": [
+                                        "arn:aws:s3:::tilestream-tilesets-development"
+                                    ],
+                                    "Action": [
+                                        "s3:ListBucket"
+                                    ],
+                                    "Effect": "Allow"
+                                }
+                            ]
+                        }
+
+                    }
+                ]
+            }
+        },
+        "MapboxTileCopyTestKey": {
+            "Type": "AWS::IAM::AccessKey",
+            "Properties": {
+                "UserName": {
+                    "Ref": "MapboxTileCopyTestUser"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "TestAccessKeyId": {
+            "Value": {
+                "Ref": "MapboxTileCopyTestKey"
+            }
+        },
+        "TestSecretAccessKey": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "MapboxTileCopyTestKey",
+                    "SecretAccessKey"
+                ]
+            }
+        }
+    }
+}
