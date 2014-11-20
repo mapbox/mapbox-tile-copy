@@ -43,6 +43,12 @@ module.exports = function(filepath, s3url, jobInfo, callback) {
       return copy.tilelive;
     })(url.parse(uri).protocol);
 
-    copyTiles(srcUri, s3url, jobInfo, callback);
+    copyTiles(srcUri, s3url, jobInfo, function(err) {
+      if (!err) return callback();
+      
+      var fatal = [ 'SQLITE_CORRUPT', 'EINVALIDTILE' ];
+      if (fatal.indexOf(err.code) !== -1) err.code = 'EINVALID';
+      return callback(err);
+    });
   });
 };
