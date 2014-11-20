@@ -22,6 +22,7 @@
     "mapbox-studio-pro-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-pro-fonts-1.0.0-9870a90b713f307b9391829602f4d5857e419615.tgz",
     "mapnik": "^3.1.0",
     "mbtiles": "^0.7.4",
+    "s3urls": "^1.1.0",
     "tilejson": "^0.10.0",
     "tilelive": "^5.3.3",
     "tilelive-omnivore": "0.0.4",
