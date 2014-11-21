@@ -25,7 +25,7 @@ if (!argv._[0]) {
     console.log('  mapbox-tile-copy <src> <dst> [--options]');
     console.log('');
     console.log('Example:');
-    console.log('  mapbox-tile-copy orig.mbtiles s3://some/file.mbtiles');
+    console.log('  mapbox-tile-copy orig.mbtiles s3://bucket/prefix/{z}/{x}/{y}');
     console.log('');
     console.log('Options:');
     console.log('  --parts=[number]');
