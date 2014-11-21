@@ -24,12 +24,16 @@ var mapnik = require('mapnik');
 mapnik.Logger.setSeverity(mapnik.Logger.NONE);
 
 module.exports = function(filepath, s3urlTemplate, jobInfo, callback) {
-  getUri(filepath, function(err, uri) {
-    if (err) return callback(err);
+  console.log("in init!!!");
+  console.log(filepath);
+  console.log(s3urlTemplate);
+  console.log(jobInfo);
+  // getUri(filepath, function(err, uri) {
+  //   if (err) return callback(err);
 
-    var copyTiles = url.parse(uri).protocol === 'serialtiles:' ?
-      copy.serialtiles : copy.tilelive;
+  //   var copyTiles = url.parse(uri).protocol === 'serialtiles:' ?
+  //     copy.serialtiles : copy.tilelive;
 
-    copyTiles(srcUri, s3urlTemplate, jobInfo, callback);
-  });
+  //   copyTiles(srcUri, s3urlTemplate, jobInfo, callback);
+  // });
 };
