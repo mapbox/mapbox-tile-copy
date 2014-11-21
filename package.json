@@ -23,6 +23,7 @@
     "mapnik": "^3.1.0",
     "mbtiles": "^0.7.1",
     "minimist": "~0.2.0",
+    "s3urls": "^1.1.0",
     "tilejson": "^0.10.0",
     "tilelive": "^5.3.3",
     "tilelive-omnivore": "0.0.4",

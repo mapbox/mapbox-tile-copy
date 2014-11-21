@@ -1,6 +1,7 @@
 var url = require('url');
 var getUri = require('./lib/get-uri');
 var copy = require('./lib/copy');
+var s3urls = require('s3urls');
 
 var tilelive = require('tilelive');
 var Vector = require('tilelive-vector');
@@ -24,22 +25,31 @@ if (process.env.MapboxUploadValidateFonts)
 var mapnik = require('mapnik');
 mapnik.Logger.setSeverity(mapnik.Logger.NONE);
 
-module.exports = function(filepath, s3urlTemplate, jobInfo, callback) {
-  console.log("in init!!!");
-  console.log(filepath);
-  console.log(s3urlTemplate);
-  console.log(jobInfo);
+module.exports = function(filepath, s3url, jobInfo, callback) {
+  // Make sure the s3url is of type s3://bucket/key
+  s3url = s3urls.convert(s3url, 's3');
 
-  // register modules
-  tilelive.auto(filepath);
-  
   getUri(filepath, function(err, uri) {
     if (err) return callback(err);
 
-    var copyTiles = url.parse(uri).protocol === 'serialtiles:' ?
-      copy.serialtiles : copy.tilelive;
-    // console.log(copyTiles);
-    // console.log(typeof copyTiles);
-    copyTiles(filepath, s3urlTemplate, jobInfo, callback);
+    var copyTiles = (function(protocol) {
+      // customized copy for serialtiles
+      if (protocol === 'serialtiles:') return copy.serialtiles;
+
+      // no-op for tm2z, tilejson
+      if (protocol === 'tm2z:' || protocol === 'tilejson:')
+        return function(a, b, c, cb) { cb(); };
+
+      // otherwise tilelive.copy
+      return copy.tilelive;
+    })(url.parse(uri).protocol);
+
+    copyTiles(srcUri, s3url, jobInfo, function(err) {
+      if (!err) return callback();
+      
+      var fatal = [ 'SQLITE_CORRUPT', 'EINVALIDTILE' ];
+      if (fatal.indexOf(err.code) !== -1) err.code = 'EINVALID';
+      return callback(err);
+    });
   });
 };
