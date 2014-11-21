@@ -7,7 +7,8 @@ var Vector = require('tilelive-vector');
 var MBTiles = require('mbtiles');
 var Omnivore = require('tilelive-omnivore');
 var TileJSON = require('tilejson');
-var Mapbox = require('../lib/tilelive-mapbox');
+var Mapbox = require('./lib/tilelive-mapbox');
+var path = require('path');
 
 Vector.registerProtocols(tilelive);
 MBTiles.registerProtocols(tilelive);
@@ -28,12 +29,17 @@ module.exports = function(filepath, s3urlTemplate, jobInfo, callback) {
   console.log(filepath);
   console.log(s3urlTemplate);
   console.log(jobInfo);
-  // getUri(filepath, function(err, uri) {
-  //   if (err) return callback(err);
 
-  //   var copyTiles = url.parse(uri).protocol === 'serialtiles:' ?
-  //     copy.serialtiles : copy.tilelive;
+  // register modules
+  tilelive.auto(filepath);
+  
+  getUri(filepath, function(err, uri) {
+    if (err) return callback(err);
 
-  //   copyTiles(srcUri, s3urlTemplate, jobInfo, callback);
-  // });
+    var copyTiles = url.parse(uri).protocol === 'serialtiles:' ?
+      copy.serialtiles : copy.tilelive;
+    // console.log(copyTiles);
+    // console.log(typeof copyTiles);
+    copyTiles(filepath, s3urlTemplate, jobInfo, callback);
+  });
 };
