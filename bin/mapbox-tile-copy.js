@@ -40,7 +40,7 @@ argv.withoutprogress = argv.withoutprogress ? true : false;
 
 var srcuri = argv._[0];
 var dsturi = argv._[1] ? argv._[1] : false;
-var options;
+var options = {};
 
 if (!argv.withoutprogress) options.progress = report;
 if (argv.part && argv.parts) options.job = {
@@ -48,7 +48,10 @@ if (argv.part && argv.parts) options.job = {
     num:argv.part
 }
 
-init(srcuri, dsturi, options);
+init(srcuri, dsturi, options, function(err){
+    if (err) process.exit(3);
+    else process.exit(0);
+});
 
 function report(stats, p) {
     util.print(util.format('\r\033[K[%s] %s%% %s/%s @ %s/s | ✓ %s □ %s | %s left',

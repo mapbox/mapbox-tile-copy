@@ -25,7 +25,7 @@ if (process.env.MapboxUploadValidateFonts)
 var mapnik = require('mapnik');
 mapnik.Logger.setSeverity(mapnik.Logger.NONE);
 
-module.exports = function(filepath, s3url, jobInfo, callback) {
+module.exports = function(filepath, s3url, options, callback) {
   // Make sure the s3url is of type s3://bucket/key
   s3url = s3urls.convert(s3url, 's3');
 
@@ -41,11 +41,11 @@ module.exports = function(filepath, s3url, jobInfo, callback) {
         return function(a, b, c, cb) { cb(); };
 
       // otherwise tilelive.copy
-      return copy.tilelive;
+      return copy.tilelivecopy;
     })(url.parse(uri).protocol);
 
-    copyTiles(srcUri, s3url, jobInfo, function(err) {
-      if (!err) return callback();
+    copyTiles(filepath, s3url, options, function(err) {
+      if (!err) return callback;
       
       var fatal = [ 'SQLITE_CORRUPT', 'EINVALIDTILE' ];
       if (fatal.indexOf(err.code) !== -1) err.code = 'EINVALID';
