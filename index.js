@@ -9,6 +9,7 @@ var MBTiles = require('mbtiles');
 var Omnivore = require('tilelive-omnivore');
 var TileJSON = require('tilejson');
 var Mapbox = require('./lib/tilelive-mapbox');
+var S3 = require('tilelive-s3');
 var path = require('path');
 
 Vector.registerProtocols(tilelive);
@@ -16,6 +17,7 @@ MBTiles.registerProtocols(tilelive);
 Omnivore.registerProtocols(tilelive);
 TileJSON.registerProtocols(tilelive);
 Mapbox.registerProtocols(tilelive);
+S3.registerProtocols(tilelive);
 
 Vector.mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-default-fonts')), { recurse: true });
 Vector.mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-pro-fonts')), { recurse: true });
@@ -46,7 +48,7 @@ module.exports = function(filepath, s3url, options, callback) {
 
     copyTiles(filepath, s3url, options, function(err) {
       if (!err) return callback;
-      
+
       var fatal = [ 'SQLITE_CORRUPT', 'EINVALIDTILE' ];
       if (fatal.indexOf(err.code) !== -1) err.code = 'EINVALID';
       return callback(err);

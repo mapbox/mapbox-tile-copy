@@ -18,6 +18,7 @@ http.globalAgent.maxSockets = 30;
 https.globalAgent.maxSockets = 30;
 
 var init = require('../index.js');
+var util = require('util');
 var argv = require('minimist')(process.argv.slice(2));
 
 if (!argv._[0]) {
@@ -49,8 +50,8 @@ if (argv.part && argv.parts) options.job = {
 }
 
 init(srcuri, dsturi, options, function(err){
-    if (err) process.exit(3);
-    else process.exit(0);
+    if (err) console.log("ERROR");
+    else console.log("DONE");
 });
 
 function report(stats, p) {
