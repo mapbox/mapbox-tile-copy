@@ -2,9 +2,13 @@
   "tilejson": "1.0.0",
   "name": "Bright TileJSON",
   "scheme": "xyz",
-  "tiles": [ "http://mapbox-staff.s3.amazonaws.com/datquest/new/{z}/{x}/{y}.vector.pbf" ],
-  "minzoom": 0,
-  "maxzoom": 6,
-  "bounds": [ -180, -85, 180, 85 ],
+  "minzoom": 4,
+  "maxzoom": 5,
+  "bounds": [
+    -124.76214599609375,
+    24.54521942138596,
+    -66.95780181884764,
+    49.3717422485226
+  ],
   "center": [ 0, 0, 3 ]
 }

@@ -1,68 +1,100 @@
 var test = require('tape').test;
 var path = require('path');
-var init = require('../index.js');
-var util = require('util');
+var crypto = require('crypto');
+var copy = require('../index.js');
+var AWS = require('aws-sdk');
+var s3urls = require('s3urls');
 
-var srcuri = __dirname + '/fixtures/valid.mbtiles';
-var dsturi = 's3://tilestream-tilesets-development/carol-staging/mapbox-tile-copy/{z}/{x}/{y}.png';
-var options = {};
-options.progress = report;
+process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
 
-test('index.js init', function(t) {
-	init(srcuri, dsturi, options, function(err){
-    	if (err) throw err;
-    	t.end();
-	});
+var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
+var runid = crypto.randomBytes(16).toString('hex');
+
+console.log('---> mapbox-tile-copy index %s', runid);
+
+function dsturi(name) {
+  return [
+    's3:/',
+    bucket,
+    'test/mapbox-tile-copy',
+    runid,
+    name,
+    '{z}/{x}/{y}'
+  ].join('/');
+}
+
+function tileCount(dst, callback) {
+  var s3 = new AWS.S3();
+  var count = 0;
+
+  params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', ''));
+  params.Prefix = params.Key;
+  delete params.Key;
+
+  function list(marker) {
+    if (marker) params.Marker = marker;
+
+    s3.listObjects(params, function(err, data) {
+      if (err) return callback(err);
+      count += data.Contents.length;
+      if (data.IsTruncated) return list(data.Contents.pop().Key);
+      callback(null, count);
+    });
+  }
+
+  list();
+}
+
+test('serialtiles', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gz');
+  var dst = dsturi('valid.serialtiles');
+  copy(fixture, dst, {}, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 4, 'expected number of tiles');
+      t.end();
+    });
+  });
 });
 
-function report(stats, p) {
-    util.print(util.format('\r\033[K[%s] %s%% %s/%s @ %s/s | ✓ %s □ %s | %s left',
-        pad(formatDuration(process.uptime()), 4, true),
-        pad((p.percentage).toFixed(4), 8, true),
-        pad(formatNumber(p.transferred),6,true),
-        pad(formatNumber(p.length),6,true),
-        pad(formatNumber(p.speed),4,true),
-        formatNumber(stats.done - stats.skipped),
-        formatNumber(stats.skipped),
-        formatDuration(p.eta)
-    ));
-}
+test('mbtiles', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
+  var dst = dsturi('valid.mbtiles');
+  copy(fixture, dst, {}, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 21, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
 
-function formatDuration(duration) {
-    var seconds = duration % 60;
-    duration -= seconds;
-    var minutes = (duration % 3600) / 60;
-    duration -= minutes * 60;
-    var hours = (duration % 86400) / 3600;
-    duration -= hours * 3600;
-    var days = duration / 86400;
+test('corrupt mbtiles', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.corrupt.mbtiles');
+  var dst = dsturi('invalid.corrupt.mbtiles');
+  copy(fixture, dst, {}, function(err) {
+    t.ok(err, 'expected error');
+    t.equal(err.code, 'EINVALID', 'marked invalid');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 0, 'rendered no tiles');
+      t.end();
+    });
+  });
+});
 
-    return (days > 0 ? days + 'd ' : '') +
-        (hours > 0 || days > 0 ? hours + 'h ' : '') +
-        (minutes > 0 || hours > 0 || days > 0 ? minutes + 'm ' : '') +
-        seconds + 's';
-}
-
-function pad(str, len, r) {
-    while (str.length < len) str = r ? ' ' + str : str + ' ';
-    return str;
-}
-
-function formatNumber(num) {
-    num = num || 0;
-    if (num >= 1e6) {
-        return (num / 1e6).toFixed(2) + 'm';
-    } else if (num >= 1e3) {
-        return (num / 1e3).toFixed(1) + 'k';
-    } else {
-        return num.toFixed(0);
-    }
-    return num.join('.');
-}
-
-function timeRemaining(progress) {
-    return Math.floor(
-        (process.uptime()) * (1 / progress) -
-        (process.uptime())
-    );
-}
+test('null mbtiles', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.null-tile.mbtiles');
+  var dst = dsturi('invalid.null-tile.mbtiles');
+  copy(fixture, dst, {}, function(err) {
+    t.ok(err, 'expected error');
+    t.equal(err.code, 'EINVALID', 'marked invalid');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 0, 'rendered no tiles');
+      t.end();
+    });
+  });
+});

@@ -31,22 +31,18 @@ module.exports = function(filepath, s3url, options, callback) {
   // Make sure the s3url is of type s3://bucket/key
   s3url = s3urls.convert(s3url, 's3');
 
-  getUri(filepath, function(err, uri) {
+  getUri(filepath, function(err, srcUri) {
     if (err) return callback(err);
 
     var copyTiles = (function(protocol) {
       // customized copy for serialtiles
       if (protocol === 'serialtiles:') return copy.serialtiles;
 
-      // no-op for tm2z, tilejson
-      if (protocol === 'tm2z:' || protocol === 'tilejson:')
-        return function(a, b, c, cb) { cb(); };
-
       // otherwise tilelive.copy
-      return copy.tilelivecopy;
-    })(url.parse(uri).protocol);
+      return copy.tilelive;
+    })(url.parse(srcUri).protocol);
 
-    copyTiles(filepath, s3url, options, function(err) {
+    copyTiles(srcUri, s3url, options, function(err) {
       if (!err) return callback();
 
       var fatal = [ 'SQLITE_CORRUPT', 'EINVALIDTILE' ];
