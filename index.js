@@ -47,7 +47,7 @@ module.exports = function(filepath, s3url, options, callback) {
     })(url.parse(uri).protocol);
 
     copyTiles(filepath, s3url, options, function(err) {
-      if (!err) return callback;
+      if (!err) return callback();
 
       var fatal = [ 'SQLITE_CORRUPT', 'EINVALIDTILE' ];
       if (fatal.indexOf(err.code) !== -1) err.code = 'EINVALID';
