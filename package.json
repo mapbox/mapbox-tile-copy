@@ -37,6 +37,6 @@
     "tape": "^3.0.2"
   },
   "bin": {
-    "mapbox-tile-copy": "./bin/mapbox-tile-copy"
+    "mapbox-tile-copy": "./bin/mapbox-tile-copy.js"
   }
 }
