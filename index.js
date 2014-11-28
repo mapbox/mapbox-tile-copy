@@ -21,8 +21,8 @@ S3.registerProtocols(tilelive);
 
 Vector.mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-default-fonts')), { recurse: true });
 Vector.mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-pro-fonts')), { recurse: true });
-if (process.env.MapboxUploadValidateFonts)
-  Vector.mapnik.register_fonts(process.env.MapboxUploadValidateFonts, { recurse: true });
+if (process.env.MapboxTileCopyFonts)
+  Vector.mapnik.register_fonts(process.env.MapboxTileCopyFonts, { recurse: true });
 
 var mapnik = require('mapnik');
 mapnik.Logger.setSeverity(mapnik.Logger.NONE);
