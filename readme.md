@@ -53,6 +53,7 @@ $ MapboxTileCopyFonts=/path/to/font/dir mapbox-tile-copy ~/style.tm2z s3://my-bu
 - .shp
 - .tif
 - .vrt
+- serialtiles
 
 ## Running tests
 
