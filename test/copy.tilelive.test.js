@@ -168,7 +168,7 @@ test('copy null-tile mbtiles', function(t) {
   var dst = dsturi('invalid.mbtiles');
   tileliveCopy(src, dst, {}, function(err) {
     t.ok(err, 'expected error');
-    t.equal(err.code, 'EINVALIDTILE');
+    t.equal(err.code, 'EINVALIDTILE', 'pass-through errors encountered during copy');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 0, 'did not render any tiles');
