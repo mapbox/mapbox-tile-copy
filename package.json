@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/mapbox/mapbox-tile-copy",
   "dependencies": {
-    "mapbox-file-sniff": "0.0.6",
+    "mapbox-file-sniff": "0.0.8",
     "mapbox-studio-default-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-default-fonts-0.0.4-4afb5235f457bd1c1a5a70fce6c2aa83bf7a851e.tgz",
     "mapbox-studio-pro-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-pro-fonts-1.0.0-9870a90b713f307b9391829602f4d5857e419615.tgz",
     "mapnik": "^3.1.0",
@@ -27,7 +27,7 @@
     "s3urls": "^1.3.0",
     "tilejson": "^0.10.0",
     "tilelive": "^5.4.0",
-    "tilelive-omnivore": "0.0.5",
+    "tilelive-omnivore": "0.0.6",
     "tilelive-s3": "^1.0.0",
     "tilelive-vector": "^3.0.4"
   },
