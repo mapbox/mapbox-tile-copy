@@ -66,6 +66,7 @@ fs.exists(srcfile, function(exists) {
     }
 
     process.stdout.write('\n');
+    process.exit(0);
   });
 });
 
