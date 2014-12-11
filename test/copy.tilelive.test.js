@@ -177,7 +177,7 @@ test('copy null-tile mbtiles', function(t) {
   });
 });
 
-test('successfully copy a tif', function(t) {
+test('successfully copy a tif', { timeout: Infinity }, function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
   var src = 'omnivore://' + fixture;
   var dst = dsturi('valid.geotiff');
