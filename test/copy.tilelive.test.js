@@ -185,7 +185,7 @@ test('successfully copy a tif', { timeout: Infinity }, function(t) {
     t.ifError(err, 'copied tiles');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      t.equal(count, 88, 'rendered all tiles');
+      t.equal(count, 85, 'rendered all tiles');
       t.end();
     });
   });
