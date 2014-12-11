@@ -177,7 +177,7 @@ test('copy null-tile mbtiles', function(t) {
   });
 });
 
-test('successfully copy a tif', function(t) {
+test('successfully copy a tif', { timeout: Infinity }, function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
   var src = 'omnivore://' + fixture;
   var dst = dsturi('valid.geotiff');
@@ -185,7 +185,7 @@ test('successfully copy a tif', function(t) {
     t.ifError(err, 'copied tiles');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      t.equal(count, 88, 'rendered all tiles');
+      t.equal(count, 85, 'rendered all tiles');
       t.end();
     });
   });
