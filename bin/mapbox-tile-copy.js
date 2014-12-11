@@ -43,7 +43,7 @@ var options = {};
 
 if (!argv.withoutprogress) options.progress = report;
 
-if (argv.part && argv.parts) options.job = {
+if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
   total: argv.parts,
   num: argv.part
 };
@@ -113,4 +113,8 @@ function formatNumber(num) {
     return num.toFixed(0);
   }
   return num.join('.');
+}
+
+function isNumeric(num) {
+  return !isNaN(parseFloat(num));
 }
