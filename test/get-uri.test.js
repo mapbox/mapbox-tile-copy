@@ -32,7 +32,7 @@ test('get-uri: invalid.tilejson', function(t) {
   getUri(filepath, function(err, uri) {
     t.ok(err, 'expected error');
     t.equal(err.code, 'EINVALID', 'expected error code');
-    t.equal(err.message, 'Unknown filetype.', 'expected error message');
+    t.equal(err.message, 'Unknown filetype', 'expected error message');
     t.end();
   });
 });
