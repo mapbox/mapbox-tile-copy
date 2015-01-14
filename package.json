@@ -34,6 +34,7 @@
   "devDependencies": {
     "aws-sdk": "^2.0.25",
     "request": "^2.47.0",
+    "sinon": "^1.12.2",
     "tape": "^3.0.2"
   },
   "bin": {
