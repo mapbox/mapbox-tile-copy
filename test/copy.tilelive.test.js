@@ -2,11 +2,13 @@ var test = require('tape');
 var path = require('path');
 var crypto = require('crypto');
 var tileliveCopy = require('../lib/copy').tilelive;
+var tilelive = require('tilelive');
 var AWS = require('aws-sdk');
 var s3urls = require('s3urls');
 var os = require('os');
 var fs = require('fs');
 var mtc = require('..'); // just to get protocols registered
+var sinon = require('sinon');
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
 
@@ -52,11 +54,15 @@ test('copy mbtiles', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
   var dst = dsturi('valid.mbtiles');
+  sinon.spy(tilelive, 'copy');
+
   tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'copied');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 21, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
+      tilelive.copy.restore();
       t.end();
     });
   });
@@ -69,12 +75,16 @@ test('copy omnivore', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
   var src = 'omnivore://' + fixture;
   var dst = dsturi('valid.geojson');
+  sinon.spy(tilelive, 'copy');
+
   onlineTiles = dst;
   tileliveCopy(src, dst, { maxzoom: 5 }, function(err) {
     t.ifError(err, 'copied');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 30, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses scanline scheme for geojson');
+      tilelive.copy.restore();
       t.end();
     });
   });
@@ -83,6 +93,7 @@ test('copy omnivore', function(t) {
 test('copy tilejson', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.tilejson');
   var tmp = path.join(os.tmpdir(), crypto.randomBytes(16).toString('hex'));
+  sinon.spy(tilelive, 'copy');
 
   fs.readFile(fixture, 'utf8', function(err, data) {
     data = JSON.parse(data);
@@ -98,6 +109,8 @@ test('copy tilejson', function(t) {
       tileCount(dst, function(err, count) {
         t.ifError(err, 'counted tiles');
         t.equal(count, 30, 'expected number of tiles');
+        t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for tilejson');
+        tilelive.copy.restore();
         t.end();
       });
     });
@@ -108,11 +121,15 @@ test('copy tm2z', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.tm2z');
   var src = 'tm2z://' + fixture;
   var dst = dsturi('valid.tm2z');
+  sinon.spy(tilelive, 'copy');
+
   tileliveCopy(src, dst, { maxzoom: 3 }, function(err) {
     t.ifError(err, 'copied');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 85, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for tm2z');
+      tilelive.copy.restore();
       t.end();
     });
   });
@@ -181,11 +198,15 @@ test('successfully copy a tif', { timeout: Infinity }, function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
   var src = 'omnivore://' + fixture;
   var dst = dsturi('valid.geotiff');
+  sinon.spy(tilelive, 'copy');
+
   tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'copied tiles');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 85, 'rendered all tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for tifs');
+      tilelive.copy.restore();
       t.end();
     });
   });
