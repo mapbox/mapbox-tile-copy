@@ -61,7 +61,7 @@ fs.exists(srcfile, function(exists) {
 
   mapboxTileCopy(srcfile, dsturi, options, function(err){
     if (err) {
-      console.error(err);
+      console.error(err.stack);
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
