@@ -33,6 +33,7 @@ if (!argv._[0]) {
   console.log('Options:');
   console.log('  --parts=[number]');
   console.log('  --part=[number]');
+  console.log('  --retry=[number]     Retry get/put operations on failure');
   console.log('  --withoutprogress    Shows progress by default');
   process.exit(1);
 }
@@ -47,6 +48,8 @@ if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
   total: argv.parts,
   num: argv.part
 };
+
+if (isNumeric(argv.retry)) options.retry = parseInt(argv.retry, 10);
 
 if (!dsturi || !s3urls.valid(dsturi)) {
   console.error('You must provide a valid S3 url');
