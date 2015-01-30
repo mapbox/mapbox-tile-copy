@@ -22,6 +22,7 @@ var util = require('util');
 var fs = require('fs');
 var s3urls = require('s3urls');
 var argv = require('minimist')(process.argv.slice(2));
+var started = +new Date();
 
 if (!argv._[0]) {
   console.log('Usage:');
@@ -34,7 +35,7 @@ if (!argv._[0]) {
   console.log('  --parts=[number]');
   console.log('  --part=[number]');
   console.log('  --retry=[number]     Retry get/put operations on failure');
-  console.log('  --withoutprogress    Shows progress by default');
+  console.log('  --progressinterval=[number of seconds]   If not included, shows progress by default');
   process.exit(1);
 }
 
@@ -42,7 +43,10 @@ var srcfile = argv._[0];
 var dsturi = argv._[1];
 var options = {};
 
-if (!argv.withoutprogress) options.progress = report;
+options.progress = getProgress;
+if (argv.progressinterval > 0) {
+  setInterval(report, argv.progressinterval * 1000);
+}
 
 if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
   total: argv.parts,
@@ -68,54 +72,31 @@ fs.exists(srcfile, function(exists) {
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
-    process.stdout.write('\n');
+    if (argv.progressinterval > 0) {
+      report();
+      process.stdout.write('\n');
+    }
+
     process.exit(0);
   });
 });
 
-function report(stats, p) {
-  util.print(util.format('\r\033[K[%s] %s%% %s/%s @ %s/s | ✓ %s □ %s | %s left',
-    pad(formatDuration(process.uptime()), 4, true),
-    pad((p.percentage).toFixed(4), 8, true),
-    pad(formatNumber(p.transferred),6,true),
-    pad(formatNumber(p.length),6,true),
-    pad(formatNumber(p.speed),4,true),
-    formatNumber(stats.done - stats.skipped),
-    formatNumber(stats.skipped),
-    formatDuration(p.eta)
+var stats, p;
+function getProgress(statistics, prog) {
+  stats = statistics;
+  p = prog;
+  if (isNumeric(argv.progressinterval) && Number(argv.progressinterval) === 0) return;
+  if (!argv.progressinterval) report();
+}
+
+function report() {
+  if (!stats || !p) return;
+  util.print(util.format('\r\033[K%s tiles @ %s/s, %s% complete [%ss]',
+    p.transferred,
+    Math.round(p.speed),
+    Math.round(p.percentage),
+    p.runtime
   ));
-}
-
-function formatDuration(duration) {
-  var seconds = duration % 60;
-  duration -= seconds;
-  var minutes = (duration % 3600) / 60;
-  duration -= minutes * 60;
-  var hours = (duration % 86400) / 3600;
-  duration -= hours * 3600;
-  var days = duration / 86400;
-
-  return (days > 0 ? days + 'd ' : '') +
-    (hours > 0 || days > 0 ? hours + 'h ' : '') +
-    (minutes > 0 || hours > 0 || days > 0 ? minutes + 'm ' : '') +
-    seconds + 's';
-}
-
-function pad(str, len, r) {
-  while (str.length < len) str = r ? ' ' + str : str + ' ';
-  return str;
-}
-
-function formatNumber(num) {
-  num = num || 0;
-  if (num >= 1e6) {
-    return (num / 1e6).toFixed(2) + 'm';
-  } else if (num >= 1e3) {
-    return (num / 1e3).toFixed(1) + 'k';
-  } else {
-    return num.toFixed(0);
-  }
-  return num.join('.');
 }
 
 function isNumeric(num) {
