@@ -5,6 +5,8 @@ var path = require('path');
 var request = require('request');
 var AWS = require('aws-sdk');
 var url = require('url');
+var sinon = require('sinon');
+var tilelive = require('tilelive');
 
 var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
 
@@ -50,6 +52,8 @@ test('serialtiles-copy: gzipped vector tiles', function(t) {
 
   var urlTemplate = util.format(s3url, 'test.valid-gzip', '0');
 
+  sinon.spy(tilelive, 'createWriteStream');
+
   copy(uri, urlTemplate, function(err) {
     t.ifError(err, 'copied');
     request.head(urlTemplate.replace('{z}/{x}/{y}', '0/0/0'), function (err, res) {
@@ -58,6 +62,33 @@ test('serialtiles-copy: gzipped vector tiles', function(t) {
       t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
       t.equal(res.headers['content-length'], '55556', 'expected content-length');
       t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
+      t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, undefined, 'passes options.retry to tilelive.createWriteStream');
+      tilelive.createWriteStream.restore();
+      t.end();
+    });
+  });
+});
+
+test('serialtiles-copy: retry', function(t) {
+  var uri = [
+    'serialtiles:',
+    path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
+  ].join('//');
+
+  var urlTemplate = util.format(s3url, 'test.retry', '0');
+
+  sinon.spy(tilelive, 'createWriteStream');
+
+  copy(uri, urlTemplate, {retry:5}, function(err) {
+    t.ifError(err, 'copied');
+    request.head(urlTemplate.replace('{z}/{x}/{y}', '0/0/0'), function (err, res) {
+      t.ifError(err, 'found expected file on s3');
+      t.equal(res.statusCode, 200, 'expected status code');
+      t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
+      t.equal(res.headers['content-length'], '55556', 'expected content-length');
+      t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
+      t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, 5, 'passes options.retry to tilelive.createWriteStream');
+      tilelive.createWriteStream.restore();
       t.end();
     });
   });
