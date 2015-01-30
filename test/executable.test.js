@@ -85,7 +85,7 @@ test('s3 url', function(t) {
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 64, 'expected stdout.length');
+    t.equal(stdout.length, 37, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -99,7 +99,7 @@ test('https s3 url', function(t) {
   var cmd = [ copy, fixture, s3urls.convert(dst, 'bucket-in-host') ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 64, 'expected stdout.length');
+    t.equal(stdout.length, 37, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -110,10 +110,10 @@ test('https s3 url', function(t) {
 
 test('no progress', function(t) {
   var dst = dsturi('valid.noprogress');
-  var cmd = [ copy, fixture, dst, '--withoutprogress' ].join(' ');
+  var cmd = [ copy, fixture, dst, '--progressinterval', '0' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 1, 'expected stdout.length');
+    t.equal(stdout.length, 0, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -122,12 +122,23 @@ test('no progress', function(t) {
   });
 });
 
+test('progress interval', function(t) {
+  var dst = dsturi('valid.interval');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
+  var cmd = [ copy, fixture, dst, '--progressinterval', '1' ].join(' ');
+  var proc = exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copies');
+    t.ok(stdout.length > 0, 'logs something');
+    t.end();
+  });
+});
+
 test('parallel', function(t) {
   var dst = dsturi('valid.parallel');
   var cmd = [ copy, fixture, dst, '--part', '1', '--parts', '10' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 64, 'expected stdout.length');
+    t.equal(stdout.length, 37, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count < 4, 'did not render all tiles');
@@ -141,7 +152,7 @@ test('part zero', function(t) {
   var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '10' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 64, 'expected stdout.length');
+    t.equal(stdout.length, 37, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count < 4, 'did not render all tiles');
@@ -155,7 +166,7 @@ test('retry', function(t) {
   var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 64, 'expected stdout.length');
+    t.equal(stdout.length, 37, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -163,4 +174,3 @@ test('retry', function(t) {
     });
   });
 });
-
