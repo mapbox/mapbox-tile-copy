@@ -149,3 +149,18 @@ test('part zero', function(t) {
     });
   });
 });
+
+test('retry', function(t) {
+  var dst = dsturi('valid.retry');
+  var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 64, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 4, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+

@@ -62,12 +62,31 @@ test('copy mbtiles', function(t) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 21, 'expected number of tiles');
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
+      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
       t.end();
     });
   });
 });
 
+test('copy retry', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('retry');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, {retry:5}, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 21, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
+      t.equal(tilelive.copy.getCall(0).args[2].retry, 5, 'passes options.retry to tilelive.copy');
+      tilelive.copy.restore();
+      t.end();
+    });
+  });
+});
 
 var onlineTiles;
 
