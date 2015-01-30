@@ -166,7 +166,7 @@ test('retry', function(t) {
   var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 64, 'expected stdout.length');
+    t.equal(stdout.length, 37, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -174,4 +174,3 @@ test('retry', function(t) {
     });
   });
 });
-
