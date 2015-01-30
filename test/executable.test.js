@@ -125,12 +125,20 @@ test('no progress', function(t) {
 test('progress interval', function(t) {
   var dst = dsturi('valid.interval');
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
-  var cmd = [ copy, fixture, dst, '--progressinterval', '1' ].join(' ');
-  exec(cmd, function(err, stdout, stderr) {
-    t.ifError(err, 'copied');
-    t.equal(stdout.length, 78, 'expected stdout.length');
+  var cmd = [ copy, fixture, dst, '--progressinterval', '0.5' ].join(' ');
+  var proc = exec(cmd);
+  var logs = 0, start;
+
+  proc.on('error', function(err) { t.ifError(err, 'copied'); });
+  proc.on('exit', function() {
+    var duration = (Date.now() - start) / 1000,
+        anticipated = Math.ceil(duration / 0.5);
+    t.ok(Math.abs(logs - anticipated) < 2, 'expected number of reporting occurrences');
     t.end();
   });
+
+  start = Date.now();
+  proc.stdout.on('data', function() { logs++; });
 });
 
 test('parallel', function(t) {
