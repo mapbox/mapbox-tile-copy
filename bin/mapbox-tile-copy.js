@@ -44,8 +44,9 @@ var dsturi = argv._[1];
 var options = {};
 
 options.progress = getProgress;
-if (argv.progressinterval > 0) {
-  setInterval(report, argv.progressinterval * 1000);
+var interval = argv.progressinterval === undefined ? -1 : Number(argv.progressinterval);
+if (interval > 0) {
+  setInterval(report, interval * 1000);
 }
 
 if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
@@ -72,11 +73,7 @@ fs.exists(srcfile, function(exists) {
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
-    if (argv.progressinterval > 0) {
-      report();
-      process.stdout.write('\n');
-    }
-
+    if (interval !== 0) report(true);
     process.exit(0);
   });
 });
@@ -85,17 +82,18 @@ var stats, p;
 function getProgress(statistics, prog) {
   stats = statistics;
   p = prog;
-  if (isNumeric(argv.progressinterval) && Number(argv.progressinterval) === 0) return;
-  if (!argv.progressinterval) report();
+  if (interval < 0) report();
 }
 
-function report() {
+function report(final) {
   if (!stats || !p) return;
-  util.print(util.format('\r\033[K%s tiles @ %s/s, %s% complete [%ss]',
+  util.print(util.format('%s%s tiles @ %s/s, %s% complete [%ss]%s',
+    interval > 0 ? '' : '\r\033[K',
     p.transferred,
     Math.round(p.speed),
     Math.round(p.percentage),
-    p.runtime
+    p.runtime,
+    interval > 0 || final ? '\n' : ''
   ));
 }
 
