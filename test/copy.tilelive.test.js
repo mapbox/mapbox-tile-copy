@@ -102,7 +102,7 @@ test('copy omnivore', function(t) {
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 30, 'expected number of tiles');
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses scanline scheme for geojson');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for geojson');
       tilelive.copy.restore();
       t.end();
     });
