@@ -230,3 +230,21 @@ test('successfully copy a tif', function(t) {
     });
   });
 });
+
+test('successfully copy a bigtiff', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.bigtiff.tif');
+  var src = 'omnivore://' + fixture;
+  var dst = dsturi('valid.bigtiff');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ifError(err, 'copied tiles');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 102, 'rendered all tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for tifs');
+      tilelive.copy.restore();
+      t.end();
+    });
+  });
+});
