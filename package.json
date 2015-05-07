@@ -28,7 +28,7 @@
     "s3urls": "^1.3.0",
     "tilejson": "^0.10.0",
     "tilelive": "^5.7.0",
-    "tilelive-omnivore": "^1.1.8",
+    "tilelive-omnivore": "git://github.com/mapbox/tilelive-omnivore.git#mapnik-om-6",
     "tilelive-s3": "^1.3.0",
     "tilelive-vector": "3.2.5"
   },
