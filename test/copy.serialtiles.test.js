@@ -16,34 +16,6 @@ var s3url = [
   'mapbox-tile-copy-serialtiles/%s/%s/{z}/{x}/{y}'
 ].join('-');
 
-test('serialtiles-copy: deflated vector tiles', function(t) {
-  var uri = [
-    'serialtiles:',
-    path.resolve(__dirname, 'fixtures', 'valid.serialtiles.deflate.vector.gz')
-  ].join('//');
-
-  var urlTemplate = util.format(s3url, 'test.valid-deflate', '0');
-
-  copy(uri, urlTemplate, function(err) {
-    t.ifError(err, 'copied');
-    request.head(urlTemplate.replace('{z}/{x}/{y}', '0/0/0'), function (err, res) {
-      t.ifError(err, 'found expected file on s3');
-      t.equal(res.statusCode, 200, 'expected status code');
-      t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
-      t.equal(res.headers['content-length'], '54263', 'expected content-length');
-      t.equal(res.headers['content-encoding'], 'deflate', 'expected content-encoding');
-      request.head(urlTemplate.replace('{z}/{x}/{y}', '2/2/3'), function(err, res) {
-        t.ifError(err, 'found expected file on s3');
-        t.equal(200, res.statusCode, 'expected status code');
-        t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
-        t.equal(res.headers['content-length'], '2065', 'expected content-length');
-        t.equal(res.headers['content-encoding'], 'deflate', 'expected content-encoding');
-        t.end();
-      });
-    });
-  });
-});
-
 test('serialtiles-copy: gzipped vector tiles', function(t) {
   var uri = [
     'serialtiles:',
@@ -97,7 +69,7 @@ test('serialtiles-copy: retry', function(t) {
 test('serialtiles-copy: parallel processing', function(t) {
   var uri = [
     'serialtiles:',
-    path.resolve(__dirname, 'fixtures', 'valid.serialtiles.deflate.vector.gz')
+    path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
   ].join('//');
 
   var urlTemplate = util.format(s3url, 'test.valid-parallel', '0');
