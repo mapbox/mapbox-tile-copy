@@ -102,3 +102,18 @@ test('serialtiles-copy: tiles too big', function(t) {
     t.end();
   });
 });
+
+test('serialtiles-copy: vector tile invalid', function(t) {
+  var uri = [
+    'serialtiles:',
+    path.resolve(__dirname, 'fixtures', 'invalid.serialtiles.gzipped.gz')
+  ].join('//');
+
+  var urlTemplate = util.format(s3url, 'test.invalid-vector-tile', '0');
+  copy(uri, urlTemplate, function(err) {
+    t.ok(err, 'expected error');
+    t.equal(err.code, 'EINVALID', 'expected error code');
+    t.equal(err.message, 'Invalid data', 'expected error message');
+    t.end();
+  });
+});
