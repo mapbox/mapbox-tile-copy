@@ -12,17 +12,16 @@
 var maxThreads = Math.ceil(Math.max(4, require('os').cpus().length * 1.5));
 process.env.UV_THREADPOOL_SIZE = maxThreads;
 
+var util = require('util');
+var fs = require('fs');
 var http = require('http');
 var https = require('https');
 http.globalAgent.maxSockets = 30;
 https.globalAgent.maxSockets = 30;
 
 var mapboxTileCopy = require('../index.js');
-var util = require('util');
-var fs = require('fs');
 var s3urls = require('s3urls');
 var argv = require('minimist')(process.argv.slice(2));
-var started = +new Date();
 
 if (!argv._[0]) {
   console.log('Usage:');
