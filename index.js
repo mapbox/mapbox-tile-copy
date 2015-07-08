@@ -34,18 +34,17 @@ module.exports = function(filepath, s3url, options, callback) {
 
   getUri(filepath, function(err, srcUri) {
     if (err) return callback(err);
-
     if (url.parse(srcUri).protocol === 'serialtiles:') {
       serialtilescopy(srcUri, s3url, options, copied);
     } else {
       tilelivecopy(srcUri, s3url, options, copied);
     }
-
-    function copied(err) {
-      if (!err) return callback();
-      var fatal = { SQLITE_CORRUPT: true, EINVALIDTILE: true };
-      if (fatal[err.code]) err.code = 'EINVALID';
-      return callback(err);
-    }
   });
+
+  function copied(err) {
+    if (!err) return callback();
+    var fatal = { SQLITE_CORRUPT: true, EINVALIDTILE: true };
+    if (fatal[err.code]) err.code = 'EINVALID';
+    return callback(err);
+  }
 };
