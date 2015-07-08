@@ -1,5 +1,5 @@
 var test = require('tape').test;
-var copy = require('../lib/copy').serialtiles;
+var copy = require('../lib/serialtilescopy');
 var util = require('util');
 var path = require('path');
 var request = require('request');
