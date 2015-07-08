@@ -1,6 +1,7 @@
 var url = require('url');
 var getUri = require('./lib/get-uri');
-var copy = require('./lib/copy');
+var tilelivecopy = require('./lib/tilelivecopy');
+var serialtilescopy = require('./lib/serialtilescopy');
 var s3urls = require('s3urls');
 
 var tilelive = require('tilelive');
@@ -36,10 +37,10 @@ module.exports = function(filepath, s3url, options, callback) {
 
     var copyTiles = (function(protocol) {
       // customized copy for serialtiles
-      if (protocol === 'serialtiles:') return copy.serialtiles;
+      if (protocol === 'serialtiles:') return serialtilescopy;
 
       // otherwise tilelive.copy
-      return copy.tilelive;
+      return tilelivecopy;
     })(url.parse(srcUri).protocol);
 
     copyTiles(srcUri, s3url, options, function(err) {
