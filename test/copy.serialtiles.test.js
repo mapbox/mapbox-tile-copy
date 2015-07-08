@@ -88,6 +88,21 @@ test('serialtiles-copy: parallel processing', function(t) {
   });
 });
 
+test('serialtiles-copy: stats', function(t) {
+  var uri = [
+    'serialtiles:',
+    path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
+  ].join('//');
+
+  var urlTemplate = util.format(s3url, 'test.valid-parallel', '0');
+
+  copy(uri, urlTemplate, { stats: true, job: { num: 0, total: 10 } }, function(err, stats) {
+    t.ifError(err, 'no error');
+    t.equal(stats.world_merc.count, 245);
+    t.end();
+  });
+});
+
 test('serialtiles-copy: tiles too big', function(t) {
   var uri = [
     'serialtiles:',

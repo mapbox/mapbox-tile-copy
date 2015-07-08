@@ -117,11 +117,10 @@ test('copy omnivore stats', function(t) {
   sinon.spy(tilelive, 'copy');
 
   onlineTiles = dst;
-  var stats = new TileStatStream();
-  tileliveCopy(src, dst, { maxzoom: 5, transform: stats }, function(err) {
+  tileliveCopy(src, dst, { maxzoom: 5, stats: true }, function(err, stats) {
     t.ifError(err, 'copied');
-    t.ok(stats.getStatistics(), 'has stats');
-    t.equal(stats.getStatistics().valid.geometryTypes.Polygon, 215, 'Counts polygons');
+    t.ok(stats, 'has stats');
+    t.equal(stats.valid.geometryTypes.Polygon, 215, 'Counts polygons');
     tilelive.copy.restore();
     t.end();
   });

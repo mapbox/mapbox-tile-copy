@@ -25,8 +25,6 @@ var mapboxTileCopy = require('../index.js');
 var s3urls = require('s3urls');
 var argv = require('minimist')(process.argv.slice(2));
 
-var TileStatStream = require('tile-stat-stream');
-
 if (!argv._[0]) {
   process.stdout.write(fs.readFileSync(__dirname + '/help', 'utf8'));
   process.exit(1);
@@ -37,6 +35,8 @@ var dsturi = argv._[1];
 var options = {};
 
 options.progress = getProgress;
+
+options.stats = !!argv.stats;
 
 var interval = argv.progressinterval === undefined ? -1 : Number(argv.progressinterval);
 
@@ -51,8 +51,6 @@ if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
 
 if (isNumeric(argv.retry)) options.retry = parseInt(argv.retry, 10);
 
-if (argv.stats) options.transform = new TileStatStream();
-
 if (!dsturi || !s3urls.valid(dsturi)) {
   console.error('You must provide a valid S3 url');
   process.exit(1);
@@ -64,17 +62,14 @@ fs.exists(srcfile, function(exists) {
     process.exit(1);
   }
 
-  mapboxTileCopy(srcfile, dsturi, options, function(err){
+  mapboxTileCopy(srcfile, dsturi, options, function(err, stats) {
     if (err) {
       console.error(err.stack);
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
     if (argv.stats) {
-      fs.writeFile(
-        argv.stats,
-        JSON.stringify(options.transform.getStatistics()),
-        done);
+      fs.writeFile(argv.stats, JSON.stringify(stats), done);
     } else {
       done();
     }

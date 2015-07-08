@@ -41,8 +41,8 @@ module.exports = function(filepath, s3url, options, callback) {
     }
   });
 
-  function copied(err) {
-    if (!err) return callback();
+  function copied(err, stats) {
+    if (!err) return callback(err, stats);
     var fatal = { SQLITE_CORRUPT: true, EINVALIDTILE: true };
     if (fatal[err.code]) err.code = 'EINVALID';
     return callback(err);

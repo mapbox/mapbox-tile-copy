@@ -89,6 +89,7 @@ test('stats flag', function(t) {
   var cmd = [ copy, fixture, '--stats=' + tmpfile, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'no error');
+    t.pass(tmpfile);
     var stats = JSON.parse(fs.readFileSync(tmpfile));
     t.ok(stats);
     t.equal(stats.valid.geometryTypes.Polygon, 21344, 'Counts polygons');
