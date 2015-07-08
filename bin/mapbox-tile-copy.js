@@ -24,17 +24,7 @@ var s3urls = require('s3urls');
 var argv = require('minimist')(process.argv.slice(2));
 
 if (!argv._[0]) {
-  console.log('Usage:');
-  console.log('  mapbox-tile-copy <src> <dst> [--options]');
-  console.log('');
-  console.log('Example:');
-  console.log('  mapbox-tile-copy orig.mbtiles s3://bucket/prefix/{z}/{x}/{y}');
-  console.log('');
-  console.log('Options:');
-  console.log('  --parts=[number]');
-  console.log('  --part=[number]');
-  console.log('  --retry=[number]     Retry get/put operations on failure');
-  console.log('  --progressinterval=[number of seconds]   If not included, shows progress by default');
+  process.stdout.write(fs.readFileSync(__dirname + '/help', 'utf8'));
   process.exit(1);
 }
 

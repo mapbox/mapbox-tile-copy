@@ -1,0 +1,11 @@
+Usage:
+  mapbox-tile-copy <src> <dst> [--options]
+
+Example:
+  mapbox-tile-copy orig.mbtiles s3://bucket/prefix/{z}/{x}/{y}
+
+Options:
+  --parts=[number]
+  --part=[number]
+  --retry=[number]     Retry get/put operations on failure
+  --progressinterval=[number of seconds]   If not included, shows progress by default
