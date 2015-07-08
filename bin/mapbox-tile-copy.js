@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint no-process-exit: 0, no-path-concat: 0, no-octal-escape: 0 */
+
 // Our goal is a command that can be invoked something like this:
 // $ mapbox-tile-copy /path/to/some/file s3://bucket/folder/{z}/{x}/{y} --part=1 --parts=12
 //
@@ -24,17 +26,7 @@ var s3urls = require('s3urls');
 var argv = require('minimist')(process.argv.slice(2));
 
 if (!argv._[0]) {
-  console.log('Usage:');
-  console.log('  mapbox-tile-copy <src> <dst> [--options]');
-  console.log('');
-  console.log('Example:');
-  console.log('  mapbox-tile-copy orig.mbtiles s3://bucket/prefix/{z}/{x}/{y}');
-  console.log('');
-  console.log('Options:');
-  console.log('  --parts=[number]');
-  console.log('  --part=[number]');
-  console.log('  --retry=[number]     Retry get/put operations on failure');
-  console.log('  --progressinterval=[number of seconds]   If not included, shows progress by default');
+  process.stdout.write(fs.readFileSync(__dirname + '/help', 'utf8'));
   process.exit(1);
 }
 
@@ -43,7 +35,11 @@ var dsturi = argv._[1];
 var options = {};
 
 options.progress = getProgress;
+
+options.stats = !!argv.stats;
+
 var interval = argv.progressinterval === undefined ? -1 : Number(argv.progressinterval);
+
 if (interval > 0) {
   setInterval(report, interval * 1000);
 }
@@ -66,18 +62,27 @@ fs.exists(srcfile, function(exists) {
     process.exit(1);
   }
 
-  mapboxTileCopy(srcfile, dsturi, options, function(err){
+  mapboxTileCopy(srcfile, dsturi, options, function(err, stats) {
     if (err) {
       console.error(err.stack);
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
-    if (interval !== 0) report(true);
-    process.exit(0);
+    if (argv.stats) {
+      fs.writeFile(argv.stats, JSON.stringify(stats), done);
+    } else {
+      done();
+    }
+
+    function done() {
+      if (interval !== 0) report(true);
+      process.exit(0);
+    }
   });
 });
 
 var stats, p;
+
 function getProgress(statistics, prog) {
   stats = statistics;
   p = prog;
