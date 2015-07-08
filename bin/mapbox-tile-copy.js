@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint no-process-exit: 0, no-path-concat: 0, no-octal-escape: 0 */
+
 // Our goal is a command that can be invoked something like this:
 // $ mapbox-tile-copy /path/to/some/file s3://bucket/folder/{z}/{x}/{y} --part=1 --parts=12
 //
@@ -23,6 +25,8 @@ var mapboxTileCopy = require('../index.js');
 var s3urls = require('s3urls');
 var argv = require('minimist')(process.argv.slice(2));
 
+var TileStatStream = require('tile-stat-stream');
+
 if (!argv._[0]) {
   process.stdout.write(fs.readFileSync(__dirname + '/help', 'utf8'));
   process.exit(1);
@@ -33,7 +37,9 @@ var dsturi = argv._[1];
 var options = {};
 
 options.progress = getProgress;
+
 var interval = argv.progressinterval === undefined ? -1 : Number(argv.progressinterval);
+
 if (interval > 0) {
   setInterval(report, interval * 1000);
 }
@@ -44,6 +50,8 @@ if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
 };
 
 if (isNumeric(argv.retry)) options.retry = parseInt(argv.retry, 10);
+
+if (argv.stats) options.transform = new TileStatStream();
 
 if (!dsturi || !s3urls.valid(dsturi)) {
   console.error('You must provide a valid S3 url');
@@ -62,12 +70,24 @@ fs.exists(srcfile, function(exists) {
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
-    if (interval !== 0) report(true);
-    process.exit(0);
+    if (argv.stats) {
+      fs.writeFile(
+        argv.stats,
+        JSON.stringify(options.transform.getStatistics()),
+        done);
+    } else {
+      done();
+    }
+
+    function done() {
+      if (interval !== 0) report(true);
+      process.exit(0);
+    }
   });
 });
 
 var stats, p;
+
 function getProgress(statistics, prog) {
   stats = statistics;
   p = prog;

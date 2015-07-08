@@ -1,9 +1,11 @@
 var test = require('tape');
 var exec = require('child_process').exec;
+var os = require('os');
+var fs = require('fs');
+var crypto = require('crypto');
 var path = require('path');
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
-var crypto = require('crypto');
 var copy = path.resolve(__dirname, '..', 'bin', 'mapbox-tile-copy.js');
 var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
 var runid = crypto.randomBytes(16).toString('hex');
@@ -28,7 +30,7 @@ function tileCount(dst, callback) {
   var s3 = new AWS.S3();
   var count = 0;
 
-  params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', ''));
+  var params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', ''));
   params.Prefix = params.Key;
   delete params.Key;
 
@@ -76,6 +78,20 @@ test('invalid source file', function(t) {
     t.ok(err, 'expected error');
     t.ok(/Error: Unknown filetype/.test(stderr), 'expected message');
     t.equal(err.code, 3, 'exit code 3');
+    t.end();
+  });
+});
+
+test('stats flag', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var tmpfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
+  var cmd = [ copy, fixture, '--stats=' + tmpfile, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'no error');
+    var stats = JSON.parse(fs.readFileSync(tmpfile));
+    t.ok(stats);
+    t.equal(stats.valid.geometryTypes.Polygon, 21344, 'Counts polygons');
     t.end();
   });
 });
