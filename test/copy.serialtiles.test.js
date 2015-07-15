@@ -1,5 +1,5 @@
 var test = require('tape').test;
-var copy = require('../lib/copy').serialtiles;
+var copy = require('../lib/serialtilescopy');
 var util = require('util');
 var path = require('path');
 var request = require('request');
@@ -85,6 +85,21 @@ test('serialtiles-copy: parallel processing', function(t) {
       t.ok(data.Contents.length < 21, 'should not render the entire dataset');
       t.end();
     });
+  });
+});
+
+test('serialtiles-copy: stats', function(t) {
+  var uri = [
+    'serialtiles:',
+    path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
+  ].join('//');
+
+  var urlTemplate = util.format(s3url, 'test.valid-parallel', '0');
+
+  copy(uri, urlTemplate, { stats: true, job: { num: 0, total: 10 } }, function(err, stats) {
+    t.ifError(err, 'no error');
+    t.equal(stats.world_merc.count, 245);
+    t.end();
   });
 });
 

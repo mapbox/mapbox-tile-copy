@@ -1,6 +1,7 @@
 var url = require('url');
 var getUri = require('./lib/get-uri');
-var copy = require('./lib/copy');
+var tilelivecopy = require('./lib/tilelivecopy');
+var serialtilescopy = require('./lib/serialtilescopy');
 var s3urls = require('s3urls');
 
 var tilelive = require('tilelive');
@@ -33,21 +34,17 @@ module.exports = function(filepath, s3url, options, callback) {
 
   getUri(filepath, function(err, srcUri) {
     if (err) return callback(err);
-
-    var copyTiles = (function(protocol) {
-      // customized copy for serialtiles
-      if (protocol === 'serialtiles:') return copy.serialtiles;
-
-      // otherwise tilelive.copy
-      return copy.tilelive;
-    })(url.parse(srcUri).protocol);
-
-    copyTiles(srcUri, s3url, options, function(err) {
-      if (!err) return callback();
-
-      var fatal = [ 'SQLITE_CORRUPT', 'EINVALIDTILE' ];
-      if (fatal.indexOf(err.code) !== -1) err.code = 'EINVALID';
-      return callback(err);
-    });
+    if (url.parse(srcUri).protocol === 'serialtiles:') {
+      serialtilescopy(srcUri, s3url, options, copied);
+    } else {
+      tilelivecopy(srcUri, s3url, options, copied);
+    }
   });
+
+  function copied(err, stats) {
+    if (!err) return callback(err, stats);
+    var fatal = { SQLITE_CORRUPT: true, EINVALIDTILE: true };
+    if (fatal[err.code]) err.code = 'EINVALID';
+    return callback(err);
+  }
 };

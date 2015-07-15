@@ -1,0 +1,17 @@
+Usage:
+  mapbox-tile-copy <src> <dst> [--options]
+
+Description:
+  mapbox-tile-copy takes a source that can be an MBTiles file,
+  serialtiles, vector datasource, or others, generates or extracts
+  tiles from it, and pushes the result to an S3 bucket.
+
+Example:
+  mapbox-tile-copy orig.mbtiles s3://bucket/prefix/{z}/{x}/{y}
+
+Options:
+  --parts=[number]
+  --part=[number]
+  --stats=[filename]
+  --retry=[number]     Retry get/put operations on failure
+  --progressinterval=[number of seconds]   If not included, shows progress by default
