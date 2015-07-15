@@ -120,7 +120,7 @@ test('copy omnivore stats', function(t) {
   tileliveCopy(src, dst, { maxzoom: 5, stats: true }, function(err, stats) {
     t.ifError(err, 'copied');
     t.ok(stats, 'has stats');
-    t.equal(stats.valid.geometryTypes.Polygon, 215, 'Counts polygons');
+    t.equal(stats.valid.geometryTypes.Polygon, 207, 'Counts polygons');
     tilelive.copy.restore();
     t.end();
   });
