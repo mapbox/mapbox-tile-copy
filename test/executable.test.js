@@ -92,7 +92,7 @@ test('stats flag', function(t) {
     t.pass(tmpfile);
     var stats = JSON.parse(fs.readFileSync(tmpfile));
     t.ok(stats);
-    t.equal(stats.valid.geometryTypes.Polygon, 21344, 'Counts polygons');
+    t.equal(stats.valid.geometryTypes.Polygon, 15588, 'Counts polygons');
     t.end();
   });
 });
