@@ -100,16 +100,13 @@ test('stats flag', function(t) {
 
 test('minzoom flag valid', function(t) {
   var dst = dsturi('valid.geojson');
-  console.log(dst);
+  var s3loc = dst.split('{z}')
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
   var cmd = [ copy, fixture, dst, '--minzoom 7' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'no error');
-    var s3loc = dst.split('{z}')
     exec('aws s3 ls ' + s3loc[0], function(err, stdout, stderr) {
-      console.log('inside exec');
-      console.log(err);
-      console.log(stdout);
+      t.notOk(/4/.test(stdout), 'succesfully overrides minzoom');
       t.end();
     });
   });
@@ -139,97 +136,97 @@ test('minzoom flag badval', function(t) {
   });
 });
 
-// test('s3 url', function(t) {
-//   var dst = dsturi('valid.s3url');
-//   var cmd = [ copy, fixture, dst ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'copied');
-//     t.equal(stdout.length, 75, 'expected stdout.length');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.equal(count, 4, 'expected number of tiles');
-//       t.end();
-//     });
-//   });
-// });
+test('s3 url', function(t) {
+  var dst = dsturi('valid.s3url');
+  var cmd = [ copy, fixture, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 75, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 4, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
 
-// test('https s3 url', function(t) {
-//   var dst = dsturi('valid.httpurl');
-//   var cmd = [ copy, fixture, s3urls.convert(dst, 'bucket-in-host') ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'copied');
-//     t.equal(stdout.length, 75, 'expected stdout.length');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.equal(count, 4, 'expected number of tiles');
-//       t.end();
-//     });
-//   });
-// });
+test('https s3 url', function(t) {
+  var dst = dsturi('valid.httpurl');
+  var cmd = [ copy, fixture, s3urls.convert(dst, 'bucket-in-host') ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 75, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 4, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
 
-// test('no progress', function(t) {
-//   var dst = dsturi('valid.noprogress');
-//   var cmd = [ copy, fixture, dst, '--progressinterval', '0' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'copied');
-//     t.equal(stdout.length, 0, 'expected stdout.length');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.equal(count, 4, 'expected number of tiles');
-//       t.end();
-//     });
-//   });
-// });
+test('no progress', function(t) {
+  var dst = dsturi('valid.noprogress');
+  var cmd = [ copy, fixture, dst, '--progressinterval', '0' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 0, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 4, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
 
-// test('progress interval', function(t) {
-//   var dst = dsturi('valid.interval');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
-//   var cmd = [ copy, fixture, dst, '--progressinterval', '1' ].join(' ');
-//   var proc = exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'copies');
-//     t.ok(stdout.length > 0, 'logs something');
-//     t.end();
-//   });
-// });
+test('progress interval', function(t) {
+  var dst = dsturi('valid.interval');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
+  var cmd = [ copy, fixture, dst, '--progressinterval', '1' ].join(' ');
+  var proc = exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copies');
+    t.ok(stdout.length > 0, 'logs something');
+    t.end();
+  });
+});
 
-// test('parallel', function(t) {
-//   var dst = dsturi('valid.parallel');
-//   var cmd = [ copy, fixture, dst, '--part', '1', '--parts', '10' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'copied');
-//     t.equal(stdout.length, 75, 'expected stdout.length');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.ok(count < 4, 'did not render all tiles');
-//       t.end();
-//     });
-//   });
-// });
+test('parallel', function(t) {
+  var dst = dsturi('valid.parallel');
+  var cmd = [ copy, fixture, dst, '--part', '1', '--parts', '10' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 75, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.ok(count < 4, 'did not render all tiles');
+      t.end();
+    });
+  });
+});
 
-// test('part zero', function(t) {
-//   var dst = dsturi('valid.part.zero');
-//   var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '10' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'copied');
-//     t.equal(stdout.length, 75, 'expected stdout.length');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.ok(count < 4, 'did not render all tiles');
-//       t.end();
-//     });
-//   });
-// });
+test('part zero', function(t) {
+  var dst = dsturi('valid.part.zero');
+  var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '10' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 75, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.ok(count < 4, 'did not render all tiles');
+      t.end();
+    });
+  });
+});
 
-// test('retry', function(t) {
-//   var dst = dsturi('valid.retry');
-//   var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'copied');
-//     t.equal(stdout.length, 75, 'expected stdout.length');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.equal(count, 4, 'expected number of tiles');
-//       t.end();
-//     });
-//   });
-// });
+test('retry', function(t) {
+  var dst = dsturi('valid.retry');
+  var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 75, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 4, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
