@@ -103,13 +103,18 @@ test('minzoom flag valid', function(t) {
   var s3loc = dst.split('{z}')
   console.log(dst);
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-  var cmd = [ copy, fixture, dst, '--minzoom 7' ].join(' ');
+  var cmd = [ copy, fixture, dst, '--minzoom 7', '--progressinterval', '0' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
+    console.log('stdout');
+    console.log(stdout);
+    console.log('stderr');
+    console.log(stderr);
     t.ifError(err, 'no error');
+    console.log(s3loc[0]);
     exec('aws s3 ls ' + s3loc[0], function(err, stdout, stderr) {
-      t.ok(/7/.test(stdout), 'succesfully overrides minzoom');
+      t.ok(/PRE 7/.test(stdout), 'succesfully overrides minzoom');
       console.log(stdout);
-      t.notOk(/4/.test(stdout), 'succesfully overrides minzoom');
+      t.notOk(/PRE 4/.test(stdout), 'succesfully overrides minzoom');
       t.end();
     });
   });
