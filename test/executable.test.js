@@ -83,43 +83,31 @@ test('invalid source file', function(t) {
   });
 });
 
-test('stats flag', function(t) {
-  var dst = dsturi('valid.geojson');
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-  var tmpfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
-  var cmd = [ copy, fixture, '--stats=' + tmpfile, dst ].join(' ');
-  exec(cmd, function(err, stdout, stderr) {
-    t.ifError(err, 'no error');
-    t.pass(tmpfile);
-    var stats = JSON.parse(fs.readFileSync(tmpfile));
-    t.ok(stats);
-    t.equal(stats.valid.geometryTypes.Polygon, 15588, 'Counts polygons');
-    t.end();
-  });
-});
+// test('stats flag', function(t) {
+//   var dst = dsturi('valid.geojson');
+//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+//   var tmpfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
+//   var cmd = [ copy, fixture, '--stats=' + tmpfile, dst ].join(' ');
+//   exec(cmd, function(err, stdout, stderr) {
+//     t.ifError(err, 'no error');
+//     t.pass(tmpfile);
+//     var stats = JSON.parse(fs.readFileSync(tmpfile));
+//     t.ok(stats);
+//     t.equal(stats.valid.geometryTypes.Polygon, 15588, 'Counts polygons');
+//     t.end();
+//   });
+// });
 
 test('minzoom flag valid', function(t) {
   var dst = dsturi('valid.geojson');
   var s3loc = dst.split('{z}')
-  console.log(dst);
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-  var cmd = [ copy, fixture, dst, '--minzoom 7', '--progressinterval', '0' ].join(' ');
+  var cmd = [ copy, fixture, dst, '--minzoom', '7' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
-    console.log('stdout');
-    console.log(stdout);
-    console.log('stderr');
-    console.log(stderr);
     t.ifError(err, 'no error');
-    console.log(s3loc[0]);
-    exec('aws s3 ls ' + s3loc[0], function(err, stdout, stderr) {
-      t.ok(/PRE 7/.test(stdout), 'succesfully overrides minzoom');
-      console.log('aws s3 ls err');
-      console.log(err);
-      console.log('aws s3 ls stderr');
-      console.log(stderr);
-      console.log('aws s3 ls stdout');
-      console.log(stdout);
-      t.notOk(/PRE 4/.test(stdout), 'succesfully overrides minzoom');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 12429, 'expected number of tiles');
       t.end();
     });
   });

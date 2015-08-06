@@ -110,6 +110,25 @@ test('copy omnivore', function(t) {
   });
 });
 
+test('copy omnivore minzoom override', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var src = 'omnivore://' + fixture;
+  var dst = dsturi('valid.geojson');
+  sinon.spy(tilelive, 'copy');
+
+  onlineTiles = dst;
+  tileliveCopy(src, dst, { maxzoom: 5 }, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 27, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for geojson');
+      tilelive.copy.restore();
+      t.end();
+    });
+  });
+});
+
 test('copy omnivore stats', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
   var src = 'omnivore://' + fixture;
