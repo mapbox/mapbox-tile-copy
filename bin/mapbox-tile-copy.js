@@ -38,6 +38,16 @@ options.progress = getProgress;
 
 options.stats = !!argv.stats;
 
+if (!!argv.minzoom) {
+  if (isNumeric(argv.minzoom)) {
+    options.minzoom = argv.minzoom;
+  }
+  else {
+    console.error('You must provide a valid zoom level integer');
+    process.exit(1);
+  }
+}
+
 var interval = argv.progressinterval === undefined ? -1 : Number(argv.progressinterval);
 
 if (interval > 0) {

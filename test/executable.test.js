@@ -13,6 +13,7 @@ var fixture = path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gz');
 var s3urls = require('s3urls');
 var AWS = require('aws-sdk');
 
+
 console.log('---> mapbox-tile-copy executable %s', runid);
 
 function dsturi(name) {
@@ -93,6 +94,44 @@ test('stats flag', function(t) {
     var stats = JSON.parse(fs.readFileSync(tmpfile));
     t.ok(stats);
     t.equal(stats.valid.geometryTypes.Polygon, 15588, 'Counts polygons');
+    t.end();
+  });
+});
+
+test('minzoom flag valid', function(t) {
+  var dst = dsturi('valid.mini.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
+  var cmd = [ copy, fixture, dst, '--minzoom', '5' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'no error');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 2, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+
+test('minzoom flag nullval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--minzoom' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
+test('minzoom flag badval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--minzoom q' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
     t.end();
   });
 });
