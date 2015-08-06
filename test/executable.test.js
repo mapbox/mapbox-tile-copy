@@ -113,6 +113,11 @@ test('minzoom flag valid', function(t) {
     console.log(s3loc[0]);
     exec('aws s3 ls ' + s3loc[0], function(err, stdout, stderr) {
       t.ok(/PRE 7/.test(stdout), 'succesfully overrides minzoom');
+      console.log('aws s3 ls err');
+      console.log(err);
+      console.log('aws s3 ls stderr');
+      console.log(stderr);
+      console.log('aws s3 ls stdout');
       console.log(stdout);
       t.notOk(/PRE 4/.test(stdout), 'succesfully overrides minzoom');
       t.end();
