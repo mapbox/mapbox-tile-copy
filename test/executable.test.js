@@ -83,20 +83,20 @@ test('invalid source file', function(t) {
   });
 });
 
-// test('stats flag', function(t) {
-//   var dst = dsturi('valid.geojson');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-//   var tmpfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
-//   var cmd = [ copy, fixture, '--stats=' + tmpfile, dst ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'no error');
-//     t.pass(tmpfile);
-//     var stats = JSON.parse(fs.readFileSync(tmpfile));
-//     t.ok(stats);
-//     t.equal(stats.valid.geometryTypes.Polygon, 15588, 'Counts polygons');
-//     t.end();
-//   });
-// });
+test('stats flag', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var tmpfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
+  var cmd = [ copy, fixture, '--stats=' + tmpfile, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'no error');
+    t.pass(tmpfile);
+    var stats = JSON.parse(fs.readFileSync(tmpfile));
+    t.ok(stats);
+    t.equal(stats.valid.geometryTypes.Polygon, 15588, 'Counts polygons');
+    t.end();
+  });
+});
 
 test('minzoom flag valid', function(t) {
   var dst = dsturi('valid.geojson');
