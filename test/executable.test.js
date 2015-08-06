@@ -102,12 +102,12 @@ test('minzoom flag valid', function(t) {
   var dst = dsturi('valid.geojson');
   var s3loc = dst.split('{z}')
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-  var cmd = [ copy, fixture, dst, '--minzoom', '7' ].join(' ');
+  var cmd = [ copy, fixture, dst, '--minzoom', '9' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'no error');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      t.equal(count, 12429, 'expected number of tiles');
+      t.equal(count, 11594, 'expected number of tiles');
       t.end();
     });
   });
