@@ -32,7 +32,7 @@
     "tilelive": "^5.7.0",
     "tilelive-omnivore": "~1.4.0",
     "tilelive-s3": "^2.0.0",
-    "tilelive-vector": "~3.3.0"
+    "tilelive-vector": "~3.4.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.0.25",
