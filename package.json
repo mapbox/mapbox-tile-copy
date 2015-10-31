@@ -31,7 +31,7 @@
     "tilejson": "^0.10.0",
     "tilelive": "^5.9.0",
     "tilelive-omnivore": "~1.5.0",
-    "tilelive-s3": "^2.0.0",
+    "tilelive-s3": "~3.1.0",
     "tilelive-vector": "~3.5.0"
   },
   "devDependencies": {
