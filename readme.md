@@ -14,7 +14,7 @@ You'll be writing to S3, and so you'll need to make sure that your shell environ
 $ mapbox-tile-copy <file> <s3 url template>
 ```
 
-**Note:** All style layers that use a vector source must specify a `source-layer` value. For files converted to vector tiles with map-tile-copy, the `source-layer` is the same as the filename.
+**Note:** All [style layers](https://www.mapbox.com/mapbox-gl-style-spec/#root-layers) that use a vector source must specify a `source-layer` value per the [Mapbox GL Style Spec](https://www.mapbox.com/mapbox-gl-style-spec/). For files converted to vector tiles with map-tile-copy, the `source-layer` is the same as the filename.
 
 ### Examples:
 
