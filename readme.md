@@ -14,7 +14,9 @@ You'll be writing to S3, and so you'll need to make sure that your shell environ
 $ mapbox-tile-copy <file> <s3 url template>
 ```
 
-#### Examples:
+**Note:** All style layers that use a vector source must specify a `source-layer` value. For files converted to vector tiles with map-tile-copy, the `source-layer` is the same as the filename.
+
+### Examples:
 
 Copy tiles from an mbtiles file to a folder in `my-bucket`:
 ```sh
