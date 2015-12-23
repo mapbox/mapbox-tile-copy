@@ -136,6 +136,44 @@ test('minzoom flag badval', function(t) {
   });
 });
 
+test('maxzoom flag valid', function(t) {
+  var dst = dsturi('valid.mini.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
+  var cmd = [ copy, fixture, dst, '--maxzoom', '4' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'no error');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 5, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+
+test('maxzoom flag nullval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--maxzoom' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
+test('maxzoom flag badval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--maxzoom q' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
 test('s3 url', function(t) {
   var dst = dsturi('valid.s3url');
   var cmd = [ copy, fixture, dst ].join(' ');
