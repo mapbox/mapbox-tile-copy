@@ -89,7 +89,6 @@ test('copy retry', function(t) {
   });
 });
 
-var onlineTiles;
 
 test('copy omnivore', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
@@ -97,7 +96,6 @@ test('copy omnivore', function(t) {
   var dst = dsturi('valid.geojson');
   sinon.spy(tilelive, 'copy');
 
-  onlineTiles = dst;
   tileliveCopy(src, dst, { maxzoom: 5 }, function(err) {
     t.ifError(err, 'copied');
     tileCount(dst, function(err, count) {
@@ -116,7 +114,6 @@ test('copy omnivore stats', function(t) {
   var dst = dsturi('valid.geojson');
   sinon.spy(tilelive, 'copy');
 
-  onlineTiles = dst;
   tileliveCopy(src, dst, { maxzoom: 5, stats: true }, function(err, stats) {
     t.ifError(err, 'copied');
     t.ok(stats, 'has stats');
@@ -129,13 +126,28 @@ test('copy omnivore stats', function(t) {
 test('copy tilejson', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.tilejson');
   var tmp = path.join(os.tmpdir(), crypto.randomBytes(16).toString('hex'));
-  sinon.spy(tilelive, 'copy');
 
-  fs.readFile(fixture, 'utf8', function(err, data) {
-    t.ifError(err, 'fixture load');
-    data = JSON.parse(data);
-    data.tiles = [ s3urls.convert(onlineTiles, 'bucket-in-host') ];
-    fs.writeFile(tmp, JSON.stringify(data), runCopy);
+  var onlineTiles = dsturi('online') + '?acl=public-read';
+  tilelive.copy('omnivore://' + path.resolve(__dirname, 'fixtures', 'valid.geojson'), onlineTiles, {
+    maxzoom: 5,
+    type: 'pyramid',
+    minzoom: 4,
+    bounds: [
+      -124.76214599609376,
+      24.54521942138596,
+      -66.95780181884764,
+      49.3717422485226
+    ],
+    close: true
+  }, function(err) {
+    t.ifError(err);
+    sinon.spy(tilelive, 'copy');
+    fs.readFile(fixture, 'utf8', function(err, data) {
+      t.ifError(err, 'fixture load');
+      data = JSON.parse(data);
+      data.tiles = [ s3urls.convert(onlineTiles, 'bucket-in-host') ];
+      fs.writeFile(tmp, JSON.stringify(data), runCopy);
+    });
   });
 
   function runCopy() {
