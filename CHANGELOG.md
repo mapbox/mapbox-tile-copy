@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.2
+
+- Upgraded to tilelive-s3@6.2.0 - [support for `$AWS_S3_ENDPOINT` variable](https://github.com/mapbox/tilelive-s3/pull/79)
+
 ## 4.1.2
 
 - [Add filesize validation](https://github.com/mapbox/mapbox-upload-limits/pull/5) for `max_filesize` for `mbtiles`, `tm2z`, and `serialtiles`
