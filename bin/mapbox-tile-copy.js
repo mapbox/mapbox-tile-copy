@@ -104,7 +104,7 @@ function getProgress(statistics, prog) {
 
 function report(final) {
   if (!stats || !p) return;
-  util.print(util.format('%s%s tiles @ %s/s, %s% complete [%ss]%s',
+  console.log(util.format('%s%s tiles @ %s/s, %s% complete [%ss]%s',
     interval > 0 ? '' : '\r\033[K',
     p.transferred,
     Math.round(p.speed),
