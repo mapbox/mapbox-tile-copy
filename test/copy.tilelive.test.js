@@ -1,8 +1,10 @@
 var test = require('tape');
 var path = require('path');
+var mapnik = require('mapnik');
 var crypto = require('crypto');
 var tileliveCopy = require('../lib/tilelivecopy');
 var tilelive = require('tilelive');
+var migrationStream = require('../lib/migration-stream');
 var AWS = require('aws-sdk');
 var s3urls = require('s3urls');
 var os = require('os');
@@ -51,6 +53,21 @@ function tileCount(dst, callback) {
   list();
 }
 
+function tileVersion(dst, callback) {
+  var s3 = new AWS.S3();
+  var count = 0;
+
+  var params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', '0/0/0'));
+
+  s3.getObject(params, function(err, data) {
+    if (err) return callback(err);
+
+    var info = mapnik.VectorTile.info(data.Body);
+    var version = info.layers[0].version;
+    return callback(null, version);
+  });
+}
+
 test('copy mbtiles', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
@@ -65,7 +82,12 @@ test('copy mbtiles', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
-      t.end();
+
+      tileVersion(dst, function(err, version) {
+        t.ifError(err, 'got tile info');
+        t.equal(version, 2, 'tile is v2');
+        t.end();
+      });
     });
   });
 });
@@ -85,6 +107,34 @@ test('copy retry', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].retry, 5, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
       t.end();
+    });
+  });
+});
+
+test('copy v2 mbtiles', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid-v2.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('valid-v2.mbtiles');
+  sinon.spy(tilelive, 'copy');
+  sinon.spy(migrationStream, 'migrate');
+
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 21, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
+      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
+      tilelive.copy.restore();
+
+      t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
+      migrationStream.migrate.restore();
+
+      tileVersion(dst, function(err, version) {
+        t.ifError(err, 'got tile info');
+        t.equal(version, 2, 'tile is v2');
+        t.end();
+      });
     });
   });
 });
