@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.1
+
+- Correctly extracts tile and layer parsing errors
+
 ## 4.3.0
 
 - Add a transform for mbtiles copy operations to migrate V1 vector tiles to V2
