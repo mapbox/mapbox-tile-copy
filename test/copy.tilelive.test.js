@@ -278,6 +278,19 @@ test('copy corrupt mbtiles', function(t) {
   });
 });
 
+test('error on invalid tile in mbtiles', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tiles.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('invalid.tiles.mbtiles');
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ok(err, 'expected error');
+    t.equal(err.code, 'EINVALID', 'expected error code');
+    t.equal(err.message, 'Vector Tile Feature has no geometry', 'expected error message');
+    t.ok(err.stack, 'Error has stacktrace');
+    t.end();
+  });
+});
+
 test('copy null-tile mbtiles', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'invalid.null-tile.mbtiles');
   var src = 'mbtiles://' + fixture;
