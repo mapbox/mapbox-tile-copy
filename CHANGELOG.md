@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.0
+
+- Add a transform for mbtiles copy operations to migrate V1 vector tiles to V2
+
 ## 4.2.2
 
 - Upgraded to tilelive-s3@6.2.0 - [support for `$AWS_S3_ENDPOINT` variable](https://github.com/mapbox/tilelive-s3/pull/79)
