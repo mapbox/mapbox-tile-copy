@@ -168,7 +168,7 @@ test('serialtiles-copy: vector tile invalid', function(t) {
   copy(uri, urlTemplate, function(err) {
     t.ok(err, 'expected error');
     t.equal(err.code, 'EINVALID', 'expected error code');
-    t.equal(err.message, 'Invalid data', 'expected error message');
+    t.equal(err.message, 'Buffer is not encoded as a valid PBF', 'expected error message');
     t.ok(err.stack, 'error has stacktrace');
     t.end();
   });
