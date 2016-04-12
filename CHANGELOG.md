@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.2
+
+- Upgraded to latest node-mapnik v3.5.x release: v3.5.9
+
 ## 4.3.1
 
 - Correctly extracts tile and layer parsing errors
