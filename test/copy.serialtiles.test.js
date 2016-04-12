@@ -138,7 +138,7 @@ test('serialtiles-copy: stats', function(t) {
 
   copy(uri, urlTemplate, { stats: true, job: { num: 0, total: 10 } }, function(err, stats) {
     t.ifError(err, 'no error');
-    t.equal(stats.world_merc.count, 245);
+    t.equal(stats.world_merc.count, 194);
     t.end();
   });
 });
