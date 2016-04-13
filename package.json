@@ -28,7 +28,7 @@
     "s3urls": "^1.3.0",
     "stream-combiner": "^0.2.2",
     "tile-stat-stream": "^1.0.1",
-    "tilejson": "^0.10.0",
+    "tilejson": "^1.0.1",
     "tilelive": "~5.12.2",
     "tilelive-omnivore": "git://github.com/mapbox/tilelive-omnivore.git#multiple-input-files",
     "tilelive-s3": "^6.2.0",
