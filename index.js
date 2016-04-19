@@ -13,6 +13,7 @@ var Mapbox = require('./lib/tilelive-mapbox');
 var S3 = require('tilelive-s3');
 var path = require('path');
 
+// Note: tilelive-vector is needed for `tm2z` protocol (https://github.com/mapbox/tilelive-vector/issues/124)
 Vector.registerProtocols(tilelive);
 MBTiles.registerProtocols(tilelive);
 Omnivore.registerProtocols(tilelive);
@@ -20,13 +21,13 @@ TileJSON.registerProtocols(tilelive);
 Mapbox.registerProtocols(tilelive);
 S3.registerProtocols(tilelive);
 
-Vector.mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-default-fonts')), { recurse: true });
-Vector.mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-pro-fonts')), { recurse: true });
-if (process.env.MapboxTileCopyFonts)
-  Vector.mapnik.register_fonts(process.env.MapboxTileCopyFonts, { recurse: true });
-
 var mapnik = require('mapnik');
 mapnik.Logger.setSeverity(mapnik.Logger.NONE);
+
+mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-default-fonts')), { recurse: true });
+mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-pro-fonts')), { recurse: true });
+if (process.env.MapboxTileCopyFonts)
+  mapnik.register_fonts(process.env.MapboxTileCopyFonts, { recurse: true });
 
 module.exports = function(filepath, s3url, options, callback) {
   // Make sure the s3url is of type s3://bucket/key

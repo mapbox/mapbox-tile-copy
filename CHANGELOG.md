@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.3.2
+
+- Upgraded to latest node-mapnik v3.5.x release: v3.5.9
+
+## 4.3.1
+
+- Correctly extracts tile and layer parsing errors
+
+## 4.3.0
+
+- Add a transform for mbtiles copy operations to migrate V1 vector tiles to V2
+
 ## 4.2.2
 
 - Upgraded to tilelive-s3@6.2.0 - [support for `$AWS_S3_ENDPOINT` variable](https://github.com/mapbox/tilelive-s3/pull/79)

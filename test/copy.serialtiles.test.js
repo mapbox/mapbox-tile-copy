@@ -1,6 +1,8 @@
 var test = require('tape').test;
 var copy = require('../lib/serialtilescopy');
+var migrationStream = require('../lib/migration-stream');
 var util = require('util');
+var mapnik = require('mapnik');
 var path = require('path');
 var request = require('request');
 var AWS = require('aws-sdk');
@@ -28,12 +30,14 @@ test('serialtiles-copy: gzipped vector tiles', function(t) {
 
   copy(uri, urlTemplate, function(err) {
     t.ifError(err, 'copied');
-    request.head(urlTemplate.replace('{z}/{x}/{y}', '0/0/0'), function (err, res) {
+    request.get({url:urlTemplate.replace('{z}/{x}/{y}', '0/0/0'),encoding:null}, function (err, res) {
       t.ifError(err, 'found expected file on s3');
       t.equal(res.statusCode, 200, 'expected status code');
       t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
-      t.equal(res.headers['content-length'], '55556', 'expected content-length');
+      t.equal(res.headers['content-length'], '36649', 'expected content-length');
       t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
+      var info = mapnik.VectorTile.info(res.body);
+      t.equal(info.layers[0].version, 2, 'vector tile is version 2');
       t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, undefined, 'passes options.retry to tilelive.createWriteStream');
       tilelive.createWriteStream.restore();
       t.end();
@@ -53,14 +57,50 @@ test('serialtiles-copy: retry', function(t) {
 
   copy(uri, urlTemplate, {retry:5}, function(err) {
     t.ifError(err, 'copied');
-    request.head(urlTemplate.replace('{z}/{x}/{y}', '0/0/0'), function (err, res) {
+    request.get({url:urlTemplate.replace('{z}/{x}/{y}', '0/0/0'),encoding:null}, function (err, res) {
       t.ifError(err, 'found expected file on s3');
       t.equal(res.statusCode, 200, 'expected status code');
       t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
-      t.equal(res.headers['content-length'], '55556', 'expected content-length');
+      t.equal(res.headers['content-length'], '36649', 'expected content-length');
       t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
+      var info = mapnik.VectorTile.info(res.body);
+      t.equal(info.layers[0].version, 2, 'vector tile is version 2');
       t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, 5, 'passes options.retry to tilelive.createWriteStream');
       tilelive.createWriteStream.restore();
+      t.end();
+    });
+  });
+});
+
+test('serialtiles-copy: gzipped vector tiles', function(t) {
+  var uri = [
+    'serialtiles:',
+    path.resolve(__dirname, 'fixtures', 'valid-v2.serialtiles.gzip.vector.gz')
+  ].join('//');
+
+  var urlTemplate = util.format(s3url, 'test.valid-v2-gzip', '0');
+
+  sinon.spy(tilelive, 'createWriteStream');
+  sinon.spy(migrationStream, 'migrate');
+
+  copy(uri, urlTemplate, function(err) {
+    t.ifError(err, 'copied');
+    request.get({url:urlTemplate.replace('{z}/{x}/{y}', '0/0/0'),encoding:null}, function (err, res) {
+      t.ifError(err, 'found expected file on s3');
+      t.equal(res.statusCode, 200, 'expected status code');
+      t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
+      t.equal(res.headers['content-length'], '36635', 'expected content-length');
+      t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
+
+      var info = mapnik.VectorTile.info(res.body);
+      t.equal(info.layers[0].version, 2, 'vector tile is version 2');
+
+      t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, undefined, 'passes options.retry to tilelive.createWriteStream');
+      tilelive.createWriteStream.restore();
+
+      t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
+      migrationStream.migrate.restore();
+
       t.end();
     });
   });
@@ -98,7 +138,7 @@ test('serialtiles-copy: stats', function(t) {
 
   copy(uri, urlTemplate, { stats: true, job: { num: 0, total: 10 } }, function(err, stats) {
     t.ifError(err, 'no error');
-    t.equal(stats.world_merc.count, 245);
+    t.equal(stats.world_merc.count, 194);
     t.end();
   });
 });
@@ -128,7 +168,8 @@ test('serialtiles-copy: vector tile invalid', function(t) {
   copy(uri, urlTemplate, function(err) {
     t.ok(err, 'expected error');
     t.equal(err.code, 'EINVALID', 'expected error code');
-    t.equal(err.message, 'Invalid data', 'expected error message');
+    t.equal(err.message, 'Buffer is not encoded as a valid PBF', 'expected error message');
+    t.ok(err.stack, 'error has stacktrace');
     t.end();
   });
 });
