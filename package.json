@@ -30,7 +30,7 @@
     "tile-stat-stream": "^1.0.1",
     "tilejson": "^0.10.0",
     "tilelive": "~5.12.2",
-    "tilelive-omnivore": "https://github.com/mapbox/tilelive-omnivore/tarball/named-layers",
+    "tilelive-omnivore": "2.3.0",
     "tilelive-s3": "^6.2.0",
     "tilelive-vector": "~3.9.1",
     "tiletype": "^0.3.0"
