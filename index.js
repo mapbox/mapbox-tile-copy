@@ -33,7 +33,7 @@ module.exports = function(filepath, s3url, options, callback) {
   // Make sure the s3url is of type s3://bucket/key
   s3url = s3urls.convert(s3url, 's3');
 
-  getUri(filepath, function(err, srcUri) {
+  getUri(filepath, options.layerName, function(err, srcUri) {
     if (err) return callback(err);
     if (url.parse(srcUri).protocol === 'serialtiles:') {
       serialtilescopy(srcUri, s3url, options, copied);
