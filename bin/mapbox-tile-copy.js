@@ -50,6 +50,8 @@ options.stats = !!argv.stats;
   }
 });
 
+if (argv.layerName) options.layerName = argv.layerName;
+
 var interval = argv.progressinterval === undefined ? -1 : Number(argv.progressinterval);
 
 if (interval > 0) {

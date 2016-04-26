@@ -36,7 +36,7 @@ module.exports = function(filepath, s3url, options, callback) {
   if (options.bundle === true) {
     tilelivecopy(filepath, s3url, options, copied);
   } else {
-    getUri(filepath, function(err, srcUri) {
+    getUri(filepath, options.layerName, function(err, srcUri) {
       if (err) return callback(err);
       if (url.parse(srcUri).protocol === 'serialtiles:') {
         serialtilescopy(srcUri, s3url, options, copied);
