@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.0
+## 4.5.0
 
 - Upgraded to tilelive-omnivore@2.4.0.
+
+## 4.4.0
+
+- Allow layerName to be set on source uris
 
 ## 4.3.2
 
