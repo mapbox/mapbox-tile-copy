@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4.0
+
+- Upgraded to tilelive-omnivore@2.4.0.
+
 ## 4.3.2
 
 - Upgraded to latest node-mapnik v3.5.x release: v3.5.9
