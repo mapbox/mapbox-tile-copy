@@ -65,18 +65,21 @@ if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
 
 if (isNumeric(argv.retry)) options.retry = parseInt(argv.retry, 10);
 if (isNumeric(argv.timeout)) options.timeout = parseInt(argv.timeout, 10);
+if (argv.bundle === 'true') options.bundle = true;
 
 if (!dsturi || !s3urls.valid(dsturi)) {
   console.error('You must provide a valid S3 url');
   process.exit(1);
 }
 
-fs.exists(srcfile, function(exists) {
+var srcfile0 = srcfile.split(',')[0];
+fs.exists(srcfile0, function(exists) {
   if (!exists) {
     console.error('The file specified does not exist: %s', srcfile);
     process.exit(1);
   }
 
+  if (options.bundle === true) { srcfile = 'omnivore://' + srcfile };
   mapboxTileCopy(srcfile, dsturi, options, function(err, stats) {
     if (err) {
       console.error(err.stack);

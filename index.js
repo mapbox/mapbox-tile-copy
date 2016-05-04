@@ -33,14 +33,18 @@ module.exports = function(filepath, s3url, options, callback) {
   // Make sure the s3url is of type s3://bucket/key
   s3url = s3urls.convert(s3url, 's3');
 
-  getUri(filepath, options.layerName, function(err, srcUri) {
-    if (err) return callback(err);
-    if (url.parse(srcUri).protocol === 'serialtiles:') {
-      serialtilescopy(srcUri, s3url, options, copied);
-    } else {
-      tilelivecopy(srcUri, s3url, options, copied);
-    }
-  });
+  if (options.bundle === true) {
+    tilelivecopy(filepath, s3url, options, copied);
+  } else {
+    getUri(filepath, options.layerName, function(err, srcUri) {
+      if (err) return callback(err);
+      if (url.parse(srcUri).protocol === 'serialtiles:') {
+        serialtilescopy(srcUri, s3url, options, copied);
+      } else {
+        tilelivecopy(srcUri, s3url, options, copied);
+      }
+    });
+  }
 
   function copied(err, stats) {
     if (!err) return callback(err, stats);

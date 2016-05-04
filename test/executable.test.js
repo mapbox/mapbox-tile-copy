@@ -269,6 +269,20 @@ test('retry', function(t) {
   });
 });
 
+test('bundle true', function(t) {
+  var dst = dsturi('valid.bundle.true');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.bundle-layer-1.geojson') + ',' + path.resolve(__dirname, 'fixtures', 'valid.bundle-layer-2.geojson');
+  var cmd = [ copy, fixture, dst, '--bundle', true ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 167, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+
 test('layerName', function(t) {
   var dst = dsturi('valid.mini.geojson');
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
