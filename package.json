@@ -30,7 +30,7 @@
     "tile-stat-stream": "^1.0.1",
     "tilejson": "^1.0.1",
     "tilelive": "~5.12.2",
-    "tilelive-omnivore": "git://github.com/mapbox/tilelive-omnivore.git#multiple-input-files",
+    "tilelive-omnivore": "2.5.1",
     "tilelive-s3": "^6.2.0",
     "tilelive-vector": "~3.9.1",
     "tiletype": "^0.3.0"
