@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.6.0
+
+- Bundle support: Ability to handle multiple files for a single tileset
+
 ## 4.5.0
 
 - Upgraded to tilelive-omnivore@2.4.0.
