@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.6.1
+
+- Only [log the error message](https://github.com/mapbox/mapbox-tile-copy/pull/70) from `bin/mapbox-tile-copy.js` instead of the full stack trace
+
 ## 4.6.0
 
 - Bundle support: Ability to handle multiple files for a single tileset
