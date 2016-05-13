@@ -82,7 +82,7 @@ fs.exists(srcfile0, function(exists) {
   if (options.bundle === true) { srcfile = 'omnivore://' + srcfile };
   mapboxTileCopy(srcfile, dsturi, options, function(err, stats) {
     if (err) {
-      console.error(err.stack);
+      console.error(err.message);
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
