@@ -77,7 +77,6 @@ test('invalid source file', function(t) {
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ok(err, 'expected error');
-    console.log(stderr);
     t.ok(/Unknown filetype/.test(stderr), 'expected message');
     t.equal(err.code, 3, 'exit code 3');
     t.end();
