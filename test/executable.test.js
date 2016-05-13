@@ -77,7 +77,19 @@ test('invalid source file', function(t) {
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ok(err, 'expected error');
-    t.ok(/Error: Unknown filetype/.test(stderr), 'expected message');
+    t.ok(/Unknown filetype/.test(stderr), 'expected message');
+    t.equal(err.code, 3, 'exit code 3');
+    t.end();
+  });
+});
+
+test('invalid mbtile, expected error from migration stream', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tiles.mbtiles');
+  var dst = dsturi('invalid.tiles.mbtiles');
+  var cmd = [ copy, fixture, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/Vector Tile Feature has no geometry/.test(stderr), 'expected message');
     t.equal(err.code, 3, 'exit code 3');
     t.end();
   });
