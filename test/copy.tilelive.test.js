@@ -279,11 +279,11 @@ test('copy corrupt mbtiles', function(t) {
 });
 
 test('passes through invalid tile in mbtiles', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tiles.mbtiles');
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tile-with-no-geometry.mbtiles');
   var src = 'mbtiles://' + fixture;
-  var dst = dsturi('invalid.tiles.mbtiles');
+  var dst = dsturi('invalid.tile-with-no-geometry.mbtiles');
   tileliveCopy(src, dst, {}, function(err, stats) {
-    t.ifError(err, 'passes through invalid tiles mbtiles');
+    t.ifError(err, 'passes through invalid.tile-with-no-geometry.mbtiles');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 1, 'rendered all tiles');

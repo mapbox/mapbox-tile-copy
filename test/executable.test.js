@@ -84,8 +84,8 @@ test('invalid source file', function(t) {
 });
 
 test('handles mbtile with missing geometry', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tiles.mbtiles');
-  var dst = dsturi('invalid.tiles.mbtiles');
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tile-with-no-geometry.mbtiles');
+  var dst = dsturi('invalid.tile-with-no-geometry.mbtiles');
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'no error');
