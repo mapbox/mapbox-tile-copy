@@ -83,15 +83,17 @@ test('invalid source file', function(t) {
   });
 });
 
-test('invalid mbtile, expected error from migration stream', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tiles.mbtiles');
-  var dst = dsturi('invalid.tiles.mbtiles');
+test('handles mbtile with missing geometry', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tile-with-no-geometry.mbtiles');
+  var dst = dsturi('invalid.tile-with-no-geometry.mbtiles');
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
-    t.ok(err, 'expected error');
-    t.ok(/Vector Tile Feature has no geometry/.test(stderr), 'expected message');
-    t.equal(err.code, 3, 'exit code 3');
-    t.end();
+    t.ifError(err, 'no error');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 1, 'expected number of tiles');
+      t.end();
+    });
   });
 });
 

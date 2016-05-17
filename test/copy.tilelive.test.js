@@ -278,16 +278,17 @@ test('copy corrupt mbtiles', function(t) {
   });
 });
 
-test('error on invalid tile in mbtiles', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tiles.mbtiles');
+test('passes through invalid tile in mbtiles', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tile-with-no-geometry.mbtiles');
   var src = 'mbtiles://' + fixture;
-  var dst = dsturi('invalid.tiles.mbtiles');
-  tileliveCopy(src, dst, {}, function(err) {
-    t.ok(err, 'expected error');
-    t.equal(err.code, 'EINVALID', 'expected error code');
-    t.equal(err.message, 'Vector Tile Feature has no geometry', 'expected error message');
-    t.ok(err.stack, 'Error has stacktrace');
-    t.end();
+  var dst = dsturi('invalid.tile-with-no-geometry.mbtiles');
+  tileliveCopy(src, dst, {}, function(err, stats) {
+    t.ifError(err, 'passes through invalid.tile-with-no-geometry.mbtiles');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 1, 'rendered all tiles');
+      t.end();
+    });
   });
 });
 
