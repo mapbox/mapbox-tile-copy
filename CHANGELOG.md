@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.0
+
+- For tilejson copy operations, migrate each tile to vt2
+
 ## 4.6.2
 
 - Validate mbtiles uploads after migrating the tiles to v2
