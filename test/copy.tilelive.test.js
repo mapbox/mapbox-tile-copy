@@ -53,11 +53,11 @@ function tileCount(dst, callback) {
   list();
 }
 
-function tileVersion(dst, callback) {
+function tileVersion(dst, z, x, y, callback) {
   var s3 = new AWS.S3();
   var count = 0;
 
-  var params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', '0/0/0'));
+  var params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', z + '/' + x + '/' + y));
 
   s3.getObject(params, function(err, data) {
     if (err) return callback(err);
@@ -83,7 +83,7 @@ test('copy mbtiles', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
 
-      tileVersion(dst, function(err, version) {
+      tileVersion(dst, 0, 0, 0, function(err, version) {
         t.ifError(err, 'got tile info');
         t.equal(version, 2, 'tile is v2');
         t.end();
@@ -130,7 +130,7 @@ test('copy v2 mbtiles', function(t) {
       t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
       migrationStream.migrate.restore();
 
-      tileVersion(dst, function(err, version) {
+      tileVersion(dst, 0, 0, 0, function(err, version) {
         t.ifError(err, 'got tile info');
         t.equal(version, 2, 'tile is v2');
         t.end();
@@ -208,9 +208,14 @@ test('copy tilejson', function(t) {
       tileCount(dst, function(err, count) {
         t.ifError(err, 'counted tiles');
         t.equal(count, 27, 'expected number of tiles');
-        t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for tilejson');
-        tilelive.copy.restore();
-        t.end();
+
+        tileVersion(dst, 4, 2, 5, function(err, version) {
+          t.ifError(err, 'got tile info');
+          t.equal(version, 2, 'tile is v2');
+          t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for tilejson');
+          tilelive.copy.restore();
+          t.end();
+        });
       });
     });
   }
