@@ -324,6 +324,7 @@ test('copy coordinates exceed spherical mercator', function(t) {
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 0, 'did not render any tiles');
+      tilelive.copy.restore();
       t.end();
     });
   });
