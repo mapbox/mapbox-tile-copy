@@ -312,26 +312,25 @@ test('copy null-tile mbtiles', function(t) {
   });
 });
 
-test('successfully copy a tif', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geotiff.tif');
+test('copy coordinates exceed spherical mercator', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.coords-out-of-range.geojson');
   var src = 'omnivore://' + fixture;
-  var dst = dsturi('valid.geotiff');
+  var dst = dsturi('invalid.geojson');
   sinon.spy(tilelive, 'copy');
 
   tileliveCopy(src, dst, {}, function(err) {
-    t.ifError(err, 'copied tiles');
+    t.ok(err, 'expect an error for out of bounds coordinates');
+    t.equal(err.code, 'EINVALID', 'error code encountered')
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      t.equal(count, 85, 'rendered all tiles');
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for tifs');
-      tilelive.copy.restore();
+      t.equal(count, 0, 'did not render any tiles');
       t.end();
     });
   });
 });
 
 test('successfully copy a bigtiff', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.bigtiff.tif');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.bigtiff.tif'); 
   var src = 'omnivore://' + fixture;
   var dst = dsturi('valid.bigtiff');
   sinon.spy(tilelive, 'copy');
