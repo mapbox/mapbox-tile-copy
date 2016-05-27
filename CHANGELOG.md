@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.7.1
+
+- Add explicit error to the `copy` operation for coordinates out of bounds.
+
 ## 4.7.0
 
 - For tilejson copy operations, migrate each tile to vt2
