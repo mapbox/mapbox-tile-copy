@@ -31,7 +31,7 @@
     "tilejson": "^1.0.1",
     "tilelive": "~5.12.2",
     "tilelive-omnivore": "2.5.1",
-    "tilelive-s3": "^6.2.0",
+    "tilelive-s3": "https://github.com/mapbox/tilelive-s3/tarball/regions",
     "tilelive-vector": "~3.9.1",
     "tiletype": "^0.3.0"
   },

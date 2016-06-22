@@ -31,7 +31,9 @@ if (process.env.MapboxTileCopyFonts)
 
 module.exports = function(filepath, s3url, options, callback) {
   // Make sure the s3url is of type s3://bucket/key
+  var query = url.parse(s3url).query;
   s3url = s3urls.convert(s3url, 's3');
+  if (query) s3url += '?' + query;
 
   if (options.bundle === true) {
     tilelivecopy(filepath, s3url, options, copied);
