@@ -331,7 +331,7 @@ test('copy coordinates exceed spherical mercator', function(t) {
 });
 
 test('successfully copy a bigtiff', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.bigtiff.tif'); 
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.bigtiff.tif');
   var src = 'omnivore://' + fixture;
   var dst = dsturi('valid.bigtiff');
   sinon.spy(tilelive, 'copy');
@@ -342,6 +342,28 @@ test('successfully copy a bigtiff', function(t) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 121, 'rendered all tiles');
       t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for tifs');
+      tilelive.copy.restore();
+      t.end();
+    });
+  });
+});
+
+test('copy omnivore to Frankfurt', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var src = 'omnivore://' + fixture;
+  var dst = [
+    's3://mapbox-eu-central-1/test/mapbox-tile-copy',
+    runid,
+    'valid.geojson/{z}/{x}/{y}?region=eu-central-1'
+  ].join('/');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, { maxzoom: 5 }, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 27, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for geojson');
       tilelive.copy.restore();
       t.end();
     });
