@@ -13,7 +13,8 @@
                             "Statement": [
                                 {
                                     "Resource": [
-                                        "arn:aws:s3:::tilestream-tilesets-development/*"
+                                        "arn:aws:s3:::tilestream-tilesets-development/*",
+                                        "arn:aws:s3:::mapbox-eu-central-1/test/mapbox-tile-copy/*"
                                     ],
                                     "Action": [
                                         "s3:GetObject",
@@ -30,6 +31,20 @@
                                         "s3:ListBucket"
                                     ],
                                     "Effect": "Allow"
+                                },
+                                {
+                                    "Resource": [
+                                        "arn:aws:s3:::mapbox-eu-central-1"
+                                    ],
+                                    "Action": [
+                                        "s3:ListBucket"
+                                    ],
+                                    "Effect": "Allow",
+                                    "Condition": {
+                                        "StringLike": {
+                                            "s3:prefix": "test/mapbox-tile-copy/*"
+                                        }
+                                    }
                                 }
                             ]
                         }
