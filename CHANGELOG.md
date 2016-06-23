@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.8.0
+
+- Can specify the region for the destination bucket by providing a `region` query param
+
 ## 4.7.1
 
 - Add explicit error to the `copy` operation for coordinates out of bounds.
