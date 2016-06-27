@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.8.1
+
+- Bump to tilelive-s3@6.4.1
+
 ## 4.8.0
 
 - Can specify the region for the destination bucket by providing a `region` query param
