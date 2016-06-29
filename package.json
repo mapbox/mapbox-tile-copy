@@ -30,7 +30,7 @@
     "tile-stat-stream": "^1.0.1",
     "tilejson": "^1.0.1",
     "tilelive": "~5.12.2",
-    "tilelive-omnivore": "2.5.1",
+    "tilelive-omnivore": "https://github.com/mapbox/tilelive-omnivore/tarball/minmaxsix",
     "tilelive-s3": "6.4.1",
     "tilelive-vector": "~3.9.1",
     "tiletype": "^0.3.0"
