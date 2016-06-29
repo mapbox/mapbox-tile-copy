@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0
+
+- Output tilesets will never have a max zoom level less than 6
+
 ## 4.8.1
 
 - Bump to tilelive-s3@6.4.1
