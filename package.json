@@ -1,6 +1,6 @@
 {
   "name": "mapbox-tile-copy",
-  "version": "4.8.1",
+  "version": "5.0.0",
   "description": "From geodata files to tiles on S3",
   "main": "index.js",
   "scripts": {
