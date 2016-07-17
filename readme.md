@@ -4,6 +4,12 @@ A shortcut from local geodata files to tiles on S3
 
 [![Build Status](https://travis-ci.org/mapbox/mapbox-tile-copy.svg?branch=master)](https://travis-ci.org/mapbox/mapbox-tile-copy)
 
+## Installation
+
+```sh
+$ npm install --save mapbox-tile-copy
+```
+
 ## Configuration
 
 You'll be writing to S3, and so you'll need to make sure that your shell environment is [configured with appropriate credentials](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
