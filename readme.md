@@ -7,7 +7,7 @@ A shortcut from local geodata files to tiles on S3
 ## Installation
 
 ```sh
-$ npm install --save mapbox-tile-copy
+$ npm install -g mapbox-tile-copy
 ```
 
 ## Configuration
