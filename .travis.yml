@@ -3,8 +3,10 @@ node_js:
 - '0.10'
 - 4
 sudo: false
-before_install:
-- if [[ $(uname -s) == 'Linux' ]]; then wget https://launchpad.net/~ubuntu-toolchain-r/+archive/ubuntu/test/+files/libstdc%2B%2B6_4.8.1-2ubuntu1~12.04_amd64.deb && dpkg -x libstdc++6_4.8.1-2ubuntu1~12.04_amd64.deb ./ && export LD_PRELOAD=$(pwd)/usr/lib/x86_64-linux-gnu/libstdc++.so.6; fi
+addons:
+  apt:
+    sources: [ 'ubuntu-toolchain-r-test' ]
+    packages: [ 'libstdc++-5-dev' ]
 env:
   global:
   - secure: rFbJCcDbGQtC+PGL2NU/hGkEuzDdWL7AukuhqYBE2VcfCNsohc9EiIhLVrW5VTggLX/Eo8AEiUSIEGlto9RWkuF5Rh2SrA70gSMdm6gdEjHncJCR6yxXqJs5R6evC33k1xtfD7yQ/Ove+FXjyxfw4g6wYH40wGAZhO+fwGJDVdw=
