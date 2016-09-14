@@ -32,13 +32,12 @@ function dsturi(name) {
 }
 
 function tileCount(dst, callback) {
+  var s3 = new AWS.S3();
   var count = 0;
-  var region = require('url').parse(dst, true).query.region;
-  var params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', ''));
+
+  params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', ''));
   params.Prefix = params.Key;
   delete params.Key;
-
-  var s3 = new AWS.S3({ region: region });
 
   function list(marker) {
     if (marker) params.Marker = marker;
