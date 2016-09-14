@@ -44,7 +44,6 @@ function tileCount(dst, callback) {
     if (marker) params.Marker = marker;
 
     s3.listObjects(params, function(err, data) {
-      console.log(err);
       if (err) return callback(err);
       count += data.Contents.length;
       if (data.IsTruncated) return list(data.Contents.pop().Key);
