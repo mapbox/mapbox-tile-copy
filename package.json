@@ -17,11 +17,11 @@
   },
   "homepage": "https://github.com/mapbox/mapbox-tile-copy",
   "dependencies": {
-    "mapbox-file-sniff": "~0.4.0",
+    "mapbox-file-sniff": "https://github.com/mapbox/mapbox-file-sniff/tarball/smelloscope",
     "mapbox-studio-default-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-default-fonts-0.0.4-4afb5235f457bd1c1a5a70fce6c2aa83bf7a851e.tgz",
     "mapbox-studio-pro-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-pro-fonts-1.0.0-9870a90b713f307b9391829602f4d5857e419615.tgz",
-    "mapnik": "~3.5.9",
-    "mbtiles": "^0.8.0",
+    "mapnik": "~3.5.14",
+    "mbtiles": "~0.9.0",
     "minimist": "~0.2.0",
     "progress-stream": "^0.5.0",
     "queue-async": "^1.0.7",
@@ -30,7 +30,7 @@
     "tile-stat-stream": "^1.0.1",
     "tilejson": "^1.0.1",
     "tilelive": "~5.12.2",
-    "tilelive-omnivore": "~3.0.0",
+    "tilelive-omnivore": "https://github.com/mapbox/tilelive-omnivore/tarball/tag-fiesta",
     "tilelive-s3": "6.4.1",
     "tilelive-vector": "~3.9.1",
     "tiletype": "^0.3.0"
