@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.1.0
+
+- Upgrade mapnik-omnivore#8.1.0, tilelive-omnivore@3.1.0, mapbox-file-sniff@0.5.2, mbtiles@0.9.0
+- Add tests for Node 6
+- Update tests using aws-sdk region param per https://github.com/mapbox/mapbox-tile-copy/pull/81
+
 ## 5.0.0
 
 - Output tilesets will never have a max zoom level less than 6
