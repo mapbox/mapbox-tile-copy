@@ -6,7 +6,6 @@ node_js:
 
 sudo: false
 
-# necessary deps for C++ modules
 addons:
   apt:
     sources: [ 'ubuntu-toolchain-r-test' ]
