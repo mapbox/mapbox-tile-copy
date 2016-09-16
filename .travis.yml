@@ -1,12 +1,17 @@
 language: node_js
+
 node_js:
-- '6'
-- 4
+  - "6"
+  - "4"
+
 sudo: false
+
+# necessary deps for C++ modules
 addons:
   apt:
     sources: [ 'ubuntu-toolchain-r-test' ]
     packages: [ 'libstdc++-5-dev' ]
+
 env:
   global:
   - secure: rFbJCcDbGQtC+PGL2NU/hGkEuzDdWL7AukuhqYBE2VcfCNsohc9EiIhLVrW5VTggLX/Eo8AEiUSIEGlto9RWkuF5Rh2SrA70gSMdm6gdEjHncJCR6yxXqJs5R6evC33k1xtfD7yQ/Ove+FXjyxfw4g6wYH40wGAZhO+fwGJDVdw=
