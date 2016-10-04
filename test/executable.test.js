@@ -269,6 +269,35 @@ test('part zero', function(t) {
   });
 });
 
+test('single part zero', function(t) {
+  var dst = dsturi('valid.single.zero');
+  var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '1' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 77, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      console.log(count);
+      t.ok(count < 4, 'did not render all tiles');
+      t.end();
+    });
+  });
+});
+
+test('single part one', function(t) {
+  var dst = dsturi('valid.single.one');
+  var cmd = [ copy, fixture, dst, '--part', '1', '--parts', '1' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'copied');
+    t.equal(stdout.length, 77, 'expected stdout.length');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.ok(count < 4, 'did not render all tiles');
+      t.end();
+    });
+  });
+});
+
 test('retry', function(t) {
   var dst = dsturi('valid.retry');
   var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
