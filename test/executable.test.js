@@ -277,6 +277,7 @@ test('single part zero', function(t) {
     t.equal(stdout.length, 77, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
+      console.log(stdout);
       console.log(count);
       t.ok(count < 4, 'did not render all tiles');
       t.end();
@@ -291,6 +292,8 @@ test('single part one', function(t) {
     t.ifError(err, 'copied');
     t.equal(stdout.length, 77, 'expected stdout.length');
     tileCount(dst, function(err, count) {
+      console.log(stdout);
+      console.log(count);
       t.ifError(err, 'counted tiles');
       t.ok(count < 4, 'did not render all tiles');
       t.end();
