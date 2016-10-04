@@ -269,7 +269,7 @@ test('part zero', function(t) {
   });
 });
 
-test('single part zero', function(t) {
+test('single part', function(t) {
   var dst = dsturi('valid.single.zero');
   var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '1' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
@@ -277,25 +277,7 @@ test('single part zero', function(t) {
     t.equal(stdout.length, 77, 'expected stdout.length');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      console.log(stdout);
-      console.log(count);
-      t.ok(count < 4, 'did not render all tiles');
-      t.end();
-    });
-  });
-});
-
-test('single part one', function(t) {
-  var dst = dsturi('valid.single.one');
-  var cmd = [ copy, fixture, dst, '--part', '1', '--parts', '1' ].join(' ');
-  exec(cmd, function(err, stdout, stderr) {
-    t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
-    tileCount(dst, function(err, count) {
-      console.log(stdout);
-      console.log(count);
-      t.ifError(err, 'counted tiles');
-      t.ok(count < 4, 'did not render all tiles');
+      t.ok(count == 4, 'rendered all tiles');
       t.end();
     });
   });

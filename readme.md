@@ -37,14 +37,24 @@ Copy tiles from one S3 location to another via tilejson describing the source:
 $ mapbox-tile-copy ~/data/online-data.tilejson s3://my-bucket/folder/tilejson/{z}/{x}/{y}
 ```
 
+Render image tiles from vector tiles, using custom fonts from a location on your computer:
+```sh
+$ MapboxTileCopyFonts=/path/to/font/dir mapbox-tile-copy ~/style.tm2z s3://my-bucket/pngs/{z}/{x}/{y}
+```
+
 Perform a part of a copy operation. [Useful for parallel processing a large file](https://github.com/mapbox/tilelive.js#parallel-read-streams):
 ```sh
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 2 --parts 12
 ```
 
-Render image tiles from vector tiles, using custom fonts from a location on your computer:
+The `--part` operation is explicitly _zero-indexed_ because this gives tilelive's stream processors a predictable way to segment tiles per part. For example, the following will distribute all tiles among a single part. So all tiles will be rendered by this single part:
 ```sh
-$ MapboxTileCopyFonts=/path/to/font/dir mapbox-tile-copy ~/style.tm2z s3://my-bucket/pngs/{z}/{x}/{y}
+$ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 0 --parts 1
+```
+
+The following example will distribute tiles to the second part out of 5 total parts:
+```sh
+$ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 1 --parts 4
 ```
 
 ## Supported file types
