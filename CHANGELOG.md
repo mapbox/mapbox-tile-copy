@@ -3,6 +3,7 @@
 ## 5.1.1
 
 - Add error handling for missing `{z}/{x}/{y}` template in the destination URL.
+- test to make sure that zero-indexing is happening correctly (all tiles copied to a single part)
 
 ## 5.1.0
 
