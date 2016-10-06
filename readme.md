@@ -20,6 +20,8 @@ You'll be writing to S3, and so you'll need to make sure that your shell environ
 $ mapbox-tile-copy <file> <s3 url template>
 ```
 
+Your s3 url template must include a `{z}/{x}/{y}` scheme for writing and distributing tiles. File extensions are not required.
+
 #### Examples:
 
 Copy tiles from an mbtiles file to a folder in `my-bucket`:
