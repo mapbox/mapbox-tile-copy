@@ -98,3 +98,15 @@ test('null mbtiles', function(t) {
     });
   });
 });
+
+test('fails with missing {z}/{x}/{y} template', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
+  var dst = dsturi('valid.mbtiles');
+  var dst = dst.slice(0, dst.indexOf('{z}'));
+  console.log(dst);
+  copy(fixture, dst, {}, function(err) {
+    t.ok(err);
+    t.equal(err.message, 'Destination URL does not include a {z}/{x}/{y} template.');
+    t.end();
+  });
+});

@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.1.1
+
+- Add error handling for missing `{z}/{x}/{y}` template in the destination URL.
+- test to make sure that zero-indexing is happening correctly (all tiles copied to a single part)
+
 ## 5.1.0
 
 - Upgrade mapnik-omnivore#8.1.0, tilelive-omnivore@3.1.0, mapbox-file-sniff@0.5.2, mbtiles@0.9.0

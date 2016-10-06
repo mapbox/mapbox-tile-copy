@@ -35,6 +35,10 @@ module.exports = function(filepath, s3url, options, callback) {
   s3url = s3urls.convert(s3url, 's3');
   if (query) s3url += '?' + query;
 
+  if (s3url.indexOf('{z}') == -1 ||
+      s3url.indexOf('{x}') == -1 ||
+      s3url.indexOf('{y}') == -1) return callback(new Error('Destination URL does not include a {z}/{x}/{y} template.'));
+
   if (options.bundle === true) {
     tilelivecopy(filepath, s3url, options, copied);
   } else {
