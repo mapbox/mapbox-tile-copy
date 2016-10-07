@@ -2,7 +2,7 @@
 
 A shortcut from local geodata files to tiles on S3
 
-[![Build Status](https://travis-ci.org/mapbox/mapbox-tile-copy.svg?branch=master)](https://travis-ci.org/mapbox/mapbox-tile-copy)
+[![Build Status](https://travis-ci.org/mapbox/mapbox-tile-copy.svg?branch=master)](https://travis-ci.org/mapbox/mapbox-tile-copy) (*tested on Node v4 & v6*)
 
 ## Installation
 
