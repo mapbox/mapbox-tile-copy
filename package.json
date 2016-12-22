@@ -1,5 +1,5 @@
 {
-  "name": "mapbox-tile-copy",
+  "name": "@mapbox/mapbox-tile-copy",
   "version": "5.1.1",
   "description": "From geodata files to tiles on S3",
   "main": "index.js",
