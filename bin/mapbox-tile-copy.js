@@ -66,10 +66,7 @@ if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
 if (isNumeric(argv.retry)) options.retry = parseInt(argv.retry, 10);
 if (isNumeric(argv.timeout)) options.timeout = parseInt(argv.timeout, 10);
 if (argv.bundle === 'true') options.bundle = true;
-
-if (argv.scheme && (argv.scheme === 'pyramid' || argv.scheme === 'scanline')) {
-  options.scheme = argv.scheme;
-}
+if (argv.scheme) options.scheme = argv.scheme;
 
 if (!dsturi || !s3urls.valid(dsturi)) {
   console.error('You must provide a valid S3 url');
