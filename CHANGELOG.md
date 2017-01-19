@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.0
+
+- Change default tiling scheme to `scanline` for the omnivore protocol, which resolves an issue where z0 tiles were being simplified away and no tiles were counted further down the pyramid.
+
 ## 5.1.1
 
 - Add error handling for missing `{z}/{x}/{y}` template in the destination URL.
