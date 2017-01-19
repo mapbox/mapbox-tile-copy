@@ -353,7 +353,7 @@ test('invalid scheme option errors', function(t) {
 
   tileliveCopy(src, dst, { maxzoom: 5, scheme: 'not-real' }, function(err) {
     t.ok(err);
-    t.equal(err.message, 'Error: Invalid scheme. Must be "put", "pyramid", "scanline", or "list".');
+    t.equal(err.message, 'Invalid scheme. Must be "put", "pyramid", "scanline", or "list".');
     tilelive.copy.restore();
     t.end();
   });
