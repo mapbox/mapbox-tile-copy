@@ -152,7 +152,7 @@ test('copy omnivore', function(t) {
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 27, 'expected number of tiles');
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for geojson');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for geojson');
       tilelive.copy.restore();
       t.end();
     });
@@ -342,7 +342,7 @@ test('successfully copy a bigtiff', function(t) {
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 121, 'rendered all tiles');
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for tifs');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for tifs');
       tilelive.copy.restore();
       t.end();
     });
@@ -364,7 +364,7 @@ test('copy omnivore to Frankfurt', function(t) {
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 27, 'expected number of tiles');
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'pyramid', 'uses pyramid scheme for geojson');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for geojson');
       tilelive.copy.restore();
       t.end();
     });
