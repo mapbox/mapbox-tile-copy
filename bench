@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+COUNTER=0
+while [  $COUNTER -lt 3 ]; do
+  SECONDS=0
+  node bin/mapbox-tile-copy.js ~/data/mapbox-tile-copy-benchmarks/nyc-building-footprints.geojson s3://mapbox/playground/mapsam/tilesets/mtc-bench/nyc-building-footprints-pyramid/$COUNTER/{z}/{x}/{y} > /dev/null
+  duration=$SECONDS
+  echo "[$COUNTER] $duration seconds"
+  let COUNTER=COUNTER+1
+done
