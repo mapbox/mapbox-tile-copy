@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.0
+
+- Add ability to specify a tiling scheme instead of hard coding. Preserves defaults that existed prior.
+
 ## 5.1.1
 
 - Add error handling for missing `{z}/{x}/{y}` template in the destination URL.
