@@ -59,7 +59,7 @@ The following example will distribute tiles to the second part out of 5 total pa
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 1 --parts 4
 ```
 
-Specify a specific tiling scheme to use during copying:
+Specify a tiling scheme to use during copying:
 ```sh
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --scheme scanline
 ```

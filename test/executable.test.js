@@ -347,7 +347,7 @@ test('invalid scheme scanline', function(t) {
   var cmd = [ copy, fixture, dst, '--scheme', 'waka' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ok(err, 'expected');
-    t.equal(stderr, 'Invalid scheme. Must be "put", "pyramid", "scanline", or "list".\n', 'expected message');
+    t.equal(stderr, 'Invalid scheme. Must be "pyramid", "scanline", or "list".\n', 'expected message');
     t.end();
   });
 });
