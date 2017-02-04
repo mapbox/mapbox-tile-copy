@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.1
+
+- Add namespaced onivores and add z23 bump
+
 ## 6.0.0
 
 - Change default tiling scheme to `scanline` for the omnivore protocol, which resolves an issue where z0 tiles were being simplified away and no tiles were counted further down the pyramid.
