@@ -5,9 +5,9 @@ var serialtilescopy = require('./lib/serialtilescopy');
 var s3urls = require('s3urls');
 
 var tilelive = require('tilelive');
-var Vector = require('tilelive-vector');
+var Vector = require('@mapbox/tilelive-vector');
 var MBTiles = require('mbtiles');
-var Omnivore = require('tilelive-omnivore');
+var Omnivore = require('@mapbox/tilelive-omnivore');
 var TileJSON = require('tilejson');
 var Mapbox = require('./lib/tilelive-mapbox');
 var S3 = require('tilelive-s3');
