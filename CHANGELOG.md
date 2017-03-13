@@ -1,8 +1,12 @@
 # Changelog
 
+## 6.1.0
+
+- Upgrade to tilelive-omnivore@3.2.0
+
 ## 6.0.1
 
-- Add namespaced onivores and add z23 bump
+- Add namespaced omnivores and add z23 bump
 
 ## 6.0.0
 
