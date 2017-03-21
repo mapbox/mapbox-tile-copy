@@ -32,7 +32,7 @@
     "tile-stat-stream": "^1.0.1",
     "tilejson": "^1.0.1",
     "tilelive": "~5.12.2",
-    "tilelive-s3": "6.4.1",
+    "tilelive-s3": "https://github.com/mapbox/tilelive-s3/tarball/update-aws-sdk",
     "tiletype": "^0.3.0"
   },
   "devDependencies": {
