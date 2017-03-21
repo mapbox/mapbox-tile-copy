@@ -10,7 +10,7 @@ var MBTiles = require('mbtiles');
 var Omnivore = require('@mapbox/tilelive-omnivore');
 var TileJSON = require('tilejson');
 var Mapbox = require('./lib/tilelive-mapbox');
-var S3 = require('tilelive-s3');
+var S3 = require('@mapbox/tilelive-s3');
 var path = require('path');
 
 // Note: tilelive-vector is needed for `tm2z` protocol (https://github.com/mapbox/tilelive-vector/issues/124)

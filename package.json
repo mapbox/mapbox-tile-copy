@@ -19,6 +19,7 @@
   "dependencies": {
     "@mapbox/tilelive-omnivore": "~3.1.0",
     "@mapbox/tilelive-vector": "~3.9.1",
+    "@mapbox/tilelive-s3": "6.5.1",
     "mapbox-file-sniff": "~0.5.2",
     "mapbox-studio-default-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-default-fonts-0.0.4-4afb5235f457bd1c1a5a70fce6c2aa83bf7a851e.tgz",
     "mapbox-studio-pro-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-pro-fonts-1.0.0-9870a90b713f307b9391829602f4d5857e419615.tgz",
@@ -32,7 +33,6 @@
     "tile-stat-stream": "^1.0.1",
     "tilejson": "^1.0.1",
     "tilelive": "~5.12.2",
-    "tilelive-s3": "6.4.1",
     "tiletype": "^0.3.0"
   },
   "devDependencies": {
