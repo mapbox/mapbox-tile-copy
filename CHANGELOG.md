@@ -4,6 +4,10 @@
 
 - Upgrade to tilelive-omnivore@3.2.0
 
+## 6.0.2
+
+- Add namespaced tilelive-s3@6.5.1
+
 ## 6.0.1
 
 - Add namespaced omnivores and add z23 bump
