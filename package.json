@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/mapbox/mapbox-tile-copy",
   "dependencies": {
-    "@mapbox/tilelive-omnivore": "https://github.com/mapbox/tilelive-omnivore/tarball/nom-nom",
+    "@mapbox/tilelive-omnivore": "~3.2.0",
     "@mapbox/tilelive-vector": "~3.9.1",
     "@mapbox/mapbox-file-sniff": "~1.0.0",
     "@mapbox/tilelive-s3": "6.5.1",
