@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.0
+
+- Upgrade to tilelive-omnivore@3.2.0
+
 ## 6.0.2
 
 - Add namespaced tilelive-s3@6.5.1
