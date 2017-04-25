@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.1
+
+- Upgrade tilelive, tilejson, tiletype, mbtiles, and s3urls deps to their new @mapbox namespace
+
 ## 6.2.0
 
 - Upgraded to use mapnik 3.6.0, along with relevant deps:
