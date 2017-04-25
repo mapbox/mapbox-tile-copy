@@ -22,7 +22,7 @@ http.globalAgent.maxSockets = 30;
 https.globalAgent.maxSockets = 30;
 
 var mapboxTileCopy = require('../index.js');
-var s3urls = require('s3urls');
+var s3urls = require('@mapbox/s3urls');
 var argv = require('minimist')(process.argv.slice(2));
 
 if (!argv._[0]) {

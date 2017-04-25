@@ -1,7 +1,7 @@
 var exec = require('child_process').exec;
 var test = require('tape').test;
 
-['mapnik', 'tilelive', 'gdal', 'sqlite3'].forEach(function(mod) {
+['mapnik', '@mapbox/tilelive', 'gdal', 'sqlite3'].forEach(function(mod) {
   test('Duplicate modules: there should only be one ' + mod + ' otherwise you are asking for pwnage', function(t) {
     var cmd = 'npm ls ' + mod;
     exec(cmd, function (error, stdout, stderr) {

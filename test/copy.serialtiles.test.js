@@ -8,7 +8,7 @@ var request = require('request');
 var AWS = require('aws-sdk');
 var url = require('url');
 var sinon = require('sinon');
-var tilelive = require('tilelive');
+var tilelive = require('@mapbox/tilelive');
 
 var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
 

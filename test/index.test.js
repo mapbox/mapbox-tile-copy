@@ -3,7 +3,7 @@ var path = require('path');
 var crypto = require('crypto');
 var copy = require('../index.js');
 var AWS = require('aws-sdk');
-var s3urls = require('s3urls');
+var s3urls = require('@mapbox/s3urls');
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
 

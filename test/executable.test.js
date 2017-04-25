@@ -10,7 +10,7 @@ var copy = path.resolve(__dirname, '..', 'bin', 'mapbox-tile-copy.js');
 var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
 var runid = crypto.randomBytes(16).toString('hex');
 var fixture = path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gz');
-var s3urls = require('s3urls');
+var s3urls = require('@mapbox/s3urls');
 var AWS = require('aws-sdk');
 
 
