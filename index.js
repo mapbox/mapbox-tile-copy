@@ -2,13 +2,13 @@ var url = require('url');
 var getUri = require('./lib/get-uri');
 var tilelivecopy = require('./lib/tilelivecopy');
 var serialtilescopy = require('./lib/serialtilescopy');
-var s3urls = require('s3urls');
 
-var tilelive = require('tilelive');
+var s3urls = require('@mapbox/s3urls');
+var tilelive = require('@mapbox/tilelive');
 var Vector = require('@mapbox/tilelive-vector');
-var MBTiles = require('mbtiles');
+var MBTiles = require('@mapbox/mbtiles');
 var Omnivore = require('@mapbox/tilelive-omnivore');
-var TileJSON = require('tilejson');
+var TileJSON = require('@mapbox/tilejson');
 var Mapbox = require('./lib/tilelive-mapbox');
 var S3 = require('@mapbox/tilelive-s3');
 var path = require('path');
