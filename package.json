@@ -37,7 +37,10 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.0.25",
+    "mkdirp": "^0.5.1",
+    "mock-aws-s3": "^2.5.1",
     "request": "^2.47.0",
+    "rimraf": "^2.6.1",
     "sinon": "^1.12.2",
     "tape": "^3.0.2"
   },
