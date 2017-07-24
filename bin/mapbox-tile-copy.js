@@ -102,6 +102,8 @@ fs.exists(srcfile0, function(exists) {
 var stats, p;
 
 function getProgress(statistics, prog) {
+  console.log('statistics: ', statistics);
+  console.log('progress: ', prog);
   stats = statistics;
   p = prog;
   if (interval < 0) report();
@@ -109,6 +111,7 @@ function getProgress(statistics, prog) {
 
 function report(final) {
   if (!stats || !p) return;
+
   console.log(util.format('%s%s tiles @ %s/s, %s% complete [%ss]%s',
     interval > 0 ? '' : '\r\033[K',
     p.transferred,
