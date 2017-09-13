@@ -21,7 +21,7 @@
     "@mapbox/mbtiles": "~0.9.0",
     "@mapbox/s3urls": "^1.3.0",
     "@mapbox/tilejson": "^1.0.1",
-    "@mapbox/tilelive-omnivore": "mapbox/tilelive-omnivore#8157dc06386749b4d321045296136e889c90af1a",
+    "@mapbox/tilelive-omnivore": "mapbox/tilelive-omnivore#797e80bb95370ef122b2e0086a4f25946508278f",
     "@mapbox/tilelive-s3": "6.5.1",
     "@mapbox/tilelive-vector": "~3.10.0",
     "@mapbox/tilelive": "~5.12.2",
