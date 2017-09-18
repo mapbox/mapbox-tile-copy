@@ -151,7 +151,7 @@ test('copy omnivore', function(t) {
     t.ifError(err, 'copied');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      t.equal(count, 27, 'expected number of tiles');
+      t.equal(count, 35, 'expected number of tiles');
       t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for geojson');
       tilelive.copy.restore();
       t.end();
@@ -168,7 +168,7 @@ test('copy omnivore stats', function(t) {
   tileliveCopy(src, dst, { maxzoom: 5, stats: true }, function(err, stats) {
     t.ifError(err, 'copied');
     t.ok(stats, 'has stats');
-    t.equal(stats.valid.geometryTypes.Polygon, 207, 'Counts polygons');
+    t.equal(stats.valid.geometryTypes.Polygon, 452, 'Counts polygons');
     tilelive.copy.restore();
     t.end();
   });
@@ -363,7 +363,7 @@ test('copy omnivore to Frankfurt', function(t) {
     t.ifError(err, 'copied');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      t.equal(count, 27, 'expected number of tiles');
+      t.equal(count, 35, 'expected number of tiles');
       t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for geojson');
       tilelive.copy.restore();
       t.end();
