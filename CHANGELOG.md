@@ -1,5 +1,9 @@
 # Changelog
 
+## N/A
+
+- Update tests per https://github.com/mapbox/mapnik-omnivore/pull/172
+
 ## 6.3.0
 
 - Upgrade tilelive-omnivore to 3.4.0
