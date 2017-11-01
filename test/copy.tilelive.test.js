@@ -19,7 +19,7 @@ var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
 var runid = crypto.randomBytes(16).toString('hex');
 
 console.log('---> mapbox-tile-copy copy.tilelive %s', runid);
-
+console.log('test')
 function dsturi(name) {
   return [
     's3:/',
