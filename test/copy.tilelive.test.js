@@ -103,8 +103,6 @@ test('copy mbtiles with v1 tile logging', function(t) {
   tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'copied');
     tileCount(dst, function(err, count) {
-      t.ifError(err, 'counted tiles');
-      t.equal(count, 21, 'expected number of tiles');
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
