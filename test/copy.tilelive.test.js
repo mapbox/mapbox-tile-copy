@@ -110,7 +110,7 @@ test('copy mbtiles with v1 tile logging', function(t) {
       tileVersion(dst, 0, 0, 0, function(err, version) {
         var path = './v1-stats.json';
         t.equal(fs.existsSync(path), true);
-        process.env.LOG_V1_TILES = ''; 
+        process.env.LOG_V1_TILES = false; 
         fs.unlinkSync(path); 
         t.end();
       });
