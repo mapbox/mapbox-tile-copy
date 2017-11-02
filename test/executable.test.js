@@ -107,7 +107,7 @@ test('stats flag', function(t) {
     t.pass(tmpfile);
     var stats = JSON.parse(fs.readFileSync(tmpfile));
     t.ok(stats);
-    t.equal(Math.abs(15590 - stats.valid.geometryTypes.Polygon) < 200, true, 'Counts polygons (+/-15590)');
+    t.equal(Math.abs(15800 - stats.valid.geometryTypes.Polygon) < 200, true, 'Counts polygons (+/-15800)');
     t.end();
   });
 });
