@@ -69,7 +69,7 @@ function tileVersion(dst, z, x, y, callback) {
   });
 }
 
-test('copy mbtiles', function(t) {
+test('copy mbtiles without v1 tile logging', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
   var dst = dsturi('valid.mbtiles');
@@ -87,6 +87,31 @@ test('copy mbtiles', function(t) {
       tileVersion(dst, 0, 0, 0, function(err, version) {
         t.ifError(err, 'got tile info');
         t.equal(version, 2, 'tile is v2');
+        t.end();
+      });
+    });
+  });
+});
+
+test('copy mbtiles with v1 tile logging', function(t) {
+  process.env.LOG_V1_TILES = true; 
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('valid.mbtiles');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
+      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
+      tilelive.copy.restore();
+
+      tileVersion(dst, 0, 0, 0, function(err, version) {
+        var path = './v1-stats.json';
+        t.equal(fs.existsSync(path), true);
+        process.env.LOG_V1_TILES = false; 
+        fs.unlinkSync(path); 
         t.end();
       });
     });
