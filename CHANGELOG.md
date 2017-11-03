@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.4.0
+
+- Add V1 tile tracker. 
+
 ## N/A
 
 - Update tests per https://github.com/mapbox/mapnik-omnivore/pull/172
