@@ -101,6 +101,7 @@ function getProgress(prog) {
 
 function report(final) {
   if (!p) return;
+  console.log(p);
   console.log(util.format('%s%s tiles @ %s/s, %s% complete [%ss]%s',
     interval > 0 ? '' : '\r\033[K',
     p.transferred,
