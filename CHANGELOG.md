@@ -1,8 +1,12 @@
 # Changelog
 
+## 7.0.0
+
+- Remove tile-stat-stream and stats as an option [#105](https://github.com/mapbox/mapbox-tile-copy/issues/105)
+
 ## 6.4.0
 
-- Add V1 tile tracker. 
+- Add V1 tile tracker.
 
 ## N/A
 

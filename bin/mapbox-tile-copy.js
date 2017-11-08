@@ -36,8 +36,6 @@ var options = {};
 
 options.progress = getProgress;
 
-options.stats = !!argv.stats;
-
 ['minzoom','maxzoom'].forEach(function(zoomopt) {
   if (!!argv[zoomopt]) {
     if (isNumeric(argv[zoomopt])) {
@@ -80,17 +78,13 @@ fs.exists(srcfile0, function(exists) {
   }
 
   if (options.bundle === true) { srcfile = 'omnivore://' + srcfile };
-  mapboxTileCopy(srcfile, dsturi, options, function(err, stats) {
+  mapboxTileCopy(srcfile, dsturi, options, function(err) {
     if (err) {
       console.error(err.message);
       process.exit(err.code === 'EINVALID' ? 3 : 1);
     }
 
-    if (argv.stats) {
-      fs.writeFile(argv.stats, JSON.stringify(stats), done);
-    } else {
-      done();
-    }
+    done();
 
     function done() {
       if (interval !== 0) report(true);
@@ -99,16 +93,14 @@ fs.exists(srcfile0, function(exists) {
   });
 });
 
-var stats, p;
-
-function getProgress(statistics, prog) {
-  stats = statistics;
+var p;
+function getProgress(prog) {
   p = prog;
   if (interval < 0) report();
 }
 
 function report(final) {
-  if (!stats || !p) return;
+  if (!p) return;
   console.log(util.format('%s%s tiles @ %s/s, %s% complete [%ss]%s',
     interval > 0 ? '' : '\r\033[K',
     p.transferred,

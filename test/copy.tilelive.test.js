@@ -11,7 +11,6 @@ var os = require('os');
 var fs = require('fs');
 var mtc = require('..'); // just to get protocols registered
 var sinon = require('sinon');
-var TileStatStream = require('tile-stat-stream');
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
 
@@ -94,7 +93,7 @@ test('copy mbtiles without v1 tile logging', function(t) {
 });
 
 test('copy mbtiles with v1 tile logging', function(t) {
-  process.env.LOG_V1_TILES = true; 
+  process.env.LOG_V1_TILES = true;
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
   var dst = dsturi('valid.mbtiles');
@@ -110,8 +109,8 @@ test('copy mbtiles with v1 tile logging', function(t) {
       tileVersion(dst, 0, 0, 0, function(err, version) {
         var path = './v1-stats.json';
         t.equal(fs.existsSync(path), true);
-        process.env.LOG_V1_TILES = false; 
-        fs.unlinkSync(path); 
+        process.env.LOG_V1_TILES = false;
+        fs.unlinkSync(path);
         t.end();
       });
     });
@@ -181,21 +180,6 @@ test('copy omnivore', function(t) {
       tilelive.copy.restore();
       t.end();
     });
-  });
-});
-
-test('copy omnivore stats', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-  var src = 'omnivore://' + fixture;
-  var dst = dsturi('valid.geojson');
-  sinon.spy(tilelive, 'copy');
-
-  tileliveCopy(src, dst, { maxzoom: 5, stats: true }, function(err, stats) {
-    t.ifError(err, 'copied');
-    t.ok(stats, 'has stats');
-    t.equal(stats.valid.geometryTypes.Polygon, 452, 'Counts polygons');
-    tilelive.copy.restore();
-    t.end();
   });
 });
 
@@ -313,7 +297,7 @@ test('passes through invalid tile in mbtiles', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tile-with-no-geometry.mbtiles');
   var src = 'mbtiles://' + fixture;
   var dst = dsturi('invalid.tile-with-no-geometry.mbtiles');
-  tileliveCopy(src, dst, {}, function(err, stats) {
+  tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'passes through invalid.tile-with-no-geometry.mbtiles');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');

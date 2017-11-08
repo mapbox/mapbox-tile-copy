@@ -97,21 +97,6 @@ test('handles mbtile with missing geometry', function(t) {
   });
 });
 
-test('stats flag', function(t) {
-  var dst = dsturi('valid.geojson');
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-  var tmpfile = path.join(os.tmpdir(), crypto.randomBytes(8).toString('hex'));
-  var cmd = [ copy, fixture, '--stats=' + tmpfile, dst ].join(' ');
-  exec(cmd, function(err, stdout, stderr) {
-    t.ifError(err, 'no error');
-    t.pass(tmpfile);
-    var stats = JSON.parse(fs.readFileSync(tmpfile));
-    t.ok(stats);
-    t.equal(Math.abs(15800 - stats.valid.geometryTypes.Polygon) < 200, true, 'Counts polygons (+/-15800)');
-    t.end();
-  });
-});
-
 test('minzoom flag valid', function(t) {
   var dst = dsturi('valid.mini.geojson');
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');

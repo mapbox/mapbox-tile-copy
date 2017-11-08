@@ -32,8 +32,7 @@
     "minimist": "~0.2.0",
     "progress-stream": "^0.5.0",
     "queue-async": "^1.0.7",
-    "stream-combiner": "^0.2.2",
-    "tile-stat-stream": "^1.0.1"
+    "stream-combiner": "^0.2.2"
   },
   "devDependencies": {
     "aws-sdk": "^2.0.25",
