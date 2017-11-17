@@ -114,7 +114,7 @@
         },
         "TestKMSKey": {
             "Value": {
-                "Fn:GetAtt": [
+                "Fn::GetAtt": [
                     "MapboxTileCopyKMSKey"
                 ]
             }
