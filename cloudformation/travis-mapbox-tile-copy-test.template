@@ -12,6 +12,11 @@
                         "PolicyDocument": {
                             "Statement": [
                                 {
+                                    "Effect": "Allow",
+                                    "Action": [ "kms:Decrypt" ],
+                                    "Resource": { "Ref": "MapboxTileCopyKMSKey" }
+                                },
+                                {
                                     "Resource": [
                                         "arn:aws:s3:::tilestream-tilesets-development/*",
                                         "arn:aws:s3:::mapbox-eu-central-1/test/mapbox-tile-copy/*"
@@ -60,6 +65,34 @@
                     "Ref": "MapboxTileCopyTestUser"
                 }
             }
+        },
+        "MapboxTileCopyKMSKey": {
+            "Type" : "AWS::KMS::Key",
+            "Properties" : {
+                "Description": "KMS key for mapbox-tile-copy test user",
+                "Enabled": true,
+                "KeyPolicy" : {
+                    "Version": "2012-10-17",
+                    "Id": "test-user-kms",
+                    "Statement": [{
+                        "Effect": "Allow",
+                        "Principal": {
+                            "AWS": {
+                                "Fn::Join" : [ "", [ "arn:aws:iam::", { "Ref" : "AWS::AccountId" }, ":root" ] ]
+                            }
+                        },
+                        "Action": "kms:*",
+                        "Resource": "*"
+                    }]
+                }
+            }
+        },
+        "MapboxTileCopyKMSAlias": {
+            "Type" : "AWS::KMS::Alias",
+            "Properties" : {
+                "AliasName" : "alias/mapbox-tile-copy-test-kms",
+                "TargetKeyId" : { "Ref":"MapboxTileCopyKMSKey" }
+            }
         }
     },
     "Outputs": {
@@ -73,6 +106,13 @@
                 "Fn::GetAtt": [
                     "MapboxTileCopyTestKey",
                     "SecretAccessKey"
+                ]
+            }
+        },
+        "TestKMSKey": {
+            "Value": {
+                "Fn:GetAtt": [
+                    "MapboxTileCopyKMSKey"
                 ]
             }
         }
