@@ -2,7 +2,7 @@
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Travis user for testing mapbox-tile-copy",
     "Resources": {
-        "MapboxTileCopyTestUser": {
+        "TestUser": {
             "Type": "AWS::IAM::User",
             "Properties": {
                 "Path": "/service/",
@@ -18,7 +18,7 @@
                                         "kms:Encrypt"
                                     ],
                                     "Resource": [
-                                      { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:alias/mapbox-tile-copy-test-kms" }
+                                      { "Fn::Sub": "arn:aws:kms::${AWS::AccountId}:alias/mapbox-tile-copy-test-kms" }
                                     ]
                                 },
                                 {
@@ -63,15 +63,13 @@
                 ]
             }
         },
-        "MapboxTileCopyTestKey": {
+        "AccessKey": {
             "Type": "AWS::IAM::AccessKey",
             "Properties": {
-                "UserName": {
-                    "Ref": "MapboxTileCopyTestUser"
-                }
+                "UserName": { "Ref": "TestUser" }
             }
         },
-        "MapboxTileCopyKMSKey": {
+        "KMSKey": {
             "Type" : "AWS::KMS::Key",
             "Properties" : {
                 "Description": "KMS key for mapbox-tile-copy test user",
@@ -90,24 +88,24 @@
                 }
             }
         },
-        "MapboxTileCopyKMSAlias": {
+        "KMSAlias": {
             "Type" : "AWS::KMS::Alias",
             "Properties" : {
                 "AliasName" : "alias/mapbox-tile-copy-test-kms",
-                "TargetKeyId" : { "Ref":"MapboxTileCopyKMSKey" }
+                "TargetKeyId" : { "Ref":"KMSKey" }
             }
         }
     },
     "Outputs": {
         "TestAccessKeyId": {
             "Value": {
-                "Ref": "MapboxTileCopyTestKey"
+                "Ref": "AccessKey"
             }
         },
         "TestSecretAccessKey": {
             "Value": {
                 "Fn::GetAtt": [
-                    "MapboxTileCopyTestKey",
+                    "AccessKey",
                     "SecretAccessKey"
                 ]
             }
