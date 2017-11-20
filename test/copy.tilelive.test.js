@@ -379,3 +379,26 @@ test('copy omnivore to Frankfurt', function(t) {
     });
   });
 });
+
+test('copy omnivore to s3 encrypted with AWS KMS', function(t) {
+  var kmsKeyId = 'alias/mapbox-tile-copy-test-kms';
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var src = 'omnivore://' + fixture;
+  var dst = [
+    's3://' + bucket + '/test/mapbox-tile-copy',
+    runid,
+    'kms-encrypted.geojson/{z}/{x}/{y}?sse=aws:kms&sseKmsId=' + kmsKeyId
+  ].join('/');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, { maxzoom: 5 }, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 35, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for geojson');
+      tilelive.copy.restore();
+      t.end();
+    });
+  });
+});

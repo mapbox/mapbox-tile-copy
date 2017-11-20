@@ -3,6 +3,7 @@
 ## 7.0.0
 
 - Remove tile-stat-stream and stats as an option [#105](https://github.com/mapbox/mapbox-tile-copy/issues/105)
+- Add support for s3 KMS encryption [#108](https://github.com/mapbox/mapbox-tile-copy/pull/108) and update test user credentials [#109](https://github.com/mapbox/mapbox-tile-copy/pull/109)
 
 ## 6.4.0
 
