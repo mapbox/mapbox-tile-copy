@@ -78,7 +78,7 @@
                         "Effect": "Allow",
                         "Principal": {
                             "AWS": [
-                                { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" }
+                                { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root" },
                                 { "Fn::Sub": [
                                     "arn:aws:iam::${AWS::AccountId}:user/service/${User}",
                                     { "User": { "Ref" : "TestUser" } }
