@@ -17,7 +17,9 @@
                                         "kms:Decrypt",
                                         "kms:Encrypt"
                                     ],
-                                    "Resource": { "Ref": "MapboxTileCopyKMSKey" }
+                                    "Resource": [
+                                      { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:alias/mapbox-tile-copy-test-kms" }
+                                    ]
                                 },
                                 {
                                     "Resource": [
