@@ -109,13 +109,6 @@
                     "SecretAccessKey"
                 ]
             }
-        },
-        "TestKMSKey": {
-            "Value": {
-                "Fn::GetAtt": [
-                    "MapboxTileCopyKMSKey"
-                ]
-            }
         }
     }
 }

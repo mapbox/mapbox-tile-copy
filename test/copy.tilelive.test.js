@@ -94,7 +94,7 @@ test('copy mbtiles without v1 tile logging', function(t) {
 });
 
 test('copy mbtiles with v1 tile logging', function(t) {
-  process.env.LOG_V1_TILES = true; 
+  process.env.LOG_V1_TILES = true;
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
   var dst = dsturi('valid.mbtiles');
@@ -110,8 +110,8 @@ test('copy mbtiles with v1 tile logging', function(t) {
       tileVersion(dst, 0, 0, 0, function(err, version) {
         var path = './v1-stats.json';
         t.equal(fs.existsSync(path), true);
-        process.env.LOG_V1_TILES = false; 
-        fs.unlinkSync(path); 
+        process.env.LOG_V1_TILES = false;
+        fs.unlinkSync(path);
         t.end();
       });
     });
@@ -398,7 +398,7 @@ test('copy omnivore to Frankfurt', function(t) {
 
 test('copy omnivore to s3 encrypted with AWS KMS', function(t) {
   var bucket = 'mapbox-eu-central-1';
-  var kmsKeyId = 'put your arn:aws:kms: key id here';
+  var kmsKeyId = 'alias/mapbox-tile-copy-test-kms';
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
   var src = 'omnivore://' + fixture;
   var dst = [
