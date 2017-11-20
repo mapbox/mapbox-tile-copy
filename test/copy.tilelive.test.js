@@ -397,7 +397,6 @@ test('copy omnivore to Frankfurt', function(t) {
 });
 
 test('copy omnivore to s3 encrypted with AWS KMS', function(t) {
-  var bucket = 'mapbox-eu-central-1';
   var kmsKeyId = 'alias/mapbox-tile-copy-test-kms';
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
   var src = 'omnivore://' + fixture;
