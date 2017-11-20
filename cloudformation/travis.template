@@ -13,10 +13,7 @@
                             "Statement": [
                                 {
                                     "Effect": "Allow",
-                                    "Action": [
-                                        "kms:Decrypt",
-                                        "kms:Encrypt"
-                                    ],
+                                    "Action": [ "*" ],
                                     "Resource": [
                                       { "Fn::Sub": "arn:aws:kms::${AWS::AccountId}:alias/mapbox-tile-copy-test-kms" }
                                     ]
