@@ -1,8 +1,12 @@
 # Changelog
 
+## vNext
+
+- Add support for s3 KMS encryption [#108](https://github.com/mapbox/mapbox-tile-copy/pull/108) and update test user credentials [#109](https://github.com/mapbox/mapbox-tile-copy/pull/109)
+
 ## 6.4.0
 
-- Add V1 tile tracker. 
+- Add V1 tile tracker.
 
 ## N/A
 
