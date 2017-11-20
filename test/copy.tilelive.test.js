@@ -37,7 +37,6 @@ function tileCount(dst, callback) {
   var params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', ''));
   params.Prefix = params.Key;
   delete params.Key;
-  console.log(params);
 
   var s3 = new AWS.S3({ region: region });
 
