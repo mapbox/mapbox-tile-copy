@@ -3,3 +3,4 @@
 test/fixtures/valid.geotiff.tif.aux.xml
 v1-stats.json
 npm-debug.log
+.DS_Store
