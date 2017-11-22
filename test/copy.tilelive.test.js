@@ -108,7 +108,7 @@ test('copy mbtiles with v1 tile logging, confirm migration is called', function(
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
-      t.equal(mapnikVT.info.callCount, count*2, 'called mapnik info twice as many times as there are tiles');
+      t.equal(mapnikVT.info.callCount, count, 'called mapnik info twice as many times as there are tiles');
       mapnikVT.info.restore();
 
       tileVersion(dst, 0, 0, 0, function(err, version) {
