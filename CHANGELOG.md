@@ -1,6 +1,6 @@
 # Changelog
 
-## vNext
+## 6.5.0
 
 - Add support for s3 KMS encryption [#108](https://github.com/mapbox/mapbox-tile-copy/pull/108) and update test user credentials [#109](https://github.com/mapbox/mapbox-tile-copy/pull/109)
 - Catch reprojection errors from mapnik [#110](https://github.com/mapbox/mapbox-tile-copy/pull/110)
