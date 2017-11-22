@@ -1,6 +1,7 @@
 var test = require('tape');
 var path = require('path');
 var mapnik = require('mapnik');
+var mapnikVT = mapnik.VectorTile; // required for spying
 var crypto = require('crypto');
 var tileliveCopy = require('../lib/tilelivecopy');
 var tilelive = require('@mapbox/tilelive');
@@ -93,12 +94,13 @@ test('copy mbtiles without v1 tile logging', function(t) {
   });
 });
 
-test('copy mbtiles with v1 tile logging', function(t) {
+test('copy mbtiles with v1 tile logging, confirm migration is called', function(t) {
   process.env.LOG_V1_TILES = true;
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
   var dst = dsturi('valid.mbtiles');
   sinon.spy(tilelive, 'copy');
+  sinon.spy(mapnikVT, 'info');
 
   tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'copied');
@@ -106,6 +108,8 @@ test('copy mbtiles with v1 tile logging', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
+      t.equal(mapnikVT.info.callCount, count*2, 'called mapnik info twice as many times as there are tiles');
+      mapnikVT.info.restore();
 
       tileVersion(dst, 0, 0, 0, function(err, version) {
         var path = './v1-stats.json';
