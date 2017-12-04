@@ -94,9 +94,9 @@ test('copy mbtiles without v1 tile logging', function(t) {
   });
 });
 
-test('copy mbtiles with v1 tile logging, confirm migration is called', function(t) {
+test('confirm mapnik.VectorTile.info is only called once for v2 tiles', function(t) {
   process.env.LOG_V1_TILES = true;
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid-v2.mbtiles');
   var src = 'mbtiles://' + fixture;
   var dst = dsturi('valid.mbtiles');
   sinon.spy(tilelive, 'copy');
@@ -107,17 +107,10 @@ test('copy mbtiles with v1 tile logging, confirm migration is called', function(
     tileCount(dst, function(err, count) {
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
+      t.equal(mapnikVT.info.callCount, count, 'called mapnik info as many times as there are tiles');
       tilelive.copy.restore();
-      t.equal(mapnikVT.info.callCount, count, 'called mapnik info twice as many times as there are tiles');
       mapnikVT.info.restore();
-
-      tileVersion(dst, 0, 0, 0, function(err, version) {
-        var path = './v1-stats.json';
-        t.equal(fs.existsSync(path), true);
-        process.env.LOG_V1_TILES = false;
-        fs.unlinkSync(path);
-        t.end();
-      });
+      t.end();
     });
   });
 });
