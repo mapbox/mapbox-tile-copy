@@ -94,27 +94,6 @@ test('copy mbtiles without v1 tile logging', function(t) {
   });
 });
 
-test('confirm mapnik.VectorTile.info is only called once for v2 tiles', function(t) {
-  process.env.LOG_V1_TILES = true;
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid-v2.mbtiles');
-  var src = 'mbtiles://' + fixture;
-  var dst = dsturi('valid.mbtiles');
-  sinon.spy(tilelive, 'copy');
-  sinon.spy(mapnikVT, 'info');
-
-  tileliveCopy(src, dst, {}, function(err) {
-    t.ifError(err, 'copied');
-    tileCount(dst, function(err, count) {
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
-      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
-      t.equal(mapnikVT.info.callCount, count, 'called mapnik info as many times as there are tiles');
-      tilelive.copy.restore();
-      mapnikVT.info.restore();
-      t.end();
-    });
-  });
-});
-
 test('copy retry', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
@@ -140,6 +119,7 @@ test('copy v2 mbtiles', function(t) {
   var dst = dsturi('valid-v2.mbtiles');
   sinon.spy(tilelive, 'copy');
   sinon.spy(migrationStream, 'migrate');
+  sinon.spy(mapnikVT, 'info');
 
   tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'copied');
@@ -149,6 +129,9 @@ test('copy v2 mbtiles', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
+
+      t.equal(mapnikVT.info.callCount, count, 'called mapnik info as many times as there are tiles (should only be once per v2 tile)');
+      mapnikVT.info.restore();
 
       t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
       migrationStream.migrate.restore();
@@ -161,7 +144,6 @@ test('copy v2 mbtiles', function(t) {
     });
   });
 });
-
 
 test('copy omnivore', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
