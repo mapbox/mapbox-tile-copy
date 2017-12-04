@@ -1,6 +1,7 @@
 var test = require('tape');
 var path = require('path');
 var mapnik = require('mapnik');
+var mapnikVT = mapnik.VectorTile; // required for spying
 var crypto = require('crypto');
 var tileliveCopy = require('../lib/tilelivecopy');
 var tilelive = require('@mapbox/tilelive');
@@ -93,31 +94,6 @@ test('copy mbtiles without v1 tile logging', function(t) {
   });
 });
 
-test('copy mbtiles with v1 tile logging', function(t) {
-  process.env.LOG_V1_TILES = true;
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
-  var src = 'mbtiles://' + fixture;
-  var dst = dsturi('valid.mbtiles');
-  sinon.spy(tilelive, 'copy');
-
-  tileliveCopy(src, dst, {}, function(err) {
-    t.ifError(err, 'copied');
-    tileCount(dst, function(err, count) {
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
-      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
-      tilelive.copy.restore();
-
-      tileVersion(dst, 0, 0, 0, function(err, version) {
-        var path = './v1-stats.json';
-        t.equal(fs.existsSync(path), true);
-        process.env.LOG_V1_TILES = false;
-        fs.unlinkSync(path);
-        t.end();
-      });
-    });
-  });
-});
-
 test('copy retry', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
@@ -143,6 +119,7 @@ test('copy v2 mbtiles', function(t) {
   var dst = dsturi('valid-v2.mbtiles');
   sinon.spy(tilelive, 'copy');
   sinon.spy(migrationStream, 'migrate');
+  sinon.spy(mapnikVT, 'info');
 
   tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'copied');
@@ -152,6 +129,9 @@ test('copy v2 mbtiles', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
+
+      t.equal(mapnikVT.info.callCount, count, 'called mapnik info as many times as there are tiles (should only be once per v2 tile)');
+      mapnikVT.info.restore();
 
       t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
       migrationStream.migrate.restore();
@@ -164,7 +144,6 @@ test('copy v2 mbtiles', function(t) {
     });
   });
 });
-
 
 test('copy omnivore', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
