@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.6.0
+
+- Remove duplicate mapnik.VectorTile.info call in migration stream for v2 tiles [#102](https://github.com/mapbox/mapbox-tile-copy/pull/102)
+
 ## 6.5.0
 
 - Add support for s3 KMS encryption [#108](https://github.com/mapbox/mapbox-tile-copy/pull/108) and update test user credentials [#109](https://github.com/mapbox/mapbox-tile-copy/pull/109)
