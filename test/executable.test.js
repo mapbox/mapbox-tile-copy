@@ -325,3 +325,13 @@ test('layerName', function(t) {
     });
   });
 });
+
+test('size limit environment variable', function(t) {
+  var dst = dsturi('valid.mini.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
+  var cmd = [ 'BRIDGE_MAX_VTILE_BYTES_COMPRESSED=10', copy, fixture, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(stderr.indexOf('Tile size exceeds limit. At least one vector tile is larger than') > -1, 'expected error');
+    t.end();
+  });
+});
