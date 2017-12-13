@@ -3,6 +3,7 @@
 ## 6.6.0
 
 - Remove duplicate mapnik.VectorTile.info call in migration stream for v2 tiles [#102](https://github.com/mapbox/mapbox-tile-copy/pull/102)
+- Catch tile size errors from tilelive-bridge and exit with `EINVALID`
 
 ## 6.5.0
 
