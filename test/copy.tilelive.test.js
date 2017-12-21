@@ -112,7 +112,8 @@ test('copy invalid mbtiles with v2 invalid tile logging', function(t) {
       tileVersion(dst, 0, 0, 0, function(err, version) {    
         var path = './vt-invalid.json';   
         t.equal(fs.existsSync(path), true);  
-        process.env.LOG_V1_TILES = false;   
+        process.env.LOG_V1_TILES = false;
+        fs.unlinkSync(path);    
         t.end();    
       });   
     });   
