@@ -96,34 +96,11 @@ function tileVersion(dst, z, x, y, callback) {
 //   });   
 // }); 
 
-// test('copy valid v2 mbtiles', function(t) { 
-//   process.env.LOG_INVALID_VT = true;    
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid-v2.mbtiles');   
-//   var src = 'mbtiles://' + fixture;   
-//   var dst = dsturi('valid-v2.mbtiles');    
-//   sinon.spy(tilelive, 'copy');    
-    
-//   tileliveCopy(src, dst, {}, function(err) {   
-//     tileCount(dst, function(err, count) {   
-//       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');   
-//       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');    
-//       tilelive.copy.restore();    
-    
-//       tileVersion(dst, 0, 0, 0, function(err, version) { 
-//         var path = './vt-invalid.json';   
-//         // t.equal(fs.existsSync(path), false);   
-//         process.env.LOG_INVALID_VT = false;   
-//         t.end();    
-//       });   
-//     });   
-//   });   
-// });    p
-
-test('copy invalid mbtiles with v2 invalid tile logging', function(t) {    
+test('copy valid v2 mbtiles', function(t) { 
   process.env.LOG_INVALID_VT = true;    
-  var fixture = path.resolve(__dirname, 'fixtures', 'v2-throw.mbtiles');   
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid-v2.mbtiles');   
   var src = 'mbtiles://' + fixture;   
-  var dst = dsturi('v2-throw.mbtiles');    
+  var dst = dsturi('valid-v2.mbtiles');    
   sinon.spy(tilelive, 'copy');    
     
   tileliveCopy(src, dst, {}, function(err) {   
@@ -132,16 +109,39 @@ test('copy invalid mbtiles with v2 invalid tile logging', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');    
       tilelive.copy.restore();    
     
-      tileVersion(dst, 0, 0, 0, function(err, version) {    
+      tileVersion(dst, 0, 0, 0, function(err, version) { 
         var path = './vt-invalid.json';   
-        t.equal(fs.existsSync(path), true);   
-        process.env.LOG_V1_TILES = false;   
-        // fs.unlinkSync(path);    
+        t.equal(fs.existsSync(path), false);   
+        process.env.LOG_INVALID_VT = false;
+        fs.unlinkSync(path);    
         t.end();    
       });   
     });   
   });   
 });    
+
+// test('copy invalid mbtiles with v2 invalid tile logging', function(t) {    
+//   process.env.LOG_INVALID_VT = true;    
+//   var fixture = path.resolve(__dirname, 'fixtures', 'v2-throw.mbtiles');   
+//   var src = 'mbtiles://' + fixture;   
+//   var dst = dsturi('v2-throw.mbtiles');    
+//   sinon.spy(tilelive, 'copy');    
+    
+//   tileliveCopy(src, dst, {}, function(err) {   
+//     tileCount(dst, function(err, count) {   
+//       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');   
+//       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');    
+//       tilelive.copy.restore();    
+    
+//       tileVersion(dst, 0, 0, 0, function(err, version) {    
+//         var path = './vt-invalid.json';   
+//         t.equal(fs.existsSync(path), false);  
+//         process.env.LOG_V1_TILES = false;   
+//         t.end();    
+//       });   
+//     });   
+//   });   
+// });    
 
 
 // test('copy mbtiles without v1 tile logging', function(t) {
