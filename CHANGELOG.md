@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.7.0
+
+- Adds x out of range error handler. See #113
+- Adds file writer for invalid VT stats object & vtvalidate library for additional VT validation. See #113 & mapbox/unpacker#1458 (comment)
+
 ## 6.6.0
 
 - Remove duplicate mapnik.VectorTile.info call in migration stream for v2 tiles [#102](https://github.com/mapbox/mapbox-tile-copy/pull/102)
