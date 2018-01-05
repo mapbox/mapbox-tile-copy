@@ -12,7 +12,7 @@
 
 // Perform some performance adjustments early on
 var maxThreads = Math.ceil(Math.max(4, require('os').cpus().length * 1.5));
-process.env.UV_THREADPOOL_SIZE = 1;//maxThreads;
+process.env.UV_THREADPOOL_SIZE = maxThreads;
 
 var util = require('util');
 var fs = require('fs');
@@ -33,7 +33,6 @@ if (!argv._[0]) {
 var srcfile = argv._[0];
 var dsturi = argv._[1];
 var options = {};
-
 
 options.progress = getProgress;
 
