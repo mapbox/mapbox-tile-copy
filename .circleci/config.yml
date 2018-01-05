@@ -11,7 +11,7 @@ step-library:
 jobs:
   build-osx:
     macos:
-      xcode: "9"
+      xcode: "9.0"
     steps:
       - checkout
       - *build-and-test
