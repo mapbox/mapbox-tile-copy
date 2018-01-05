@@ -7,6 +7,7 @@ node_js:
 sudo: false
 
 before_install:
+  - node -e "console.log(require('os').cpus().length,require('os').cpus())"
   - npm install --global npm@5
 
 addons:
