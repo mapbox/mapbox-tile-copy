@@ -1,0 +1,36 @@
+version: 2
+
+step-library:
+  - &build-and-test
+      run:
+        name: Build and test
+        command: |
+          npm install
+          npm test
+
+jobs:
+  build-osx:
+    macos:
+      xcode: "8.3.3"
+    steps:
+      - checkout
+      - *build-and-test
+
+  build-linux:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: libstdc++ upgrade
+          command: |
+            sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            sudo apt-get update -y
+            sudo apt-get install -y libstdc++-6
+      - *build-and-test
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build-osx
+      - build-linux
