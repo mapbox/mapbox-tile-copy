@@ -53,6 +53,7 @@ jobs:
       - run:
           name: libstdc++ upgrade
           command: |
+            apt-get update -y
             apt-get install -y software-properties-common python-software-properties || true
             add-apt-repository -y ppa:ubuntu-toolchain-r/test
             apt-get update -y
