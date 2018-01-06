@@ -376,13 +376,10 @@ test('copy coordinates exceed spherical mercator', function(t) {
 
   tileliveCopy(src, dst, {}, function(err) {
     t.ok(err, 'expect an error for out of bounds coordinates');
+    t.ok(err.message.indexOf('Coordinates beyond web mercator range') > -1);
     t.equal(err.code, 'EINVALID', 'error code encountered');
-    tileCount(dst, function(err, count) {
-      t.ifError(err, 'counted tiles');
-      t.equal(count, 0, 'did not render any tiles');
-      tilelive.copy.restore();
-      t.end();
-    });
+    tilelive.copy.restore();
+    t.end();
   });
 });
 
