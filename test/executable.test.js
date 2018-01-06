@@ -193,7 +193,7 @@ test('s3 url', function(t) {
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -207,7 +207,7 @@ test('https s3 url', function(t) {
   var cmd = [ copy, fixture, s3urls.convert(dst, 'bucket-in-host') ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -246,7 +246,7 @@ test('parallel', function(t) {
   var cmd = [ copy, fixture, dst, '--part', '1', '--parts', '10' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count < 4, 'did not render all tiles');
@@ -260,7 +260,7 @@ test('part zero', function(t) {
   var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '10' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count < 4, 'did not render all tiles');
@@ -274,7 +274,7 @@ test('single part', function(t) {
   var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '1' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count == 4, 'rendered all tiles');
@@ -288,7 +288,7 @@ test('retry', function(t) {
   var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -317,7 +317,7 @@ test('layerName', function(t) {
   var cmd = [ copy, fixture, dst, '--layerName', 'named' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 5, 'expected number of tiles');
