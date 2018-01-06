@@ -52,6 +52,12 @@ jobs:
       - image: docker:stable-git
     steps:
       - checkout
+      - run:
+          name: libstdc++ upgrade
+          command: |
+            add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            apt-get update -y
+            apt-get install -y libstdc++6 curl bash
       - run: echo 'export NVM_DIR=/opt/circleci/.nvm' >> $BASH_ENV
       - *install-node
       - *build-and-test
