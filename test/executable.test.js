@@ -49,137 +49,136 @@ function tileCount(dst, callback) {
   list();
 }
 
-// test('invalid s3 url', function(t) {
-//   var dst = 'http://www.google.com';
-//   var cmd = [ copy, fixture, dst ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ok(err, 'expected error');
-//     t.equal(stderr, 'You must provide a valid S3 url\n', 'expected message');
-//     t.equal(err.code, 1, 'exit code 1');
-//     t.end();
-//   });
-// });
-//
-// test('file does not exist', function(t) {
-//   var dst = dsturi('invalid.file');
-//   var cmd = [ copy, '/w/t/f', dst ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ok(err, 'expected error');
-//     t.equal(stderr, 'The file specified does not exist: /w/t/f\n', 'expected message');
-//     t.equal(err.code, 1, 'exit code 1');
-//     t.end();
-//   });
-// });
-//
-// test('invalid source file', function(t) {
-//   var dst = dsturi('invalid.source');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tilejson');
-//   var cmd = [ copy, fixture, dst ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ok(err, 'expected error');
-//     t.ok(/Unknown filetype/.test(stderr), 'expected message');
-//     t.equal(err.code, 3, 'exit code 3');
-//     t.end();
-//   });
-// });
-//
-// test('handles mbtile with missing geometry', function(t) {
-//   var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tile-with-no-geometry.mbtiles');
-//   var dst = dsturi('invalid.tile-with-no-geometry.mbtiles');
-//   var cmd = [ copy, fixture, dst ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'no error');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.equal(count, 1, 'expected number of tiles');
-//       t.end();
-//     });
-//   });
-// });
-//
-// test('minzoom flag valid', function(t) {
-//   var dst = dsturi('valid.mini.geojson');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
-//   var cmd = [ copy, fixture, dst, '--minzoom', '5' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'no error');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.equal(count, 2, 'expected number of tiles');
-//       t.end();
-//     });
-//   });
-// });
-//
-// test('minzoom flag nullval', function(t) {
-//   var dst = dsturi('valid.geojson');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-//   var cmd = [ copy, fixture, dst, '--minzoom' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ok(err, 'expected error');
-//     t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
-//     t.equal(err.code, 1, 'exit code 1');
-//     t.end();
-//   });
-// });
-//
-// test('minzoom flag badval', function(t) {
-//   var dst = dsturi('valid.geojson');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-//   var cmd = [ copy, fixture, dst, '--minzoom q' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ok(err, 'expected error');
-//     t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
-//     t.equal(err.code, 1, 'exit code 1');
-//     t.end();
-//   });
-// });
-//
-// test('maxzoom flag valid', function(t) {
-//   var dst = dsturi('valid.mini.geojson');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
-//   var cmd = [ copy, fixture, dst, '--maxzoom', '4' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ifError(err, 'no error');
-//     tileCount(dst, function(err, count) {
-//       t.ifError(err, 'counted tiles');
-//       t.equal(count, 5, 'expected number of tiles');
-//       t.end();
-//     });
-//   });
-// });
-//
-// test('maxzoom flag nullval', function(t) {
-//   var dst = dsturi('valid.geojson');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-//   var cmd = [ copy, fixture, dst, '--maxzoom' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ok(err, 'expected error');
-//     t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
-//     t.equal(err.code, 1, 'exit code 1');
-//     t.end();
-//   });
-// });
-//
-// test('maxzoom flag badval', function(t) {
-//   var dst = dsturi('valid.geojson');
-//   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
-//   var cmd = [ copy, fixture, dst, '--maxzoom q' ].join(' ');
-//   exec(cmd, function(err, stdout, stderr) {
-//     t.ok(err, 'expected error');
-//     t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
-//     t.equal(err.code, 1, 'exit code 1');
-//     t.end();
-//   });
-// });
+test('invalid s3 url', function(t) {
+  var dst = 'http://www.google.com';
+  var cmd = [ copy, fixture, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.equal(stderr, 'You must provide a valid S3 url\n', 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
+test('file does not exist', function(t) {
+  var dst = dsturi('invalid.file');
+  var cmd = [ copy, '/w/t/f', dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.equal(stderr, 'The file specified does not exist: /w/t/f\n', 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
+test('invalid source file', function(t) {
+  var dst = dsturi('invalid.source');
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tilejson');
+  var cmd = [ copy, fixture, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/Unknown filetype/.test(stderr), 'expected message');
+    t.equal(err.code, 3, 'exit code 3');
+    t.end();
+  });
+});
+
+test('handles mbtile with missing geometry', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid.tile-with-no-geometry.mbtiles');
+  var dst = dsturi('invalid.tile-with-no-geometry.mbtiles');
+  var cmd = [ copy, fixture, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'no error');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 1, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+
+test('minzoom flag valid', function(t) {
+  var dst = dsturi('valid.mini.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
+  var cmd = [ copy, fixture, dst, '--minzoom', '5' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'no error');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 2, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+
+test('minzoom flag nullval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--minzoom' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
+test('minzoom flag badval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--minzoom q' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
+test('maxzoom flag valid', function(t) {
+  var dst = dsturi('valid.mini.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
+  var cmd = [ copy, fixture, dst, '--maxzoom', '4' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ifError(err, 'no error');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 5, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+
+test('maxzoom flag nullval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--maxzoom' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
+
+test('maxzoom flag badval', function(t) {
+  var dst = dsturi('valid.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
+  var cmd = [ copy, fixture, dst, '--maxzoom q' ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(err, 'expected error');
+    t.ok(/You must provide a valid zoom level integer/.test(stderr), 'expected message');
+    t.equal(err.code, 1, 'exit code 1');
+    t.end();
+  });
+});
 
 test('s3 url', function(t) {
   var dst = dsturi('valid.s3url');
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    console.log(stdout);
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -193,7 +192,7 @@ test('https s3 url', function(t) {
   var cmd = [ copy, fixture, s3urls.convert(dst, 'bucket-in-host') ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -232,7 +231,7 @@ test('parallel', function(t) {
   var cmd = [ copy, fixture, dst, '--part', '1', '--parts', '10' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count < 4, 'did not render all tiles');
@@ -246,7 +245,7 @@ test('part zero', function(t) {
   var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '10' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count < 4, 'did not render all tiles');
@@ -260,7 +259,7 @@ test('single part', function(t) {
   var cmd = [ copy, fixture, dst, '--part', '0', '--parts', '1' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.ok(count == 4, 'rendered all tiles');
@@ -274,7 +273,7 @@ test('retry', function(t) {
   var cmd = [ copy, fixture, dst, '--retry', '5' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 4, 'expected number of tiles');
@@ -303,11 +302,21 @@ test('layerName', function(t) {
   var cmd = [ copy, fixture, dst, '--layerName', 'named' ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ifError(err, 'copied');
-    t.equal(stdout.length, 77, 'expected stdout.length');
+    t.ok(stdout.length > 0, 'logs something');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
       t.equal(count, 5, 'expected number of tiles');
       t.end();
     });
+  });
+});
+
+test('size limit environment variable', function(t) {
+  var dst = dsturi('valid.mini.geojson');
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mini.geojson');
+  var cmd = [ 'BRIDGE_MAX_VTILE_BYTES_COMPRESSED=10', copy, fixture, dst ].join(' ');
+  exec(cmd, function(err, stdout, stderr) {
+    t.ok(stderr.indexOf('Tile size exceeds limit. At least one vector tile is larger than') > -1, 'expected error');
+    t.end();
   });
 });

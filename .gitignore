@@ -2,4 +2,6 @@
 /node_modules
 test/fixtures/valid.geotiff.tif.aux.xml
 v1-stats.json
+vt-invalid.json
 npm-debug.log
+.DS_Store

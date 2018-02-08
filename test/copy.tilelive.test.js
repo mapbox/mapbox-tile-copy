@@ -1,6 +1,7 @@
 var test = require('tape');
 var path = require('path');
 var mapnik = require('mapnik');
+var mapnikVT = mapnik.VectorTile; // required for spying
 var crypto = require('crypto');
 var tileliveCopy = require('../lib/tilelivecopy');
 var tilelive = require('@mapbox/tilelive');
@@ -11,6 +12,11 @@ var os = require('os');
 var fs = require('fs');
 var mtc = require('..'); // just to get protocols registered
 var sinon = require('sinon');
+<<<<<<< HEAD
+=======
+var TileStatStream = require('tile-stat-stream');
+var mvtf = require('@mapbox/mvt-fixtures');
+>>>>>>> master
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
 
@@ -68,6 +74,56 @@ function tileVersion(dst, z, x, y, callback) {
   });
 }
 
+test('copy mbtiles with v1 tile logging', function(t) {    
+  process.env.LOG_V1_TILES = true;    
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');   
+  var src = 'mbtiles://' + fixture;   
+  var dst = dsturi('valid.mbtiles');    
+  sinon.spy(tilelive, 'copy');    
+    
+  tileliveCopy(src, dst, {}, function(err) {    
+    t.ifError(err, 'copied');   
+    tileCount(dst, function(err, count) {   
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');   
+      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');    
+      tilelive.copy.restore();    
+    
+      tileVersion(dst, 0, 0, 0, function(err, version) {    
+        var path = './v1-stats.json';   
+        t.equal(fs.existsSync(path), true);   
+        process.env.LOG_V1_TILES = false;   
+        fs.unlinkSync(path);    
+        t.end();    
+      });   
+    });   
+  });   
+});    
+
+test('copy invalid mbtiles with v2 invalid tile logging', function(t) {    
+  process.env.LOG_INVALID_VT = true;    
+  var fixture = path.resolve(__dirname, 'fixtures', 'v2-throw.mbtiles');   
+  var src = 'mbtiles://' + fixture;   
+  var dst = dsturi('v2-throw.mbtiles');    
+  sinon.spy(tilelive, 'copy');    
+    
+  tileliveCopy(src, dst, {}, function(err) {   
+    tileCount(dst, function(err, count) {   
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');   
+      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');    
+      tilelive.copy.restore();    
+    
+      tileVersion(dst, 0, 0, 0, function(err, version) {    
+        var path = './vt-invalid.json';   
+        t.equal(fs.existsSync(path), true);  
+        process.env.LOG_V1_TILES = false;
+        fs.unlinkSync(path);    
+        t.end();    
+      });   
+    });   
+  });   
+});    
+
+
 test('copy mbtiles without v1 tile logging', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
@@ -86,31 +142,6 @@ test('copy mbtiles without v1 tile logging', function(t) {
       tileVersion(dst, 0, 0, 0, function(err, version) {
         t.ifError(err, 'got tile info');
         t.equal(version, 2, 'tile is v2');
-        t.end();
-      });
-    });
-  });
-});
-
-test('copy mbtiles with v1 tile logging', function(t) {
-  process.env.LOG_V1_TILES = true;
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
-  var src = 'mbtiles://' + fixture;
-  var dst = dsturi('valid.mbtiles');
-  sinon.spy(tilelive, 'copy');
-
-  tileliveCopy(src, dst, {}, function(err) {
-    t.ifError(err, 'copied');
-    tileCount(dst, function(err, count) {
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
-      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
-      tilelive.copy.restore();
-
-      tileVersion(dst, 0, 0, 0, function(err, version) {
-        var path = './v1-stats.json';
-        t.equal(fs.existsSync(path), true);
-        process.env.LOG_V1_TILES = false;
-        fs.unlinkSync(path);
         t.end();
       });
     });
@@ -142,6 +173,7 @@ test('copy v2 mbtiles', function(t) {
   var dst = dsturi('valid-v2.mbtiles');
   sinon.spy(tilelive, 'copy');
   sinon.spy(migrationStream, 'migrate');
+  sinon.spy(mapnikVT, 'info');
 
   tileliveCopy(src, dst, {}, function(err) {
     t.ifError(err, 'copied');
@@ -151,6 +183,9 @@ test('copy v2 mbtiles', function(t) {
       t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
       t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
       tilelive.copy.restore();
+
+      t.equal(mapnikVT.info.callCount, count, 'called mapnik info as many times as there are tiles (should only be once per v2 tile)');
+      mapnikVT.info.restore();
 
       t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
       migrationStream.migrate.restore();
@@ -163,7 +198,6 @@ test('copy v2 mbtiles', function(t) {
     });
   });
 });
-
 
 test('copy omnivore', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.geojson');
@@ -330,13 +364,10 @@ test('copy coordinates exceed spherical mercator', function(t) {
 
   tileliveCopy(src, dst, {}, function(err) {
     t.ok(err, 'expect an error for out of bounds coordinates');
+    t.ok(err.message.indexOf('Coordinates beyond web mercator range') > -1);
     t.equal(err.code, 'EINVALID', 'error code encountered');
-    tileCount(dst, function(err, count) {
-      t.ifError(err, 'counted tiles');
-      t.equal(count, 0, 'did not render any tiles');
-      tilelive.copy.restore();
-      t.end();
-    });
+    tilelive.copy.restore();
+    t.end();
   });
 });
 
@@ -400,5 +431,19 @@ test('copy omnivore to s3 encrypted with AWS KMS', function(t) {
       tilelive.copy.restore();
       t.end();
     });
+  });
+});
+
+test('handles vector data reprojection errors', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid-reprojection/projection-error.shp');
+  var src = 'omnivore://' + fixture;
+  var dst = dsturi('invalid.shp');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ok(err, 'expect an error for invalid reprojections');
+    t.equal(err.code, 'EINVALID', 'error code encountered');
+    t.equal(err.message,'Unable to reproject data. Please reproject to Web Mercator (EPSG:3857) and try again.');
+    t.end();
   });
 });

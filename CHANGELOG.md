@@ -1,9 +1,24 @@
 # Changelog
 
+<<<<<<< HEAD
 ## 7.0.0
+=======
+## 6.7.0
+
+- Adds x out of range error handler. See #113
+- Adds file writer for invalid VT stats object & vtvalidate library for additional VT validation. See #113 & mapbox/unpacker#1458 (comment)
+
+## 6.6.0
+
+- Remove duplicate mapnik.VectorTile.info call in migration stream for v2 tiles [#102](https://github.com/mapbox/mapbox-tile-copy/pull/102)
+- Catch tile size errors from tilelive-bridge and exit with `EINVALID`
+
+## 6.5.0
+>>>>>>> master
 
 - Remove tile-stat-stream and stats as an option [#105](https://github.com/mapbox/mapbox-tile-copy/issues/105)
 - Add support for s3 KMS encryption [#108](https://github.com/mapbox/mapbox-tile-copy/pull/108) and update test user credentials [#109](https://github.com/mapbox/mapbox-tile-copy/pull/109)
+- Catch reprojection errors from mapnik [#110](https://github.com/mapbox/mapbox-tile-copy/pull/110)
 
 ## 6.4.0
 
