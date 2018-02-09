@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.8.0
+
+- Update tilelive-omnivore@3.5.0
+
 ## 6.7.0
 
 - Adds x out of range error handler. See #113
