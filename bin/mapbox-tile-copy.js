@@ -93,23 +93,23 @@ fs.exists(srcfile0, function(exists) {
   });
 });
 
-var p;
-function getProgress(prog) {
-  p = prog;
+var stats, p;
+function getProgress(statistics, progress) {
+  stats = statistics;
+  p = progress;
   if (interval < 0) report();
 }
 
 function report(final) {
-  if (!p) return;
-  console.log(p);
-  console.log(util.format('%s%s tiles @ %s/s, %s% complete [%ss]%s',
-    interval > 0 ? '' : '\r\033[K',
-    p.transferred,
-    Math.round(p.speed),
-    Math.round(p.percentage),
-    p.runtime,
-    interval > 0 || final ? '\n' : ''
-  ));
+  if (!stats || !p) return;
+
+  if (final) {
+    console.log(`\nCopying complete!\nTiles copied: ${p.transferred}, tiles skipped (empty): ${stats.skipped}`);
+    console.log(`Total runtime: ${p.runtime}s, ${Math.round(p.transferred/p.runtime)} tiles/s, ${Math.round(stats.total/p.runtime)} operations/s`);
+  } else {
+    var complete = stats.total - p.remaining;
+    console.log(`${Math.round((complete/stats.total)*100)}% (${p.transferred} tiles copied)`);
+  }
 }
 
 function isNumeric(num) {

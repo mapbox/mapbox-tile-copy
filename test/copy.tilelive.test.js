@@ -12,11 +12,7 @@ var os = require('os');
 var fs = require('fs');
 var mtc = require('..'); // just to get protocols registered
 var sinon = require('sinon');
-<<<<<<< HEAD
-=======
-var TileStatStream = require('tile-stat-stream');
 var mvtf = require('@mapbox/mvt-fixtures');
->>>>>>> master
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
 
