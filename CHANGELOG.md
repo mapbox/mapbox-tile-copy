@@ -19,9 +19,7 @@
 - Catch tile size errors from tilelive-bridge and exit with `EINVALID`
 
 ## 6.5.0
->>>>>>> master
 
-- Remove tile-stat-stream and stats as an option [#105](https://github.com/mapbox/mapbox-tile-copy/issues/105)
 - Add support for s3 KMS encryption [#108](https://github.com/mapbox/mapbox-tile-copy/pull/108) and update test user credentials [#109](https://github.com/mapbox/mapbox-tile-copy/pull/109)
 - Catch reprojection errors from mapnik [#110](https://github.com/mapbox/mapbox-tile-copy/pull/110)
 
