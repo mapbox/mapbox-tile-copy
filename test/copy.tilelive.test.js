@@ -74,54 +74,54 @@ function tileVersion(dst, z, x, y, callback) {
   });
 }
 
-test('copy mbtiles with v1 tile logging', function(t) {    
-  process.env.LOG_V1_TILES = true;    
-  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');   
-  var src = 'mbtiles://' + fixture;   
-  var dst = dsturi('valid.mbtiles');    
-  sinon.spy(tilelive, 'copy');    
-    
-  tileliveCopy(src, dst, {}, function(err) {    
-    t.ifError(err, 'copied');   
-    tileCount(dst, function(err, count) {   
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');   
-      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');    
-      tilelive.copy.restore();    
-    
-      tileVersion(dst, 0, 0, 0, function(err, version) {    
-        var path = './v1-stats.json';   
-        t.equal(fs.existsSync(path), true);   
-        process.env.LOG_V1_TILES = false;   
-        fs.unlinkSync(path);    
-        t.end();    
-      });   
-    });   
-  });   
-});    
+test('copy mbtiles with v1 tile logging', function(t) {
+  process.env.LOG_V1_TILES = true;
+  var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('valid.mbtiles');
+  sinon.spy(tilelive, 'copy');
 
-test('copy invalid mbtiles with v2 invalid tile logging', function(t) {    
-  process.env.LOG_INVALID_VT = true;    
-  var fixture = path.resolve(__dirname, 'fixtures', 'v2-throw.mbtiles');   
-  var src = 'mbtiles://' + fixture;   
-  var dst = dsturi('v2-throw.mbtiles');    
-  sinon.spy(tilelive, 'copy');    
-    
-  tileliveCopy(src, dst, {}, function(err) {   
-    tileCount(dst, function(err, count) {   
-      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');   
-      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');    
-      tilelive.copy.restore();    
-    
-      tileVersion(dst, 0, 0, 0, function(err, version) {    
-        var path = './vt-invalid.json';   
-        t.equal(fs.existsSync(path), true);  
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
+      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
+      tilelive.copy.restore();
+
+      tileVersion(dst, 0, 0, 0, function(err, version) {
+        var path = './v1-stats.json';
+        t.equal(fs.existsSync(path), true);
         process.env.LOG_V1_TILES = false;
-        fs.unlinkSync(path);    
-        t.end();    
-      });   
-    });   
-  });   
-});    
+        fs.unlinkSync(path);
+        t.end();
+      });
+    });
+  });
+});
+
+test('copy invalid mbtiles with v2 invalid tile logging', function(t) {
+  process.env.LOG_INVALID_VT = true;
+  var fixture = path.resolve(__dirname, 'fixtures', 'v2-throw.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('v2-throw.mbtiles');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, {}, function(err) {
+    tileCount(dst, function(err, count) {
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'list', 'uses list scheme for mbtiles');
+      t.equal(tilelive.copy.getCall(0).args[2].retry, undefined, 'passes options.retry to tilelive.copy');
+      tilelive.copy.restore();
+
+      tileVersion(dst, 0, 0, 0, function(err, version) {
+        var path = './vt-invalid.json';
+        t.equal(fs.existsSync(path), true);
+        process.env.LOG_V1_TILES = false;
+        fs.unlinkSync(path);
+        t.end();
+      });
+    });
+  });
+});
 
 
 test('copy mbtiles without v1 tile logging', function(t) {
@@ -381,7 +381,7 @@ test('successfully copy a bigtiff', function(t) {
     t.ifError(err, 'copied tiles');
     tileCount(dst, function(err, count) {
       t.ifError(err, 'counted tiles');
-      t.equal(count, 121, 'rendered all tiles');
+      t.equal(count, 126, 'rendered all tiles');
       t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for tifs');
       tilelive.copy.restore();
       t.end();
