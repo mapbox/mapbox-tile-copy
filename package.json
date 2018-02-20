@@ -40,7 +40,7 @@
     "@mapbox/mvt-fixtures": "^3.1.0",
     "aws-sdk": "^2.0.25",
     "request": "^2.83.0",
-    "sinon": "^1.12.2"
+    "sinon": "^4.3.0"
   },
   "bin": {
     "mapbox-tile-copy": "./bin/mapbox-tile-copy.js"
