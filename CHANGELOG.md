@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.9.0
+
+- Updated to mapnik 3.7.0
+- Updated to tilelive-omnivore 3.6.0
+- Updated to tilelive-vector 3.11.0
+
 ## 6.8.0
 
 - Update tilelive-omnivore@3.5.0

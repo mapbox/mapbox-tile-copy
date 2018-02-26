@@ -445,17 +445,3 @@ test('copy omnivore to s3 encrypted with AWS KMS', function(t) {
     });
   });
 });
-
-test('handles vector data reprojection errors', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'invalid-reprojection/projection-error.shp');
-  var src = 'omnivore://' + fixture;
-  var dst = dsturi('invalid.shp');
-  sinon.spy(tilelive, 'copy');
-
-  tileliveCopy(src, dst, {}, function(err) {
-    t.ok(err, 'expect an error for invalid reprojections');
-    t.equal(err.code, 'EINVALID', 'error code encountered');
-    t.equal(err.message,'Unable to reproject data. Please reproject to Web Mercator (EPSG:3857) and try again.');
-    t.end();
-  });
-});
