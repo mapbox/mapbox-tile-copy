@@ -445,3 +445,21 @@ test('copy omnivore to s3 encrypted with AWS KMS', function(t) {
     });
   });
 });
+
+test('handles vector data reprojection', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'reprojection/data.shp');
+  var src = 'omnivore://' + fixture;
+  var dst = dsturi('reprojection.shp');
+  sinon.spy(tilelive, 'copy');
+
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 35, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for geojson');
+      tilelive.copy.restore();
+      t.end();
+    });
+  });
+});
