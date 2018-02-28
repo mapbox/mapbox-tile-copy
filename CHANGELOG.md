@@ -1,10 +1,11 @@
 # Changelog
 
-## 6.9.0
+## 7.0.0
 
 - Updated to mapnik 3.7.0
 - Updated to tilelive-omnivore 3.6.0
 - Updated to tilelive-vector 3.11.0
+- Drops windows support
 
 ## 6.8.0
 
