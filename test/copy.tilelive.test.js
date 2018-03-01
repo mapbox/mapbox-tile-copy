@@ -446,16 +446,20 @@ test('copy omnivore to s3 encrypted with AWS KMS', function(t) {
   });
 });
 
-test('handles vector data reprojection errors', function(t) {
-  var fixture = path.resolve(__dirname, 'fixtures', 'invalid-reprojection/projection-error.shp');
+test('handles vector data reprojection', function(t) {
+  var fixture = path.resolve(__dirname, 'fixtures', 'reprojection/data.shp');
   var src = 'omnivore://' + fixture;
-  var dst = dsturi('invalid.shp');
+  var dst = dsturi('reprojection.shp');
   sinon.spy(tilelive, 'copy');
 
   tileliveCopy(src, dst, {}, function(err) {
-    t.ok(err, 'expect an error for invalid reprojections');
-    t.equal(err.code, 'EINVALID', 'error code encountered');
-    t.equal(err.message,'Unable to reproject data. Please reproject to Web Mercator (EPSG:3857) and try again.');
-    t.end();
+    t.ifError(err, 'copied');
+    tileCount(dst, function(err, count) {
+      t.ifError(err, 'counted tiles');
+      t.equal(count, 35, 'expected number of tiles');
+      t.equal(tilelive.copy.getCall(0).args[2].type, 'scanline', 'uses scanline scheme for geojson');
+      tilelive.copy.restore();
+      t.end();
+    });
   });
 });
