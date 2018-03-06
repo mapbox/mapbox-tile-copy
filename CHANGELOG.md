@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.1
+
+- Update to s3Urls@1.5.3
+
 ## 7.0.0
 
 - Updated to mapnik 3.7.0
