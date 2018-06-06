@@ -1,0 +1,72 @@
+version: 2
+
+step-library:
+  - &install-node
+      run:
+        name: Install node
+        command: |
+          set +e
+          curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+          [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+          nvm install v4
+          nvm alias default v4
+          echo "[ -s \"${NVM_DIR}/nvm.sh\" ] && . \"${NVM_DIR}/nvm.sh\"" >> $BASH_ENV
+
+  - &build-and-test
+      run:
+        name: Build and test
+        command: |
+          node -v
+          npm -v
+          npm install
+          npm test
+
+jobs:
+  build-osx:
+    macos:
+      xcode: "9.0"
+    steps:
+      - checkout
+      - run: echo 'export NVM_DIR=${HOME}/.nvm' >> $BASH_ENV
+      - *install-node
+      - *build-and-test
+
+  build-linux-machine:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: libstdc++ upgrade
+          command: |
+            sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            sudo apt-get update -y
+            sudo apt-get install -y libstdc++6
+      - run: echo 'export NVM_DIR=${HOME}/.nvm' >> $BASH_ENV
+      - *install-node
+      - *build-and-test
+
+  build-linux-docker:
+    docker:
+      - image: ubuntu:trusty
+    steps:
+      - checkout
+      - run:
+          name: libstdc++ upgrade
+          command: |
+            apt-get update -y
+            apt-get install -y software-properties-common python-software-properties || true
+            add-apt-repository -y ppa:ubuntu-toolchain-r/test
+            apt-get update -y
+            apt-get install -y libstdc++6 curl bash git
+      - run: echo 'export NVM_DIR=/opt/circleci/.nvm' >> $BASH_ENV
+      - *install-node
+      - *build-and-test
+
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build-osx
+      - build-linux-docker
+      - build-linux-machine

@@ -59,7 +59,7 @@ The `--part` operation is explicitly _zero-indexed_ because this gives tilelive'
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 0 --parts 1
 ```
 
-The following example will distribute tiles to the second part out of 5 total parts:
+The following example will distribute tiles to the second part out of 4 total parts:
 ```sh
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 1 --parts 4
 ```

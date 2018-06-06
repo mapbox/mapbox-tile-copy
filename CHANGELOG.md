@@ -1,5 +1,43 @@
 # Changelog
 
+## 7.0.0
+
+- Updated to mapnik 3.7.0
+- Updated to tilelive-omnivore 3.6.0
+- Updated to tilelive-vector 3.11.0
+- Drops windows support
+
+## 6.8.0
+
+- Update tilelive-omnivore@3.5.0
+
+## 6.7.0
+
+- Adds x out of range error handler. See #113
+- Adds file writer for invalid VT stats object & vtvalidate library for additional VT validation. See #113 & mapbox/unpacker#1458 (comment)
+
+## 6.6.0
+
+- Remove duplicate mapnik.VectorTile.info call in migration stream for v2 tiles [#102](https://github.com/mapbox/mapbox-tile-copy/pull/102)
+- Catch tile size errors from tilelive-bridge and exit with `EINVALID`
+
+## 6.5.0
+
+- Add support for s3 KMS encryption [#108](https://github.com/mapbox/mapbox-tile-copy/pull/108) and update test user credentials [#109](https://github.com/mapbox/mapbox-tile-copy/pull/109)
+- Catch reprojection errors from mapnik [#110](https://github.com/mapbox/mapbox-tile-copy/pull/110)
+
+## 6.4.0
+
+- Add V1 tile tracker.
+
+## N/A
+
+- Update tests per https://github.com/mapbox/mapnik-omnivore/pull/172
+
+## 6.3.0
+
+- Upgrade tilelive-omnivore to 3.4.0
+
 ## 6.2.1
 
 - Upgrade tilelive, tilejson, tiletype, mbtiles, and s3urls deps to their new @mapbox namespace
