@@ -44,7 +44,7 @@ module.exports = function(filepath, dsturi, options, callback) {
         dsturi.indexOf('{y}') == -1) return callback(new Error('Destination URL does not include a {z}/{x}/{y} template.'));
 
   } else if (dsturi.indexOf('file://') == -1) {
-    throw new Error('Invalid output protocol: ' + dsturi);
+    return callback (new Error('Invalid output protocol: ' + dsturi));
   }
 
   if (options.bundle === true) {
