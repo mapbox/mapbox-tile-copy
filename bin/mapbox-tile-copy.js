@@ -67,7 +67,7 @@ if (isNumeric(argv.timeout)) options.timeout = parseInt(argv.timeout, 10);
 if (argv.bundle === 'true') options.bundle = true;
 
 if (!dsturi) {
-  console.error('You must provide a valid s3:// or file:// url');
+  console.error('You must provide a valid s3:// url, file:// uri, or noop://');
   process.exit(1);
 }
 
