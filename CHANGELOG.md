@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1.0
+
+- Update vtvalidate with gzip-hpp
+
 ## 7.0.0
 
 - Updated to mapnik 3.7.0
