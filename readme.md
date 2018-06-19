@@ -1,6 +1,6 @@
 # mapbox-tile-copy
 
-A shortcut from local geodata files to tiles on S3
+A shortcut from local geodata files to tiles on S3 or to the local filesystem.
 
 [![Build Status](https://travis-ci.org/mapbox/mapbox-tile-copy.svg?branch=master)](https://travis-ci.org/mapbox/mapbox-tile-copy) (*tested on Node v4 & v6*)
 
@@ -12,12 +12,12 @@ $ npm install -g @mapbox/mapbox-tile-copy
 
 ## Configuration
 
-You'll be writing to S3, and so you'll need to make sure that your shell environment is [configured with appropriate credentials](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
+If writing to S3 you'll need to make sure that your shell environment is [configured with appropriate credentials](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html).
 
 ## Usage
 
 ```sh
-$ mapbox-tile-copy <file> <s3 url template>
+$ mapbox-tile-copy <file> <s3:// url template or file:// path>
 ```
 
 Your s3 url template must include a `{z}/{x}/{y}` scheme for writing and distributing tiles. File extensions are not required.
@@ -27,6 +27,11 @@ Your s3 url template must include a `{z}/{x}/{y}` scheme for writing and distrib
 Copy tiles from an mbtiles file to a folder in `my-bucket`:
 ```sh
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/folder/mbtiles/{z}/{x}/{y}
+```
+
+Copy tiles from an mbtiles file to a relative folder in the current working directory named 'tiles':
+```sh
+$ mapbox-tile-copy ~/data/my-tiles.mbtiles file://./tiles
 ```
 
 Convert a GeoJSON file into vector tiles:

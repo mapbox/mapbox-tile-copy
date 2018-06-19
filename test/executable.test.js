@@ -54,7 +54,7 @@ test('invalid s3 url', function(t) {
   var cmd = [ copy, fixture, dst ].join(' ');
   exec(cmd, function(err, stdout, stderr) {
     t.ok(err, 'expected error');
-    t.equal(stderr, 'You must provide a valid S3 url\n', 'expected message');
+    t.equal(stderr, 'Invalid output protocol: http://www.google.com\n', 'expected message');
     t.equal(err.code, 1, 'exit code 1');
     t.end();
   });

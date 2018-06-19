@@ -11,6 +11,7 @@ var Omnivore = require('@mapbox/tilelive-omnivore');
 var TileJSON = require('@mapbox/tilejson');
 var Mapbox = require('./lib/tilelive-mapbox');
 var S3 = require('@mapbox/tilelive-s3');
+var tl_file = require('tilelive-file');
 var path = require('path');
 
 // Note: tilelive-vector is needed for `tm2z` protocol (https://github.com/mapbox/tilelive-vector/issues/124)
@@ -20,6 +21,7 @@ Omnivore.registerProtocols(tilelive);
 TileJSON.registerProtocols(tilelive);
 Mapbox.registerProtocols(tilelive);
 S3.registerProtocols(tilelive);
+tl_file.registerProtocols(tilelive);
 
 var mapnik = require('mapnik');
 mapnik.Logger.setSeverity(mapnik.Logger.NONE);
@@ -29,25 +31,31 @@ mapnik.register_fonts(path.dirname(require.resolve('mapbox-studio-pro-fonts')), 
 if (process.env.MapboxTileCopyFonts)
   mapnik.register_fonts(process.env.MapboxTileCopyFonts, { recurse: true });
 
-module.exports = function(filepath, s3url, options, callback) {
-  // Make sure the s3url is of type s3://bucket/key
-  var query = url.parse(s3url).query;
-  s3url = s3urls.convert(s3url, 's3');
-  if (query) s3url += '?' + query;
+module.exports = function(filepath, dsturi, options, callback) {
 
-  if (s3url.indexOf('{z}') == -1 ||
-      s3url.indexOf('{x}') == -1 ||
-      s3url.indexOf('{y}') == -1) return callback(new Error('Destination URL does not include a {z}/{x}/{y} template.'));
+  if (s3urls.valid(dsturi)) {
+    // Make sure the s3url is of type s3://bucket/key
+    var query = url.parse(dsturi).query;
+    dsturi = s3urls.convert(dsturi, 's3');
+    if (query) dsturi += '?' + query;
+
+    if (dsturi.indexOf('{z}') == -1 ||
+        dsturi.indexOf('{x}') == -1 ||
+        dsturi.indexOf('{y}') == -1) return callback(new Error('Destination URL does not include a {z}/{x}/{y} template.'));
+
+  } else if (dsturi.indexOf('file://') == -1) {
+    return callback(new Error('Invalid output protocol: ' + dsturi));
+  }
 
   if (options.bundle === true) {
-    tilelivecopy(filepath, s3url, options, copied);
+    tilelivecopy(filepath, dsturi, options, copied);
   } else {
     getUri(filepath, options.layerName, function(err, srcUri) {
       if (err) return callback(err);
       if (url.parse(srcUri).protocol === 'serialtiles:') {
-        serialtilescopy(srcUri, s3url, options, copied);
+        serialtilescopy(srcUri, dsturi, options, copied);
       } else {
-        tilelivecopy(srcUri, s3url, options, copied);
+        tilelivecopy(srcUri, dsturi, options, copied);
       }
     });
   }
