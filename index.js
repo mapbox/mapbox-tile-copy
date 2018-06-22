@@ -47,6 +47,10 @@ NoopBackend.prototype.stopWriting = function(callback) {
     callback(null);
 };
 
+NoopBackend.prototype.putInfo = function(info, callback) {
+    callback(null);
+};
+
 NoopBackend.prototype.putTile = function(z, x, y, tile, callback) {
     this.tiles_written++;
     callback(null);
