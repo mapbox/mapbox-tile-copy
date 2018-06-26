@@ -18,7 +18,7 @@
   "homepage": "https://github.com/mapbox/mapbox-tile-copy",
   "dependencies": {
     "@mapbox/mapbox-file-sniff": "~1.0.0",
-    "@mapbox/mbtiles": "~0.9.0",
+    "@mapbox/mbtiles": "~0.10.0",
     "@mapbox/s3urls": "^1.5.3",
     "@mapbox/tilejson": "^1.0.1",
     "@mapbox/tilelive": "~5.12.2",
