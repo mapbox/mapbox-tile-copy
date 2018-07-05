@@ -26,7 +26,6 @@ script:
   - curl -sSfL https://github.com/mapbox/logbt/archive/v2.0.3.tar.gz | tar --gunzip --extract --strip-components=2 --exclude="*md" --exclude="test*" --directory=./logbt
   - export PATH=$(pwd)/logbt:${PATH}
   - which logbt
-  - /usr/local/bin/logbt
   - logbt --version
   - sudo logbt --setup
-  - logbt npm test
+  - logbt -- npm test
