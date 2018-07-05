@@ -27,5 +27,5 @@ script:
   - export PATH=$(pwd)/logbt:${PATH}
   - which logbt
   - logbt --version
-  - sudo logbt --setup
+  - sudo ./logbt/logbt --setup
   - logbt -- npm test
