@@ -6,7 +6,7 @@ node_js:
   - "8"
   - "10"
 
-sudo: false
+sudo: required
 
 addons:
   apt:
@@ -16,3 +16,15 @@ addons:
 env:
   global:
   - secure: uLTEYEfOuF5VidH9fOhOdxly/9ChkAwTKw7DZltmiNfy+QZ5QmDfXIgVj0hJRfeUFPd3+r+WwL68nEFj8fG9SCAAHeYUR9ewEwKkpZ0141zF7PpgftFWuLk64YPYNgd+R4wfdS3I63OSHQWpwOykZEcd3GBVIuHopt9At+KiyB8=
+
+script:
+  - mkdir mason && curl -sSfL https://github.com/mapbox/mason/archive/v0.6.0.tar.gz | tar --gunzip --extract --strip-components=1 --directory=./mason
+  - ./mason/mason install gdb 7.12
+  - export PATH=$(./mason/mason prefix gdb 7.12)/bin:${PATH}
+  - which gdb
+  - curl -sSfL https://github.com/mapbox/logbt/archive/v2.0.3.tar.gz | tar --gunzip --extract --strip-components=1 --exclude="*md" --exclude="test*" --directory=/usr/local
+  - which logbt
+  - /usr/local/bin/logbt
+  - logbt --version
+  - sudo logbt --setup
+  - logbt npm test
