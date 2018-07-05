@@ -22,6 +22,7 @@ script:
   - ./mason/mason install gdb 7.12
   - export PATH=$(./mason/mason prefix gdb 7.12)/bin:${PATH}
   - which gdb
+  - mkdir -p ./logbt
   - curl -sSfL https://github.com/mapbox/logbt/archive/v2.0.3.tar.gz | tar --gunzip --extract --strip-components=2 --exclude="*md" --exclude="test*" --directory=./logbt
   - export PATH=$(pwd)/logbt:${PATH}
   - which logbt
