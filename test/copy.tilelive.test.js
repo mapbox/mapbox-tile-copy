@@ -86,8 +86,8 @@ test('copy mbtiles with v1 tile logging', function(t) {
       tilelive.copy.restore();
 
       tileVersion(dst, 0, 0, 0, function(err, version) {
-        var path = './v1-stats.json';
-        t.equal(fs.existsSync(path), true);
+        var path = require('os').tmpDir() + '/v1-stats.json';
+        t.ok(fs.existsSync(path));
         process.env.LOG_V1_TILES = false;
         fs.unlinkSync(path);
         t.end();
@@ -110,8 +110,8 @@ test('copy invalid mbtiles with v2 invalid tile logging', function(t) {
       tilelive.copy.restore();
 
       tileVersion(dst, 0, 0, 0, function(err, version) {
-        var path = './vt-invalid.json';
-        t.equal(fs.existsSync(path), true);
+        var path = require('os').tmpDir() + '/vt-invalid.json';
+        t.ok(fs.existsSync(path));
         process.env.LOG_V1_TILES = false;
         fs.unlinkSync(path);
         t.end();
