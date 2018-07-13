@@ -22,7 +22,7 @@
     "@mapbox/s3urls": "^1.5.3",
     "@mapbox/tilejson": "^1.0.1",
     "@mapbox/tilelive": "~5.12.2",
-    "@mapbox/tilelive-omnivore": "~4.0.0",
+    "@mapbox/tilelive-omnivore": "mapbox/tilelive-omnivore#dffe230525b82e2ec82993ccc82d7aff283e30d5",
     "@mapbox/tilelive-s3": "6.5.1",
     "@mapbox/tilelive-vector": "~4.0.0",
     "@mapbox/tiletype": "^0.3.0",
