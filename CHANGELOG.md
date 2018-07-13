@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.2.0
+
+- Update tilelive-omnivore 4.1.0
+
 ## 7.1.0
 
 - Update vtvalidate with gzip-hpp
