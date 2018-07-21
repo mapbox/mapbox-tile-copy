@@ -24,7 +24,7 @@
     "@mapbox/tilelive": "~5.12.2",
     "@mapbox/tilelive-omnivore": "https://github.com/mapbox/tilelive-omnivore/tarball/mapnik-4",
     "@mapbox/tilelive-s3": "6.5.1",
-    "@mapbox/tilelive-vector": "https://github.com/mapbox/tilelive-vector/tarball/mapnik-4",
+    "@mapbox/tilelive-vector": "^4.1.0",
     "@mapbox/tiletype": "^0.3.0",
     "@mapbox/vtvalidate": "~0.2.2",
     "mapbox-studio-default-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-default-fonts-0.0.4-4afb5235f457bd1c1a5a70fce6c2aa83bf7a851e.tgz",
