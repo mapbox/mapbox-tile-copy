@@ -11,8 +11,10 @@
 // - exit 3: invalid data -> do no retry
 
 // Perform some performance adjustments early on
-var maxThreads = Math.ceil(Math.max(4, require('os').cpus().length * 1.5));
-process.env.UV_THREADPOOL_SIZE = maxThreads;
+if (!process.env.UV_THREADPOOL_SIZE) {  
+  var maxThreads = Math.ceil(Math.max(4, require('os').cpus().length * 1.5));
+  process.env.UV_THREADPOOL_SIZE = maxThreads;
+}
 
 var util = require('util');
 var fs = require('fs');
