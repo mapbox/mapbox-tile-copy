@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.3.0
+
+- Add `bypassValdation` & `--bypass-validation` options to bypass the MBTiles migration stream during copy [#130](https://github.com/mapbox/mapbox-tile-copy/pull/130)
+
 ## 7.2.0
 
 - Update tilelive-omnivore 4.1.0
