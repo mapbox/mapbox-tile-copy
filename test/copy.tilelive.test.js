@@ -145,7 +145,7 @@ test('copy mbtiles without v1 tile logging', function(t) {
   });
 });
 
-test.only('copy invalid mbtiles with bypassValidation option', function(t) {
+test('copy invalid mbtiles with bypassValidation option', function(t) {
   process.env.LOG_INVALID_VT = true;
   var fixture = path.resolve(__dirname, 'fixtures', 'v2-throw.mbtiles');
   var src = 'mbtiles://' + fixture;
