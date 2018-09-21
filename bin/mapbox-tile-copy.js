@@ -65,6 +65,7 @@ if (isNumeric(argv.part) && isNumeric(argv.parts)) options.job = {
 if (isNumeric(argv.retry)) options.retry = parseInt(argv.retry, 10);
 if (isNumeric(argv.timeout)) options.timeout = parseInt(argv.timeout, 10);
 if (argv.bundle === 'true') options.bundle = true;
+if (argv['bypass-validation'] === 'true') options.bypassValidation = true;
 
 if (!dsturi) {
   console.error('You must provide a valid s3:// or file:// url');

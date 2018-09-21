@@ -145,6 +145,22 @@ test('copy mbtiles without v1 tile logging', function(t) {
   });
 });
 
+test('copy invalid mbtiles with bypassValidation option', function(t) {
+  process.env.LOG_INVALID_VT = true;
+  var fixture = path.resolve(__dirname, 'fixtures', 'v2-throw.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('v2-throw.mbtiles');
+
+  tileliveCopy(src, dst, { bypassValidation: true }, function(err) {
+    t.ifError(err);
+    tileCount(dst, function(err, count) {
+      t.ifError(err);
+      t.equal(count, 341, 'expected number of tiles');
+      t.end();
+    });
+  });
+});
+
 test('copy retry', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
