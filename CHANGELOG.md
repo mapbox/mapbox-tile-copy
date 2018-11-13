@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.3.1
+
+- Update MBTiles migration stream to throw error when ZXY range is invalid [#132](https://github.com/mapbox/mapbox-tile-copy/pull/132)
+
 ## 7.3.0
 
 - Add `bypassValdation` & `--bypass-validation` options to bypass the MBTiles migration stream during copy [#130](https://github.com/mapbox/mapbox-tile-copy/pull/130)
