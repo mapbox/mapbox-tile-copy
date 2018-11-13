@@ -161,7 +161,7 @@ test('copy invalid mbtiles with bypassValidation option', function(t) {
   });
 });
 
-test.only('fails with invalid ZXY from mbtiles in v1 tiles', function(t) {
+test('fails with invalid ZXY from mbtiles in v1 tiles', function(t) {
   process.env.LOG_INVALID_VT = true;
   var fixture = path.resolve(__dirname, 'fixtures', 'invalid-zxy.mbtiles');
   var src = 'mbtiles://' + fixture;
