@@ -161,6 +161,20 @@ test('copy invalid mbtiles with bypassValidation option', function(t) {
   });
 });
 
+test('fails with invalid ZXY from mbtiles in v1 tiles', function(t) {
+  process.env.LOG_INVALID_VT = true;
+  var fixture = path.resolve(__dirname, 'fixtures', 'invalid-zxy.mbtiles');
+  var src = 'mbtiles://' + fixture;
+  var dst = dsturi('invalid-zxy.mbtiles');
+
+  tileliveCopy(src, dst, {}, function(err) {
+    t.ok(err);
+    t.equal(err.code, 'EINVALID', 'expected code');
+    t.equal(err.message, 'Tile 0/99/99 is an invalid ZXY range.', 'expected error message');
+    t.end();
+  });
+});
+
 test('copy retry', function(t) {
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.mbtiles');
   var src = 'mbtiles://' + fixture;
