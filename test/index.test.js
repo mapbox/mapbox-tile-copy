@@ -4,6 +4,7 @@ var crypto = require('crypto');
 var copy = require('../index.js');
 var AWS = require('aws-sdk');
 var s3urls = require('@mapbox/s3urls');
+require('util.promisify/shim')();
 const promisify = require('util').promisify;
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
