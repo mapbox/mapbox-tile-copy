@@ -1,12 +1,13 @@
 language: node_js
 
 node_js:
-  - "6"
+  - "lts/boron"
+  - "lts/carbon"
 
 sudo: false
 
 before_install:
-  - npm install --global npm@5
+  - nvm install-latest-npm
 
 addons:
   apt:
