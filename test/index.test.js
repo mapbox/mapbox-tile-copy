@@ -4,13 +4,17 @@ var crypto = require('crypto');
 var copy = require('../index.js');
 var AWS = require('aws-sdk');
 var s3urls = require('@mapbox/s3urls');
+const promisify = require('util').promisify;
 
 process.env.MapboxAPIMaps = 'https://api.tiles.mapbox.com';
 
 var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
 var runid = crypto.randomBytes(16).toString('hex');
 
-console.log('---> mapbox-tile-copy index %s', runid);
+console.log(`Testing w/ S3 @ s3://${bucket}/test/mapbox-tile-copy/${runid}/`);
+const s3 = new AWS.S3();
+const listObjectsV2 = promisify(s3.listObjectsV2.bind(s3));
+const deleteObject = promisify(s3.deleteObject.bind(s3));
 
 function dsturi(name) {
   return [
@@ -23,10 +27,27 @@ function dsturi(name) {
   ].join('/');
 }
 
-function tileCount(dst, callback) {
-  var s3 = new AWS.S3();
-  var count = 0;
+test.onFinish(() => {
+  console.log(`Cleaning up S3 @ s3://${bucket}/test/mapbox-tile-copy/${runid}/:`);
+  const Prefix = `test/mapbox-tile-copy/${runid}/`;
+  listObjectsV2({ Prefix, Bucket: bucket })
+  .then((objectList) => {
+    return Promise.all(objectList.Contents.map((d) => {
+      process.stdout.write('.');
+      return deleteObject({Bucket: bucket, Key: d.Key});
+    }));
+  })
+  .then(() => {
+    process.stdout.write('.\n');
+    return deleteObject({Bucket: bucket, Key: Prefix});
+  })
+  .catch((e) => {
+    throw e;
+  });
+});
 
+function tileCount(dst, callback) {
+  var count = 0;
   params = s3urls.fromUrl(dst.replace('{z}/{x}/{y}', ''));
   params.Prefix = params.Key;
   delete params.Key;
