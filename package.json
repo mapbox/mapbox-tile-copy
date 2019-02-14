@@ -35,7 +35,8 @@
     "queue-async": "^1.0.7",
     "stream-combiner": "^0.2.2",
     "tile-stat-stream": "^1.0.1",
-    "tilelive-file": "0.0.3"
+    "tilelive-file": "0.0.3",
+    "util.promisify": "^1.0.0"
   },
   "devDependencies": {
     "@mapbox/mvt-fixtures": "^3.1.0",
