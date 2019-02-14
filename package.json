@@ -18,15 +18,15 @@
   "homepage": "https://github.com/mapbox/mapbox-tile-copy",
   "dependencies": {
     "@mapbox/mapbox-file-sniff": "~1.0.0",
-    "@mapbox/mbtiles": "~0.9.0",
+    "@mapbox/mbtiles": "^0.10.0",
     "@mapbox/s3urls": "^1.5.3",
     "@mapbox/tilejson": "^1.0.1",
     "@mapbox/tilelive": "~5.12.2",
     "@mapbox/tilelive-omnivore": "~4.1.0",
     "@mapbox/tilelive-s3": "6.5.1",
-    "@mapbox/tilelive-vector": "~4.0.0",
+    "@mapbox/tilelive-vector": "^4.2.0",
     "@mapbox/tiletype": "^0.3.0",
-    "@mapbox/vtvalidate": "0.2.1",
+    "@mapbox/vtvalidate": "^0.2.2",
     "mapbox-studio-default-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-default-fonts-0.0.4-4afb5235f457bd1c1a5a70fce6c2aa83bf7a851e.tgz",
     "mapbox-studio-pro-fonts": "https://mapbox-npm.s3.amazonaws.com/package/mapbox-studio-pro-fonts-1.0.0-9870a90b713f307b9391829602f4d5857e419615.tgz",
     "mapnik": "~3.7.0",
@@ -40,9 +40,9 @@
   },
   "devDependencies": {
     "@mapbox/mvt-fixtures": "^3.1.0",
-    "aws-sdk": "^2.0.25",
-    "request": "^2.47.0",
-    "sinon": "^1.12.2",
+    "aws-sdk": "^2.400.0",
+    "request": "^2.88.0",
+    "sinon": "^7.2.3",
     "tape": "^4.10.0"
   },
   "bin": {
