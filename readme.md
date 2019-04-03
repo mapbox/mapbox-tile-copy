@@ -64,6 +64,12 @@ The following example will distribute tiles to the second part out of 4 total pa
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 1 --parts 4
 ```
 
+You can add extra parameters supported by [tilelive-s3](https://github.com/mapbox/tilelive-s3) onto the end of the S3 URL. For instance, to extend the default HTTP timeout of 2000ms:
+
+```sh
+$ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket//{z}/{x}/{y}?timeout=10000
+```
+
 ## Supported file types
 
 - .mbtiles
