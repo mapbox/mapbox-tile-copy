@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.4.0
+
+- Update mapnik dependencies to support node10
+
 ## 7.3.1
 
 - Update MBTiles migration stream to throw error when ZXY range is invalid [#132](https://github.com/mapbox/mapbox-tile-copy/pull/132)
