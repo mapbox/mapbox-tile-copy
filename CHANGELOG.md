@@ -1,4 +1,7 @@
 # Changelog
+## 7.3.3
+- Updates @mapbox/mbtiles to 0.10.1
+
 
 ## 7.3.1
 
