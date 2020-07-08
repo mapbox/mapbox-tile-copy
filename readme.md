@@ -64,6 +64,11 @@ The following example will distribute tiles to the second part out of 4 total pa
 $ mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/parallel/{z}/{x}/{y} --part 1 --parts 4
 ```
 
+Collect tile size statistics and dump to your local tmp dir named `/tmp/<tmpdirpath>/tilelive-bridge-stats.json`
+```
+$ BRIDGE_LOG_MAX_VTILE_BYTES_COMPRESSED=1 mapbox-tile-copy ~/data/my-tiles.mbtiles s3://my-bucket/folder/mbtiles/{z}/{x}/{y}
+```
+
 ## Supported file types
 
 - .mbtiles
