@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.4.0
-
+## 7.6.0
 - Update mapnik dependencies to support node10
+
+## 7.5.1
+- fix a bug with tile property
+
+## 7.5.0
+- tile km2 area stats for serialtiles [#148](https://github.com/mapbox/mapbox-tile-copy/pull/149)
+
+## 7.4.0
+- stats for serialtiles [#148](https://github.com/mapbox/mapbox-tile-copy/pull/148)
 
 ## 7.3.1
 
