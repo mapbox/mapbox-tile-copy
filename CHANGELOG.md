@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.6.0
+- Update mapnik dependencies to support node10
+
 ## 7.5.1
 - fix a bug with tile property
 
