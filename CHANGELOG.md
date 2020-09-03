@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.7.0
+- Update tilelive-omnivore to 4.3.0
+
 ## 7.6.0
 - Update mapnik dependencies to support node10
 
