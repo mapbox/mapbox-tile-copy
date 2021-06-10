@@ -1,6 +1,6 @@
 {
   "name": "@mapbox/mapbox-tile-copy",
-  "version": "7.7.1-dev1",
+  "version": "7.7.1-dev2",
   "description": "From geodata files to tiles on S3",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "@mapbox/tilejson": "^1.0.1",
     "@mapbox/tilelive": "~5.12.2",
     "@mapbox/tilelive-omnivore": "^4.3.0",
-    "@mapbox/tilelive-s3": "^7.0.2-dev1",
+    "@mapbox/tilelive-s3": "^7.0.2-dev2",
     "@mapbox/tilelive-vector": "^4.2.0",
     "@mapbox/tiletype": "^0.3.0",
     "@mapbox/vtvalidate": "^0.2.2",
