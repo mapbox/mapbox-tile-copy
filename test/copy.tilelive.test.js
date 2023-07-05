@@ -235,7 +235,10 @@ test('copy tilejson (mocks the GET request from the tilelive-tilejson module)', 
 });
 
 test('copy tm2z', function(t) {
-  process.env.MapboxAPIMaps = 'https://api.mapbox.com';
+  process.env.MapboxAPIMaps = 'https://api.example.com';
+  nock('https://api.example.com')
+    .get(() => true).reply(200, {});
+
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.tm2z');
   var src = 'tm2z://' + fixture;
   var dst = 's3://test-bucket/valid.tm2z/{z}/{x}/{y}';
@@ -249,6 +252,7 @@ test('copy tm2z', function(t) {
 
     AWS.S3.restore();
     tilelive.copy.restore();
+    nock.cleanAll();
     t.end();
   });
 });
