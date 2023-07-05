@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.8.0
+- Move tile-stat-stream as a vendored library into this repostiory [#159](https://github.com/mapbox/mapbox-tile-copy/pull/159)
+- Update all tests to mock S3 and HTTP operations. Tests no longer require AWS credentials to run properly [#159](https://github.com/mapbox/mapbox-tile-copy/pull/159)
+
 ## 7.7.0
 - Update tilelive-omnivore to 4.3.0
 
