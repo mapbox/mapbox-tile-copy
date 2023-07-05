@@ -236,8 +236,9 @@ test('copy tilejson (mocks the GET request from the tilelive-tilejson module)', 
 
 test('copy tm2z', function(t) {
   process.env.MapboxAPIMaps = 'https://api.example.com';
-  nock('https://api.example.com')
-    .get(() => true).reply(200, {});
+  process.env.MapboxAccessToken = 'pk.test';
+  nock(/\./)
+    .get(() => true).reply(200, {}).persist();
 
   var fixture = path.resolve(__dirname, 'fixtures', 'valid.tm2z');
   var src = 'tm2z://' + fixture;
