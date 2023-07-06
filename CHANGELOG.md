@@ -1,5 +1,24 @@
 # Changelog
 
+## 7.8.0
+- Move tile-stat-stream as a vendored library into this repostiory [#159](https://github.com/mapbox/mapbox-tile-copy/pull/159)
+- Update all tests to mock S3 and HTTP operations. Tests no longer require AWS credentials to run properly [#159](https://github.com/mapbox/mapbox-tile-copy/pull/159)
+
+## 7.7.0
+- Update tilelive-omnivore to 4.3.0
+
+## 7.6.0
+- Update mapnik dependencies to support node10
+
+## 7.5.1
+- fix a bug with tile property
+
+## 7.5.0
+- tile km2 area stats for serialtiles [#148](https://github.com/mapbox/mapbox-tile-copy/pull/149)
+
+## 7.4.0
+- stats for serialtiles [#148](https://github.com/mapbox/mapbox-tile-copy/pull/148)
+
 ## 7.3.1
 
 - Update MBTiles migration stream to throw error when ZXY range is invalid [#132](https://github.com/mapbox/mapbox-tile-copy/pull/132)
