@@ -4,6 +4,7 @@
   "description": "From geodata files to tiles on S3",
   "main": "index.js",
   "scripts": {
+    "pretest": "duplicate-module-test mapnik @mapbox/tilelive gdal sqlite3",
     "test": "tape test/*.test.js"
   },
   "repository": {
@@ -36,12 +37,14 @@
     "progress-stream": "^0.5.0",
     "queue-async": "^1.0.7",
     "stream-combiner": "^0.2.2",
-    "tilelive-file": "0.0.3",
-    "util.promisify": "^1.0.0"
+    "tilelive-file": "0.0.3"
   },
   "devDependencies": {
+    "@mapbox/duplicate-module-test": "^0.2.0",
+    "@mapbox/mock-aws-sdk-js": "^1.0.1",
     "@mapbox/mvt-fixtures": "^3.1.0",
     "aws-sdk": "^2.400.0",
+    "nock": "^13.3.1",
     "request": "^2.88.0",
     "sinon": "^7.2.3",
     "tape": "^4.10.0"

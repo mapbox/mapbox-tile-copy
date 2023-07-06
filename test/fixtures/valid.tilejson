@@ -10,5 +10,8 @@
     -66.95780181884764,
     49.3717422485226
   ],
+  "tiles": [
+    "http://test-bucket.s3.amazonaws.com/test-tiles/{z}/{x}/{y}"
+  ],
   "center": [ 0, 0, 3 ]
 }
