@@ -1,108 +1,92 @@
+'use strict';
+
 var test = require('tape').test;
+var sinon = require('sinon');
+var path = require('path');
+var mapnik = require('mapnik');
+var AWS = require('@mapbox/mock-aws-sdk-js');
+var tilelive = require('@mapbox/tilelive');
 var copy = require('../lib/serialtilescopy');
 var migrationStream = require('../lib/migration-stream');
-var util = require('util');
-var mapnik = require('mapnik');
-var path = require('path');
-var request = require('request');
-var AWS = require('aws-sdk');
-var url = require('url');
-var sinon = require('sinon');
-var tilelive = require('@mapbox/tilelive');
 
-var bucket = process.env.TestBucket || 'tilestream-tilesets-development';
-
-var s3url = [
-  'http://' + bucket + '.s3.amazonaws.com/_pending/test',
-  +new Date() % 10000,
-  'mapbox-tile-copy-serialtiles/%s/%s/{z}/{x}/{y}'
-].join('-');
+function setupS3Stubs() {
+  return {
+    get: AWS.stub('S3', 'getObject', function(params, callback) {
+      return callback(null, { Body: Buffer.from('test') });
+    }),
+    put: AWS.stub('S3', 'putObject', function(params, callback) {
+      return callback(null);
+    })
+  }
+}
 
 test('serialtiles-copy: gzipped vector tiles', function(t) {
   var uri = [
     'serialtiles:',
     path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
   ].join('//');
-
-  var urlTemplate = util.format(s3url, 'test.valid-gzip', '0');
+  var dst = 'http://test-bucket.s3.amazonaws.com/_pending/test/test.valid-gzip/{z}/{x}/{y}';
 
   sinon.spy(tilelive, 'createWriteStream');
+  var s3 = setupS3Stubs();
 
-  copy(uri, urlTemplate, function(err) {
+  copy(uri, dst, function(err) {
     t.ifError(err, 'copied');
-    request.get({url:urlTemplate.replace('{z}/{x}/{y}', '0/0/0'),encoding:null}, function (err, res) {
-      t.ifError(err, 'found expected file on s3');
-      t.equal(res.statusCode, 200, 'expected status code');
-      t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
-      t.equal(res.headers['content-length'], '46886', 'expected content-length');
-      t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
-      var info = mapnik.VectorTile.info(res.body);
-      t.equal(info.layers[0].version, 2, 'vector tile is version 2');
-      t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, undefined, 'passes options.retry to tilelive.createWriteStream');
-      tilelive.createWriteStream.restore();
-      t.end();
-    });
+    t.equal(s3.put.args[0][0].ContentEncoding, 'gzip');
+    t.equal(s3.put.args[0][0].ContentType, 'application/x-protobuf');
+    t.equal(mapnik.VectorTile.info(s3.put.args[0][0].Body).layers[0].version, 2, 'vector tile is version 2');
+    t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, undefined, 'passes options.retry to tilelive.createWriteStream');
+    tilelive.createWriteStream.restore();
+    AWS.S3.restore();
+    t.end();
   });
 });
 
-test('serialtiles-copy: retry', function(t) {
+test('serialtiles-copy: options.retry', function(t) {
   var uri = [
     'serialtiles:',
     path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
   ].join('//');
 
-  var urlTemplate = util.format(s3url, 'test.retry', '0');
+  var dst = 'http://test-bucket.s3.amazonaws.com/_pending/test/test.retry/{z}/{x}/{y}';
 
   sinon.spy(tilelive, 'createWriteStream');
+  var s3 = setupS3Stubs();
 
-  copy(uri, urlTemplate, {retry:5}, function(err) {
+  copy(uri, dst, { retry: 5 }, function(err) {
     t.ifError(err, 'copied');
-    request.get({url:urlTemplate.replace('{z}/{x}/{y}', '0/0/0'),encoding:null}, function (err, res) {
-      t.ifError(err, 'found expected file on s3');
-      t.equal(res.statusCode, 200, 'expected status code');
-      t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
-      t.equal(res.headers['content-length'], '46886', 'expected content-length');
-      t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
-      var info = mapnik.VectorTile.info(res.body);
-      t.equal(info.layers[0].version, 2, 'vector tile is version 2');
-      t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, 5, 'passes options.retry to tilelive.createWriteStream');
-      tilelive.createWriteStream.restore();
-      t.end();
-    });
+    t.equal(s3.put.args[0][0].ContentEncoding, 'gzip');
+    t.equal(s3.put.args[0][0].ContentType, 'application/x-protobuf');
+    t.equal(mapnik.VectorTile.info(s3.put.args[0][0].Body).layers[0].version, 2, 'vector tile is version 2');
+    t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, 5, 'passes options.retry to tilelive.createWriteStream');
+    tilelive.createWriteStream.restore();
+    AWS.S3.restore();
+    t.end();
   });
 });
 
-test('serialtiles-copy: gzipped vector tiles', function(t) {
+test('serialtiles-copy: gzipped vector tiles, v2', function(t) {
   var uri = [
     'serialtiles:',
     path.resolve(__dirname, 'fixtures', 'valid-v2.serialtiles.gzip.vector.gz')
   ].join('//');
-
-  var urlTemplate = util.format(s3url, 'test.valid-v2-gzip', '0');
+  var dst = 'http://test-bucket.s3.amazonaws.com/_pending/test/test.valid-v2-gzip/{z}/{x}/{y}';
 
   sinon.spy(tilelive, 'createWriteStream');
   sinon.spy(migrationStream, 'migrate');
+  var s3 = setupS3Stubs();
 
-  copy(uri, urlTemplate, function(err) {
+  copy(uri, dst, function(err) {
     t.ifError(err, 'copied');
-    request.get({url:urlTemplate.replace('{z}/{x}/{y}', '0/0/0'),encoding:null}, function (err, res) {
-      t.ifError(err, 'found expected file on s3');
-      t.equal(res.statusCode, 200, 'expected status code');
-      t.equal(res.headers['content-type'], 'application/x-protobuf', 'expected content-type');
-      t.equal(res.headers['content-length'], '36635', 'expected content-length');
-      t.equal(res.headers['content-encoding'], 'gzip', 'expected content-encoding');
-
-      var info = mapnik.VectorTile.info(res.body);
-      t.equal(info.layers[0].version, 2, 'vector tile is version 2');
-
-      t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, undefined, 'passes options.retry to tilelive.createWriteStream');
-      tilelive.createWriteStream.restore();
-
-      t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
-      migrationStream.migrate.restore();
-
-      t.end();
-    });
+    t.equal(s3.put.args[0][0].ContentEncoding, 'gzip');
+    t.equal(s3.put.args[0][0].ContentType, 'application/x-protobuf');
+    t.equal(mapnik.VectorTile.info(s3.put.args[0][0].Body).layers[0].version, 2, 'vector tile is version 2');
+    t.equal(tilelive.createWriteStream.getCall(0).args[1].retry, undefined, 'passes options.retry to tilelive.createWriteStream');
+    t.equal(migrationStream.migrate.notCalled, true, 'doesn\t migrate a v2 mbtiles file');
+    tilelive.createWriteStream.restore();
+    migrationStream.migrate.restore();
+    AWS.S3.restore();
+    t.end();
   });
 });
 
@@ -111,20 +95,15 @@ test('serialtiles-copy: parallel processing', function(t) {
     'serialtiles:',
     path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
   ].join('//');
+  var dst = 'http://test-bucket.s3.amazonaws.com/_pending/test/test.valid-parallel/{z}/{x}/{y}';
 
-  var urlTemplate = util.format(s3url, 'test.valid-parallel', '0');
+  var s3 = setupS3Stubs();
 
-  copy(uri, urlTemplate, { job: { num: 0, total: 10 } }, function(err) {
+  copy(uri, dst, { job: { num: 0, total: 10 }}, function(err) {
     t.ifError(err, 'copied');
-    var s3 = new AWS.S3();
-    s3.listObjects({
-      Bucket: bucket,
-      Prefix: url.parse(urlTemplate).pathname.slice(1).replace('{z}/{x}/{y}', '')
-    }, function(err, data) {
-      if (err) throw err;
-      t.ok(data.Contents.length < 21, 'should not render the entire dataset');
-      t.end();
-    });
+    t.ok(s3.put.callCount < 21, 'should not render the entire dataset');
+    AWS.S3.restore();
+    t.end();
   });
 });
 
@@ -133,12 +112,14 @@ test('serialtiles-copy: stats', function(t) {
     'serialtiles:',
     path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
   ].join('//');
+  var dst = 'http://test-bucket.s3.amazonaws.com/_pending/test/test.valid-parallel/{z}/{x}/{y}';
+  
+  setupS3Stubs();
 
-  var urlTemplate = util.format(s3url, 'test.valid-parallel', '0');
-
-  copy(uri, urlTemplate, { stats: true, job: { num: 0, total: 10 } }, function(err, stats) {
+  copy(uri, dst, { stats: true, job: { num: 0, total: 10 } }, function(err, stats) {
     t.ifError(err, 'no error');
     t.equal(stats.world_merc.count, 223);
+    AWS.S3.restore();
     t.end();
   });
 });
@@ -148,12 +129,14 @@ test('serialtiles-copy: tiles too big', function(t) {
     'serialtiles:',
     path.resolve(__dirname, 'fixtures', 'valid.serialtiles.gzip.vector.gz')
   ].join('//');
+  var dst = 'http://test-bucket.s3.amazonaws.com/_pending/test/test.invalid-tilesize/{z}/{x}/{y}';
+  setupS3Stubs();
 
-  var urlTemplate = util.format(s3url, 'test.invalid-tilesize', '0');
-  copy(uri, urlTemplate, { limits: { max_tilesize: 10 } }, function(err) {
+  copy(uri, dst, { limits: { max_tilesize: 10 } }, function(err) {
     t.ok(err, 'expected error');
     t.equal(err.code, 'EINVALID', 'expected error code');
     t.equal(err.message, 'Tile exceeds maximum size of 0k at z 0. Reduce the detail of data at this zoom level or omit it by adjusting your minzoom.', 'expected error message');
+    AWS.S3.restore();
     t.end();
   });
 });
@@ -163,13 +146,15 @@ test('serialtiles-copy: vector tile invalid', function(t) {
     'serialtiles:',
     path.resolve(__dirname, 'fixtures', 'invalid.serialtiles.gzipped.gz')
   ].join('//');
+  var dst = 'http://test-bucket.s3.amazonaws.com/_pending/test/test.invalid-vector-tile/{z}/{x}/{y}';
+  setupS3Stubs();
 
-  var urlTemplate = util.format(s3url, 'test.invalid-vector-tile', '0');
-  copy(uri, urlTemplate, function(err) {
+  copy(uri, dst, function(err) {
     t.ok(err, 'expected error');
     t.equal(err.code, 'EINVALID', 'expected error code');
     t.equal(err.message, 'Buffer is not encoded as a valid PBF', 'expected error message');
     t.ok(err.stack, 'error has stacktrace');
+    AWS.S3.restore();
     t.end();
   });
 });
