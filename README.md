@@ -1,8 +1,8 @@
+⚠️ This repository is no longer actively maintained by Mapbox.
+
 # mapbox-tile-copy
 
 A shortcut from local geodata files to tiles on S3 or to the local filesystem.
-
-[![Build Status](https://travis-ci.com/mapbox/mapbox-tile-copy.svg?branch=master)](https://travis-ci.com/mapbox/mapbox-tile-copy)
 
 ## Installation
 
